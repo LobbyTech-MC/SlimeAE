@@ -268,7 +268,7 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
                 "&8设置朝向: " + blockFace.name() + " (" + CMIChatColor.stripColor(slimefunItem.getItemName()) + ")");
         final ItemMeta itemMeta = displayStack.getItemMeta();
         if (active) {
-            itemMeta.addEnchant(Enchantment.LUCK, 1, true);
+            itemMeta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, true);
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         itemMeta.setLore(List.of(
@@ -286,7 +286,7 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
                     blockMaterial, "&8设置朝向 " + blockFace.name() + " (" + CMIMaterial.get(blockMaterial) + ")");
             final ItemMeta itemMeta = displayStack.getItemMeta();
             if (active) {
-                itemMeta.addEnchant(Enchantment.LUCK, 1, true);
+                itemMeta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, true);
                 itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             }
             itemMeta.setLore(List.of(
