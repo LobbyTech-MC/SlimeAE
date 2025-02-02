@@ -1,6 +1,7 @@
 package me.ddggdd135.slimeae.utils;
 
 import javax.annotation.Nullable;
+
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.inventory.Inventory;

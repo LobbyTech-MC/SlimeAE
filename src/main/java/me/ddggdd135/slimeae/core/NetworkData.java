@@ -5,12 +5,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nullable;
+
+import org.bukkit.Location;
+
 import me.ddggdd135.slimeae.api.StorageCollection;
-import me.ddggdd135.slimeae.api.interfaces.*;
+import me.ddggdd135.slimeae.api.interfaces.IMEController;
+import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
+import me.ddggdd135.slimeae.api.interfaces.IMEObject;
+import me.ddggdd135.slimeae.api.interfaces.IMEStorageObject;
+import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.integrations.networks.NetworksStorage;
 import me.ddggdd135.slimeae.utils.NetworkUtils;
-import org.bukkit.Location;
 
 public class NetworkData {
     public final Set<NetworkInfo> AllNetworkData = new HashSet<>();

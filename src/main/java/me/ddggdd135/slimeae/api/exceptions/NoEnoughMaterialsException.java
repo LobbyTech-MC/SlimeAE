@@ -1,7 +1,9 @@
 package me.ddggdd135.slimeae.api.exceptions;
 
 import java.util.Map;
+
 import javax.annotation.Nonnull;
+
 import org.bukkit.inventory.ItemStack;
 
 public class NoEnoughMaterialsException extends RuntimeException {

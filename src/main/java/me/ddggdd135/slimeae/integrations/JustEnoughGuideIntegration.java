@@ -1,7 +1,8 @@
 package me.ddggdd135.slimeae.integrations;
 
-import me.ddggdd135.slimeae.api.interfaces.Integration;
 import org.bukkit.Bukkit;
+
+import me.ddggdd135.slimeae.api.interfaces.Integration;
 
 public class JustEnoughGuideIntegration implements Integration {
     @Override

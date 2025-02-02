@@ -1,9 +1,11 @@
 package me.ddggdd135.slimeae.api.interfaces;
 
 import java.util.Set;
-import me.ddggdd135.slimeae.core.NetworkInfo;
+
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+
+import me.ddggdd135.slimeae.core.NetworkInfo;
 
 public interface IMEObject {
     Set<BlockFace> Valid_Faces = Set.of(

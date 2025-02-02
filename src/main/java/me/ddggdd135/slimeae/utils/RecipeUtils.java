@@ -1,20 +1,27 @@
 package me.ddggdd135.slimeae.utils;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
-import me.ddggdd135.slimeae.api.autocraft.CraftType;
-import me.sfiguz7.transcendence.lists.TERecipeType;
+
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.CraftingRecipe;
+import me.ddggdd135.slimeae.api.autocraft.CraftType;
+import me.sfiguz7.transcendence.lists.TERecipeType;
 
 public class RecipeUtils {
     public static final Set<RecipeType> SUPPORTED_RECIPE_TYPES = new HashSet<>();

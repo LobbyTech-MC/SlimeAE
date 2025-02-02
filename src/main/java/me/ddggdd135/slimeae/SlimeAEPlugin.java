@@ -1,15 +1,25 @@
 package me.ddggdd135.slimeae;
 
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.ddggdd135.slimeae.api.database.StorageCellDataController;
 import me.ddggdd135.slimeae.core.NetworkData;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.commands.SlimeAECommand;
-import me.ddggdd135.slimeae.core.commands.subcommands.*;
+import me.ddggdd135.slimeae.core.commands.subcommands.ApplyUUIDCommand;
+import me.ddggdd135.slimeae.core.commands.subcommands.CleardataCommand;
+import me.ddggdd135.slimeae.core.commands.subcommands.HelpCommand;
+import me.ddggdd135.slimeae.core.commands.subcommands.UuidCommand;
+import me.ddggdd135.slimeae.core.commands.subcommands.ViewitemsCommand;
 import me.ddggdd135.slimeae.core.generations.SlimefunBlockPopulator;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItemGroups;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
@@ -17,15 +27,17 @@ import me.ddggdd135.slimeae.core.listeners.BlockListener;
 import me.ddggdd135.slimeae.core.listeners.NetworkListener;
 import me.ddggdd135.slimeae.core.listeners.NetworksIntegrationListener;
 import me.ddggdd135.slimeae.core.slimefun.CraftingCard;
-import me.ddggdd135.slimeae.integrations.*;
+import me.ddggdd135.slimeae.integrations.FluffyMachinesIntegration;
+import me.ddggdd135.slimeae.integrations.InfinityIntegration;
+import me.ddggdd135.slimeae.integrations.JustEnoughGuideIntegration;
+import me.ddggdd135.slimeae.integrations.NetworksExpansionIntegration;
+import me.ddggdd135.slimeae.integrations.NetworksIntegration;
+import me.ddggdd135.slimeae.integrations.TranscEndenceIntegration;
 import me.ddggdd135.slimeae.tasks.NetworkCheckTask;
 import me.ddggdd135.slimeae.tasks.NetworkRefreshTask;
 import me.ddggdd135.slimeae.tasks.NetworkTickerTask;
 import net.Zrips.CMILib.Colors.CMIChatColor;
 import net.guizhanss.minecraft.guizhanlib.updater.GuizhanUpdater;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * SlimeAE插件的主类

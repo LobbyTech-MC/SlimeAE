@@ -1,14 +1,16 @@
 package me.ddggdd135.slimeae.integrations;
 
-import io.github.sefiraat.networks.network.NetworkRoot;
-import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import org.bukkit.Bukkit;
+
+import io.github.sefiraat.networks.network.NetworkRoot;
+import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
 import me.ddggdd135.slimeae.api.interfaces.Integration;
 import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
-import org.bukkit.Bukkit;
 
 public class NetworksExpansionIntegration implements Integration {
     @Override

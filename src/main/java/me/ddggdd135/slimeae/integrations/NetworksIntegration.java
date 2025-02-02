@@ -1,9 +1,11 @@
 package me.ddggdd135.slimeae.integrations;
 
-import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
 import java.util.Arrays;
-import me.ddggdd135.slimeae.api.interfaces.Integration;
+
 import org.bukkit.Bukkit;
+
+import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
+import me.ddggdd135.slimeae.api.interfaces.Integration;
 
 public class NetworksIntegration implements Integration {
     @Override

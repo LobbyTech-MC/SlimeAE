@@ -1,13 +1,16 @@
 package me.ddggdd135.slimeae.integrations.networks;
 
-import io.github.sefiraat.networks.network.NetworkRoot;
 import java.util.Arrays;
 import java.util.Map;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.inventory.ItemStack;
+
+import io.github.sefiraat.networks.network.NetworkRoot;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
-import org.bukkit.inventory.ItemStack;
 
 public class NetworksStorage implements IStorage {
     private final NetworkRoot networkRoot;

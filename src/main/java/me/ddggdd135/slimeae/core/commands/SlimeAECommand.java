@@ -1,14 +1,22 @@
 package me.ddggdd135.slimeae.core.commands;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
-import me.ddggdd135.slimeae.api.SubCommand;
-import me.ddggdd135.slimeae.core.commands.subcommands.HelpCommand;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+
+import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
+import me.ddggdd135.slimeae.api.SubCommand;
+import me.ddggdd135.slimeae.core.commands.subcommands.HelpCommand;
 
 public class SlimeAECommand implements TabExecutor {
     private final Set<SubCommand> subCommands = new HashSet<>();

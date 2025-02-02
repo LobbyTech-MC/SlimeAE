@@ -1,11 +1,13 @@
 package me.ddggdd135.slimeae.core.recipes;
 
+import java.util.function.BiConsumer;
+
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecipe;
-import java.util.function.BiConsumer;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 
 public class BlockDestroyRecipeType extends RecipeType {
     public BlockDestroyRecipeType(ItemStack item, String machine) {

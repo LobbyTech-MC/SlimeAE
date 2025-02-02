@@ -1,11 +1,12 @@
 package me.ddggdd135.slimeae.core.recipes;
 
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 
 public class SlimefunAERecipeTypes {
     public static final BlockDestroyRecipeType BLOCK_DESTROY = new BlockDestroyRecipeType(

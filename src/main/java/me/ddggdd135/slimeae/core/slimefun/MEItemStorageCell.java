@@ -2,17 +2,21 @@ package me.ddggdd135.slimeae.core.slimefun;
 
 import static me.ddggdd135.slimeae.core.slimefun.METerminal.ALPHABETICAL_SORT;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bukkit.inventory.ItemStack;
+
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import me.ddggdd135.guguslimefunlib.GuguSlimefunLib;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTItem;
@@ -20,7 +24,6 @@ import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.MEStorageCellCache;
 import me.ddggdd135.slimeae.api.ResultWithItem;
 import me.ddggdd135.slimeae.utils.ItemUtils;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * ME物品存储元件类

@@ -1,15 +1,18 @@
 package me.ddggdd135.slimeae.api;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 
 public class CreativeItemIntegerMap implements Map<ItemStack, Integer> {
     public static final Set<ItemStack> allItemStacks;

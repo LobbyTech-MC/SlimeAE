@@ -4,7 +4,7 @@
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
   <name>SlimeAEPlugin</name>
-  <version>e83c208-Beta</version>
+  <version>34c0535-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -107,12 +107,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.SlimefunGuguProject</groupId>
-      <artifactId>Slimefun4</artifactId>
-      <version>dev-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>com.github.Zrips</groupId>
       <artifactId>CMILib</artifactId>
       <version>1.4.7.4</version>
@@ -144,8 +138,15 @@
     </dependency>
     <dependency>
       <groupId>com.github.SlimefunGuguProject</groupId>
+      <artifactId>Slimefun4</artifactId>
+      <version>UNOFFICIAL</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Slimefun-391c520-Beta.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.SlimefunGuguProject</groupId>
       <artifactId>FluffyMachines</artifactId>
-      <version>035fe56381</version>
+      <version>2.0.0</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/FluffyMachines.jar</systemPath>
     </dependency>
@@ -167,12 +168,12 @@
   <properties>
     <git.ref.slug>master</git.ref.slug>
     <java.version>21</java.version>
-    <git.commit.timestamp>1738420627</git.commit.timestamp>
+    <git.commit.timestamp>1738474584</git.commit.timestamp>
     <git.ref>master</git.ref>
-    <git.commit.short>e83c208</git.commit.short>
-    <git.commit.timestamp.datetime>2025-02-01T14:37:07Z</git.commit.timestamp.datetime>
+    <git.commit.short>34c0535</git.commit.short>
+    <git.commit.timestamp.datetime>2025-02-02T05:36:24Z</git.commit.timestamp.datetime>
     <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
-    <git.commit>e83c2082db47fe4aac455014703d2e9750538389</git.commit>
+    <git.commit>34c0535ec705bb337626cb39b3c7a4a16f8e40e5</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

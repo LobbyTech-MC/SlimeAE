@@ -1,8 +1,10 @@
 package me.ddggdd135.slimeae.utils;
 
 import java.util.Comparator;
-import me.ddggdd135.slimeae.core.AutoCraftingSession;
+
 import org.bukkit.Location;
+
+import me.ddggdd135.slimeae.core.AutoCraftingSession;
 
 public class ComparatorUtils {
     public static final Comparator<Location> LOCATION_COMPARATOR = (o1, o2) -> {
