@@ -23,10 +23,17 @@ public class MenuItems {
             "_AE_MN_PATTERN_", new AdvancedCustomItemStack(Material.GREEN_STAINED_GLASS_PANE, "{#Spring_Green}升级卡槽位"));
 
     public static final SlimefunItemStack PAGE_PREVIOUS_STACK = new SlimefunItemStack(
-            "_AE_MN_PAGE_PREVIOUS_STACK_", new AdvancedCustomItemStack(Material.RED_STAINED_GLASS_PANE, "&b上一页"));
+            "_AE_MN_PAGE_PREVIOUS_STACK_", new AdvancedCustomItemStack(Material.RED_STAINED_GLASS_PANE, "&c上一页"));
 
     public static final SlimefunItemStack PAGE_NEXT_STACK = new SlimefunItemStack(
-            "_AE_MN_PAGE_NEXT_STACK_", new AdvancedCustomItemStack(Material.RED_STAINED_GLASS_PANE, "&c下一页"));
+            "_AE_MN_PAGE_NEXT_STACK_", new AdvancedCustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a下一页"));
+    public static final SlimefunItemStack INPUT_MODE = new SlimefunItemStack(
+            "_AE_MN_INPUT_MODE_",
+            new AdvancedCustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a输入模式", "", "&e左侧存储元件的物品将会输入AE网络"));
+
+    public static final SlimefunItemStack OUTPUT_MODE = new SlimefunItemStack(
+            "_AE_MN_OUTPUT_MODE_",
+            new AdvancedCustomItemStack(Material.RED_STAINED_GLASS_PANE, "&a输出模式", "", "&eAE网络中的物品将会输出到左侧存储元件"));
 
     public static final SlimefunItemStack CHANGE_SORT_STACK = new SlimefunItemStack(
             "_AE_MN_CHANGE_SORT_STACK_", new AdvancedCustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&e更改排序方式"));
@@ -43,6 +50,9 @@ public class MenuItems {
             "_AE_MN_ACCEPT_", new AdvancedCustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a&l确认"));
     public static final SlimefunItemStack CANCEL = new SlimefunItemStack(
             "_AE_MN_CANCEL_", new AdvancedCustomItemStack(Material.RED_STAINED_GLASS_PANE, "&c&l取消"));
+    public static final SlimefunItemStack ME_SECURITY_TERMINAL_DESCRIPTION = new SlimefunItemStack(
+            "_AE_MN_ME_SECURITY_TERMINAL_DESCRIPTION_",
+            new AdvancedCustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a&l将无线终端放在上方以绑定"));
     public static final NamespacedKey MENU_ITEM = new NamespacedKey(SlimeAEPlugin.getInstance(), "menu_item");
 
     static {
@@ -51,6 +61,8 @@ public class MenuItems {
                 "&e支持以下合成配方:",
                 "&e  - 原版工作台",
                 "&b  - 增强型工作台",
+                "&e  - 充能器",
+                "&7  - 压印机",
                 "&d  - 魔法工作台",
                 "&6  - 盔甲锻造台",
                 "&e  - 冶炼炉",

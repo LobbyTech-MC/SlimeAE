@@ -34,15 +34,17 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.inventory.InvUtils;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import io.ncbpfluffybear.fluffymachines.items.Barrel;
-import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
+import java.util.*;
+import java.util.stream.IntStream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
-import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTCompoundList;
-import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTContainer;
-import me.ddggdd135.guguslimefunlib.libraries.nbtapi.iface.ReadWriteNBT;
+import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.abstracts.Card;
+import me.ddggdd135.slimeae.api.interfaces.ICardHolder;
 import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.items.MenuItems;
@@ -63,30 +65,29 @@ import net.guizhanss.minecraft.guizhanlib.gugu.minecraft.helpers.inventory.ItemS
  * 提供了一系列处理物品堆、存储和显示的实用方法
  */
 public class ItemUtils {
-    public static final String ITEM_STORAGE = "item_storage";
+    public static final String DISPLAY_ITEM = "display_item";
+
     /**
      * 根据模板物品创建指定数量的物品堆数组
      *
      * @param template 模板物品
-     * @param amount 总数量
+     * @param amount   总数量
      * @return 物品堆数组，每个物品堆不超过最大堆叠数
      */
     @Nonnull
     public static ItemStack[] createItems(@Nonnull ItemStack template, int amount) {
-        List<ItemStack> itemStacks = new ArrayList<>();
+        ItemStack[] itemStacks =
+                new ItemStack[(int) Math.max(1, Math.ceil(amount / (double) template.getMaxStackSize()))];
         int rest = amount;
-        while (true) {
+        for (int i = 0; i < itemStacks.length; i++) {
             if (rest <= template.getMaxStackSize()) {
-                ItemStack itemStack = template.asQuantity(rest);
-                itemStacks.add(itemStack);
-                break;
+                itemStacks[i] = template.asQuantity(rest);
             } else {
                 rest -= template.getMaxStackSize();
-                ItemStack itemStack = template.asQuantity(template.getMaxStackSize());
-                itemStacks.add(itemStack);
+                itemStacks[i] = template.asQuantity(template.getMaxStackSize());
             }
         }
-        return itemStacks.toArray(new ItemStack[0]);
+        return itemStacks;
     }
 
     /**
@@ -97,10 +98,31 @@ public class ItemUtils {
      */
     @Nonnull
     public static ItemStack[] createItems(@Nonnull Map<ItemStack, Integer> storage) {
-        return storage.entrySet().stream()
-                .filter(e -> e.getValue() > 0)
-                .flatMap(e -> Stream.of(createItems(e.getKey(), e.getValue())))
-                .toArray(ItemStack[]::new);
+        int len = 0;
+        for (Map.Entry<ItemStack, Integer> i : storage.entrySet()) {
+            len += (int)
+                    Math.max(1, Math.ceil(i.getValue() / (double) i.getKey().getMaxStackSize()));
+        }
+        ItemStack[] itemStacks = new ItemStack[len];
+
+        int c = 0;
+        for (Map.Entry<ItemStack, Integer> i : storage.entrySet()) {
+            int rest = i.getValue();
+            int l = (int)
+                    Math.max(1, Math.ceil(i.getValue() / (double) i.getKey().getMaxStackSize()));
+            ItemStack template = i.getKey();
+            for (int j = 0; j < l; j++) {
+                if (rest <= template.getMaxStackSize()) {
+                    itemStacks[c] = template.asQuantity(rest);
+                } else {
+                    rest -= template.getMaxStackSize();
+                    itemStacks[c] = template.asQuantity(template.getMaxStackSize());
+                }
+                c++;
+            }
+        }
+
+        return itemStacks;
     }
 
     /**
@@ -138,7 +160,7 @@ public class ItemUtils {
     /**
      * 检查存储中是否包含所有请求的物品
      *
-     * @param storage 物品存储
+     * @param storage  物品存储
      * @param requests 物品请求数组
      * @return 是否包含所有请求的物品
      */
@@ -171,7 +193,7 @@ public class ItemUtils {
     public static ItemRequest[] createRequests(@Nonnull Map<ItemStack, Integer> itemStacks) {
         List<ItemRequest> requests = new ArrayList<>();
         for (ItemStack itemStack : itemStacks.keySet()) {
-            requests.add(new ItemRequest(itemStack, itemStacks.get(itemStack)));
+            requests.add(new ItemRequest(itemStack, itemStacks.get(itemStack), true));
         }
         return requests.toArray(new ItemRequest[0]);
     }
@@ -189,9 +211,23 @@ public class ItemUtils {
             if (itemStack == null || itemStack.getType().isAir()) continue;
             ItemStack template = itemStack.asOne();
             if (storage.containsKey(template)) {
-                storage.put(template, storage.get(itemStack) + itemStack.getAmount());
+                storage.put(template, storage.get(template) + itemStack.getAmount());
             } else {
                 storage.put(template, itemStack.getAmount());
+            }
+        }
+        return storage;
+    }
+
+    @Nonnull
+    public static Map<ItemStack, Integer> getAmounts(@Nonnull ItemRequest[] requests) {
+        Map<ItemStack, Integer> storage = new HashMap<>();
+        for (ItemRequest request : requests) {
+            ItemStack template = request.getTemplate();
+            if (storage.containsKey(template)) {
+                storage.put(template, storage.get(template) + request.getAmount());
+            } else {
+                storage.put(template, request.getAmount());
             }
         }
         return storage;
@@ -208,11 +244,12 @@ public class ItemUtils {
     public static Map<ItemStack, Integer> takeItems(
             @Nonnull Map<ItemStack, Integer> source, @Nonnull Map<ItemStack, Integer> toTake) {
         Map<ItemStack, Integer> storage = new HashMap<>(source);
-        for (ItemStack itemStack : toTake.keySet()) {
+        for (Map.Entry<ItemStack, Integer> data : toTake.entrySet()) {
+            ItemStack itemStack = data.getKey();
             if (storage.containsKey(itemStack)) {
-                storage.put(itemStack, storage.get(itemStack) - toTake.get(itemStack));
+                storage.put(itemStack, storage.get(itemStack) - data.getValue());
             } else {
-                storage.put(itemStack, -toTake.get(itemStack));
+                storage.put(itemStack, -data.getValue());
             }
         }
         return storage;
@@ -222,18 +259,19 @@ public class ItemUtils {
      * 向源存储中添加物品
      *
      * @param source 源存储
-     * @param toAdd 要添加的物品及数量
+     * @param toAdd  要添加的物品及数量
      * @return 更新后的存储映射
      */
     @Nonnull
     public static Map<ItemStack, Integer> addItems(
             @Nonnull Map<ItemStack, Integer> source, @Nonnull Map<ItemStack, Integer> toAdd) {
         Map<ItemStack, Integer> storage = new HashMap<>(source);
-        for (ItemStack itemStack : toAdd.keySet()) {
+        for (Map.Entry<ItemStack, Integer> data : toAdd.entrySet()) {
+            ItemStack itemStack = data.getKey();
             if (storage.containsKey(itemStack)) {
-                storage.put(itemStack, storage.get(itemStack) + toAdd.get(itemStack));
+                storage.put(itemStack, storage.get(itemStack) + data.getValue());
             } else {
-                storage.put(itemStack, toAdd.get(itemStack));
+                storage.put(itemStack, data.getValue());
             }
         }
         return storage;
@@ -245,17 +283,25 @@ public class ItemUtils {
      * @param storage 要清理的存储映射
      */
     public static void trim(@Nonnull Map<ItemStack, Integer> storage) {
-        List<ItemStack> toRemove = new ArrayList<>();
-        for (ItemStack itemStack : storage.keySet()) {
-            if (itemStack == null || itemStack.getType().isAir() || storage.get(itemStack) <= 0)
-                toRemove.add(itemStack);
-        }
-        for (ItemStack itemStack : toRemove) {
-            storage.remove(itemStack);
+        for (Iterator<Map.Entry<ItemStack, Integer>> it = storage.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<ItemStack, Integer> data = it.next();
+            ItemStack itemStack = data.getKey();
+            if (itemStack == null || itemStack.getType().isAir() || storage.get(itemStack) <= 0) it.remove();
         }
     }
 
     public static boolean contains(BlockMenu inv, int[] slots, ItemStack[] itemStacks) {
+        Map<ItemStack, Integer> toTake = getAmounts(itemStacks);
+
+        for (ItemStack itemStack : toTake.keySet()) {
+            if (toTake.get(itemStack) > getItemAmount(inv, slots, itemStack)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean contains(Inventory inv, int[] slots, ItemStack[] itemStacks) {
         Map<ItemStack, Integer> toTake = getAmounts(itemStacks);
 
         for (ItemStack itemStack : toTake.keySet()) {
@@ -278,28 +324,16 @@ public class ItemUtils {
         return founded;
     }
 
-    @Nonnull
-    public static Map<ItemStack, Integer> toStorage(@Nonnull NBTCompoundList nbt) {
-        Map<ItemStack, Integer> result = new ItemHashMap<>();
-        for (ReadWriteNBT compound : nbt) {
-            ItemStack itemStack = compound.getItemStack("item");
-            int amount = compound.getInteger("amount");
-            result.put(itemStack, amount);
+    public static int getItemAmount(Inventory inv, int[] slots, ItemStack itemStack) {
+        int founded = 0;
+        for (int slot : slots) {
+            ItemStack item = inv.getItem(slot);
+            if (item == null || item.getType().isAir()) continue;
+            if (SlimefunUtils.isItemSimilar(item, itemStack, true, false)) {
+                founded += item.getAmount();
+            }
         }
-        return result;
-    }
-
-    @Nonnull
-    public static NBTCompoundList toNBT(@Nonnull Map<ItemStack, Integer> storage) {
-        NBTContainer container = new NBTContainer();
-        NBTCompoundList list = container.getCompoundList("item_storage");
-        for (ItemStack itemStack : storage.keySet()) {
-            ReadWriteNBT compound = new NBTContainer();
-            compound.setItemStack("item", itemStack);
-            compound.setInteger("amount", storage.get(itemStack));
-            list.addCompound(compound);
-        }
-        return list;
+        return founded;
     }
 
     @Nullable public static IStorage getStorage(@Nonnull Block block) {
@@ -317,46 +351,46 @@ public class ItemUtils {
     /**
      * 获取方块菜单中指定槽位的物品存储
      *
-     * @param block 目标方块
+     * @param block        目标方块
      * @param checkNetwork 是否检查网络
-     * @param isReadOnly 是否只读
+     * @param isReadOnly   是否只读
      * @param allowVanilla 是否允许原版容器
      * @return 存储接口，如果无法获取则返回null
      */
     @Nullable public static IStorage getStorage(
             @Nonnull Block block, boolean checkNetwork, boolean isReadOnly, boolean allowVanilla) {
         SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(block.getLocation());
+        if (slimefunBlockData == null) return null;
         SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
 
-        if (slimefunBlockData != null) {
-            if (checkNetwork && slimefunItem instanceof IMEObject) {
-                if (!(slimefunItem instanceof MEInterface)) return null;
-                else isReadOnly = true;
-            }
-            if (SlimeAEPlugin.getInfinityIntegration().isLoaded()) {
-                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof StorageUnit) {
-                    return new InfinityBarrelStorage(block);
-                }
-            }
-            if (SlimeAEPlugin.getFluffyMachinesIntegration().isLoaded()) {
-                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof Barrel) {
-                    return new FluffyBarrelStorage(block);
-                }
-            }
-            if (SlimeAEPlugin.getNetworksIntegration().isLoaded()
-                    || SlimeAEPlugin.getNetworksIntegration().isLoaded()) {
-                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworkQuantumStorage) {
-                    return new QuantumStorage(block);
-                }
-            }
-            if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()) {
-                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworksDrawer) {
-                    return new DrawerStorage(block);
-                }
+        if (checkNetwork && slimefunItem instanceof IMEObject) {
+            if (!(slimefunItem instanceof MEInterface)) return null;
+            else isReadOnly = true;
+        }
+        if (SlimeAEPlugin.getInfinityIntegration().isLoaded()) {
+            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof StorageUnit) {
+                return new InfinityBarrelStorage(block);
             }
         }
+        if (SlimeAEPlugin.getFluffyMachinesIntegration().isLoaded()) {
+            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof Barrel) {
+                return new FluffyBarrelStorage(block);
+            }
+        }
+        if (SlimeAEPlugin.getNetworksIntegration().isLoaded()
+                || SlimeAEPlugin.getNetworksIntegration().isLoaded()) {
+            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworkQuantumStorage) {
+                return new QuantumStorage(block);
+            }
+        }
+        if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()) {
+            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworksDrawer) {
+                return new DrawerStorage(block);
+            }
+        }
+
         BlockMenu inv = StorageCacheUtils.getMenu(block.getLocation());
-        if (block.getBlockData().getMaterial().isAir()) return null;
+
         if (inv != null) {
             boolean finalIsReadOnly = isReadOnly;
             return new IStorage() {
@@ -389,10 +423,11 @@ public class ItemUtils {
                 public ItemStack[] tryTakeItem(@Nonnull ItemRequest[] requests) {
                     BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
                     if (blockMenu == null) return new ItemStack[0];
-                    Map<ItemStack, Integer> amounts = ItemUtils.getAmounts(ItemUtils.createItems(requests));
+                    Map<ItemStack, Integer> amounts = ItemUtils.getAmounts(requests);
                     ItemStorage found = new ItemStorage();
 
-                    for (ItemStack itemStack : amounts.keySet()) {
+                    for (Map.Entry<ItemStack, Integer> data : amounts.entrySet()) {
+                        ItemStack itemStack = data.getKey();
                         int[] outputSlots = blockMenu
                                 .getPreset()
                                 .getSlotsAccessedByItemTransport(blockMenu, ItemTransportFlow.WITHDRAW, itemStack);
@@ -401,15 +436,15 @@ public class ItemUtils {
                             ItemStack item = blockMenu.getItemInSlot(slot);
                             if (item == null || item.getType().isAir()) continue;
                             if (SlimefunUtils.isItemSimilar(item, itemStack, true, false)) {
-                                if (item.getAmount() > amounts.get(itemStack)) {
-                                    found.addItem(ItemUtils.createItems(itemStack, amounts.get(itemStack)));
-                                    int rest = item.getAmount() - amounts.get(itemStack);
+                                if (item.getAmount() > data.getValue()) {
+                                    found.addItem(itemStack, data.getValue());
+                                    int rest = item.getAmount() - data.getValue();
                                     item.setAmount(rest);
                                     break;
                                 } else {
-                                    found.addItem(ItemUtils.createItems(itemStack, item.getAmount()));
+                                    found.addItem(itemStack, item.getAmount());
                                     blockMenu.replaceExistingItem(slot, new ItemStack(Material.AIR));
-                                    int rest = amounts.get(itemStack) - item.getAmount();
+                                    int rest = data.getValue() - item.getAmount();
                                     if (rest != 0) amounts.put(itemStack, rest);
                                     else break;
                                 }
@@ -468,21 +503,23 @@ public class ItemUtils {
                 @Override
                 public ItemStack[] tryTakeItem(@Nonnull ItemRequest[] requests) {
                     ItemStack[] items = getVanillaItemStacks(block);
-                    Map<ItemStack, Integer> amounts = ItemUtils.getAmounts(ItemUtils.createItems(requests));
+                    Map<ItemStack, Integer> amounts = ItemUtils.getAmounts(requests);
                     ItemStorage found = new ItemStorage();
 
-                    for (ItemStack itemStack : amounts.keySet()) {
+                    for (Map.Entry<ItemStack, Integer> data : amounts.entrySet()) {
+                        ItemStack itemStack = data.getKey();
+
                         for (ItemStack item : items) {
                             if (item == null || item.getType().isAir()) continue;
                             if (SlimefunUtils.isItemSimilar(item, itemStack, true, false)) {
-                                if (item.getAmount() > amounts.get(itemStack)) {
-                                    found.addItem(ItemUtils.createItems(itemStack, amounts.get(itemStack)));
-                                    int rest = item.getAmount() - amounts.get(itemStack);
+                                if (item.getAmount() > data.getValue()) {
+                                    found.addItem(itemStack, data.getValue());
+                                    int rest = item.getAmount() - data.getValue();
                                     item.setAmount(rest);
                                     break;
                                 } else {
-                                    found.addItem(ItemUtils.createItems(itemStack, item.getAmount()));
-                                    int rest = amounts.get(itemStack) - item.getAmount();
+                                    found.addItem(itemStack, item.getAmount());
+                                    int rest = data.getValue() - item.getAmount();
                                     item.setAmount(0);
                                     if (rest != 0) amounts.put(itemStack, rest);
                                     else break;
@@ -543,8 +580,6 @@ public class ItemUtils {
             return null;
         }
         BlockMenu inv = StorageCacheUtils.getMenu(block.getLocation());
-        // 下面这一行太花费性能
-        // if (block.getBlockData().getMaterial().isAir()) return null;
         if (inv != null) {
             int[] outputSlots = inv.getPreset().getSlotsAccessedByItemTransport(inv, ItemTransportFlow.WITHDRAW, null);
             if (outputSlots == null) return null;
@@ -668,7 +703,7 @@ public class ItemUtils {
     }
 
     @Nonnull
-    public static ChestMenu.MenuClickHandler getCardSlotClickHandler() {
+    public static ChestMenu.MenuClickHandler getCardSlotClickHandler(@Nonnull Block block) {
         return new ChestMenu.AdvancedMenuClickHandler() {
             @Override
             public boolean onClick(
@@ -693,6 +728,11 @@ public class ItemUtils {
                         inventoryClickEvent.getWhoClicked().setItemOnCursor(current);
                     }
                 }
+                SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(block.getLocation());
+                if (slimefunBlockData == null) return false;
+                SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
+                if (!(slimefunItem instanceof ICardHolder)) return false;
+                ICardHolder.cache.remove(block.getLocation());
 
                 return false;
             }
@@ -707,12 +747,13 @@ public class ItemUtils {
     public static ItemStack createDisplayItem(@Nonnull ItemStack itemStack, int amount) {
         return createDisplayItem(itemStack, amount, true);
     }
+
     /**
      * 创建用于显示的物品堆
      *
      * @param itemStack 原始物品堆
-     * @param amount 显示数量
-     * @param addLore 是否添加描述
+     * @param amount    显示数量
+     * @param addLore   是否添加描述
      * @return 用于显示的物品堆
      */
     @Nonnull
@@ -728,17 +769,26 @@ public class ItemUtils {
             meta.setLore(lore);
         }
         result.setItemMeta(meta);
+        NBT.modify(result, x -> {
+            x.setBoolean(DISPLAY_ITEM, true);
+        });
         return result;
     }
 
-    @Nullable public static ItemStack getDisplayItem(@Nonnull ItemStack itemStack) {
+    @Nullable public static ItemStack getDisplayItem(@Nonnull ItemStack itemStack, boolean hasLore) {
         ItemStack result = itemStack.asOne();
         ItemMeta meta = result.getItemMeta();
-        List<String> lore = meta.getLore();
-        lore.remove(lore.size() - 1);
-        lore.remove(lore.size() - 1);
-        meta.setLore(lore);
+        if (hasLore) {
+            List<String> lore = meta.getLore();
+            lore.remove(lore.size() - 1);
+            lore.remove(lore.size() - 1);
+            meta.setLore(lore);
+        }
         result.setItemMeta(meta);
+
+        NBT.modify(result, x -> {
+            x.removeKey(DISPLAY_ITEM);
+        });
         return result;
     }
 
@@ -756,5 +806,32 @@ public class ItemUtils {
         } else {
             return ItemStackHelper.getName(itemStack);
         }
+    }
+
+    public static ItemStack[] takeItems(Inventory inventory, int[] slots, ItemRequest[] requests) {
+        ItemStack[] items = Arrays.stream(slots).mapToObj(inventory::getItem).toArray(ItemStack[]::new);
+        Map<ItemStack, Integer> amounts = ItemUtils.getAmounts(requests);
+        ItemStorage found = new ItemStorage();
+
+        for (ItemStack itemStack : amounts.keySet()) {
+            for (ItemStack item : items) {
+                if (item == null || item.getType().isAir()) continue;
+                if (SlimefunUtils.isItemSimilar(item, itemStack, true, false)) {
+                    if (item.getAmount() > amounts.get(itemStack)) {
+                        found.addItem(itemStack, amounts.get(itemStack));
+                        int rest = item.getAmount() - amounts.get(itemStack);
+                        item.setAmount(rest);
+                        break;
+                    } else {
+                        found.addItem(itemStack, item.getAmount());
+                        int rest = amounts.get(itemStack) - item.getAmount();
+                        item.setAmount(0);
+                        if (rest != 0) amounts.put(itemStack, rest);
+                        else break;
+                    }
+                }
+            }
+        }
+        return found.toItemStacks();
     }
 }

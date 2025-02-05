@@ -26,6 +26,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.ddggdd135.guguslimefunlib.api.AEMenu;
 import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
+import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.CraftingRecipe;
 import me.ddggdd135.slimeae.api.ItemRequest;
@@ -39,8 +40,9 @@ import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.ddggdd135.slimeae.utils.KeyValuePair;
 import net.Zrips.CMILib.Items.CMIMaterial;
 
+
 public class AutoCraftingSession {
-    public static NamespacedKey CRAFTING_KEY = new NamespacedKey(SlimeAEPlugin.getInstance(), "auto_crafting");
+    public static final String CRAFTING_KEY = "auto_crafting";
     private final CraftingRecipe recipe;
     private final NetworkInfo info;
     private final int count;
@@ -122,11 +124,11 @@ public class AutoCraftingSession {
                 int need = in.get(template) * count;
 
                 if (amount >= need) {
-                    storage.tryTakeItem(new ItemRequest(template, need));
+                    storage.tryTakeItem(new ItemRequest(template, need, true));
                 } else {
                     int remainingNeed = need - amount;
                     if (amount > 0) {
-                        storage.tryTakeItem(new ItemRequest(template, amount));
+                        storage.tryTakeItem(new ItemRequest(template, amount, true));
                     }
 
                     // 尝试合成缺少的材料
@@ -272,14 +274,14 @@ public class AutoCraftingSession {
                     && device.getFinishedCraftingRecipe(deviceBlock).equals(next.getKey())) {
                 CraftingRecipe finished = device.getFinishedCraftingRecipe(deviceBlock);
                 device.finishCrafting(deviceBlock);
-                itemCache.addItem(finished.getOutput());
+                if (finished != null) itemCache.addItem(finished.getOutput());
                 running--;
             }
         }
 
         Set<ItemStack> toPush = new HashSet<>(itemCache.getStorage().keySet());
         for (ItemStack itemStack : toPush) {
-            ItemStack[] items = itemCache.tryTakeItem(new ItemRequest(itemStack, Integer.MAX_VALUE));
+            ItemStack[] items = itemCache.tryTakeItem(new ItemRequest(itemStack, Integer.MAX_VALUE, true));
             networkStorage.pushItem(items);
             items = Arrays.stream(items).filter(x -> x.getAmount() != 0).toArray(ItemStack[]::new);
             itemCache.pushItem(items);
@@ -325,7 +327,6 @@ public class AutoCraftingSession {
                                 .toArray(String[]::new));
             }
             ItemMeta meta = itemStack.getItemMeta();
-            meta.getPersistentDataContainer().set(CRAFTING_KEY, PersistentDataType.BOOLEAN, true);
             List<String> lore = meta.getLore();
             if (lore == null) lore = new ArrayList<>();
             lore.add("");
@@ -333,6 +334,9 @@ public class AutoCraftingSession {
             if (i == 0 && running != 0) lore.add("&a合成中 &e" + running);
             meta.setLore(CMIChatColor.translate(lore));
             itemStack.setItemMeta(meta);
+            NBT.modify(itemStack, x -> {
+                x.setBoolean(CRAFTING_KEY, true);
+            });
             menu.addItem(i, itemStack);
             menu.addMenuClickHandler(i, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -352,9 +356,11 @@ public class AutoCraftingSession {
                 }
             }
             ItemMeta meta = itemStack.getItemMeta();
-            meta.getPersistentDataContainer().set(CRAFTING_KEY, PersistentDataType.BOOLEAN, true);
             meta.setLore(CMIChatColor.translate(lore));
             itemStack.setItemMeta(meta);
+            NBT.modify(itemStack, x -> {
+                x.setBoolean(CRAFTING_KEY, true);
+            });
             menu.addItem(maxSize - 1, itemStack);
         }
 

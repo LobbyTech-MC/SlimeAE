@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.api.MEStorageCellCache;
-import me.ddggdd135.slimeae.api.ResultWithItem;
 import me.ddggdd135.slimeae.api.SubCommand;
 import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
 import net.kyori.adventure.text.Component;
@@ -57,17 +56,16 @@ public class UuidCommand extends SubCommand {
                 return false;
             }
 
-            ResultWithItem<MEStorageCellCache> data = MEItemStorageCell.getStorage(itemStack);
+            MEStorageCellCache data = MEItemStorageCell.getStorage(itemStack);
             if (data == null) {
                 commandSender.sendMessage(CMIChatColor.translate("&e你确定你拿着存储元件？"));
                 return false;
             }
-            player.getInventory().setItemInMainHand(data.getItemStack());
-            TextComponent textComponent = Component.text(CMIChatColor.translate(
-                            "&eUUID: " + data.getResult().getUuid().toString()))
+
+            TextComponent textComponent = Component.text(
+                            CMIChatColor.translate("&eUUID: " + data.getUuid().toString()))
                     .clickEvent(ClickEvent.clickEvent(
-                            ClickEvent.Action.COPY_TO_CLIPBOARD,
-                            data.getResult().getUuid().toString()))
+                            ClickEvent.Action.COPY_TO_CLIPBOARD, data.getUuid().toString()))
                     .hoverEvent(HoverEvent.showText(Component.text(CMIChatColor.translate("&e点击复制"))));
             commandSender.sendMessage(textComponent);
         }

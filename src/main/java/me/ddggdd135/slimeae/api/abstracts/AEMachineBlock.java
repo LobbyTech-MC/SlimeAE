@@ -59,6 +59,11 @@ public abstract class AEMachineBlock extends AbstractMachineBlock implements ICa
                 BlockMenu blockMenu = StorageCacheUtils.getMenu(b.getLocation());
                 if (blockMenu == null) return;
 
+                blockMenu.dropItems(b.getLocation(), getInputSlots());
+                blockMenu.dropItems(b.getLocation(), getOutputSlots());
+
+                getMachineProcessor().endOperation(b);
+
                 for (int slot : CARD_SLOTS) {
                     ItemStack itemStack = blockMenu.getItemInSlot(slot);
                     if (itemStack != null
@@ -74,10 +79,6 @@ public abstract class AEMachineBlock extends AbstractMachineBlock implements ICa
     @Override
     public void init(@Nonnull BlockMenuPreset preset) {
         super.init(preset);
-
-        for (int slot : getCardSlots()) {
-            preset.addMenuClickHandler(slot, ItemUtils.getCardSlotClickHandler());
-        }
     }
 
     @Override
@@ -89,6 +90,7 @@ public abstract class AEMachineBlock extends AbstractMachineBlock implements ICa
                     || menu.getItemInSlot(slot).getType().isAir()) {
                 menu.replaceExistingItem(slot, MenuItems.Card);
             }
+            menu.addMenuClickHandler(slot, ItemUtils.getCardSlotClickHandler(block));
         }
     }
 

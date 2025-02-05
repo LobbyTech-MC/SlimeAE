@@ -18,6 +18,12 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.CraftingRecipe;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
@@ -162,19 +168,17 @@ public class MEPatternTerminal extends METerminal {
                             .filter(Objects::nonNull)
                             .filter(x -> !x.getType().isAir())
                             .toArray(ItemStack[]::new));
-            toOut = Pattern.setRecipe(toOut, recipe);
+            Pattern.setRecipe(toOut, recipe);
         } else {
-            ItemStack output = null;
-            for (int slot : getCraftOutputSlots()) {
-                ItemStack itemStack = blockMenu.getItemInSlot(slot);
-                if (output != null
-                        && !output.getType().isAir()
-                        && itemStack != null
-                        && !itemStack.getType().isAir()) return;
-                if (itemStack != null && !itemStack.getType().isAir()) output = itemStack;
+            ItemStack[] inputs;
+            List<ItemStack> inputList = new ArrayList<>();
+            for (int slot : getCraftSlots()) {
+                inputList.add(blockMenu.getItemInSlot(slot));
             }
-            if (output == null) return;
-            CraftingRecipe recipe = RecipeUtils.getRecipe(output);
+
+            inputs = inputList.toArray(ItemStack[]::new);
+            CraftingRecipe recipe = RecipeUtils.getRecipe(inputs);
+
             if (recipe == null) return;
             for (int i = 0; i < getCraftSlots().length; i++) {
                 int slot = getCraftSlots()[i];
@@ -187,7 +191,7 @@ public class MEPatternTerminal extends METerminal {
             }
             toOut.setAmount(1);
             in.subtract();
-            toOut = Pattern.setRecipe(toOut, recipe);
+            Pattern.setRecipe(toOut, recipe);
         }
         blockMenu.replaceExistingItem(getPatternOutputSlot(), toOut);
     }

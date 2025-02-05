@@ -10,11 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.bukkit.inventory.ItemStack;
-
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTItem;
+import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTType;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
@@ -38,28 +34,41 @@ public class MEStorageCellCache implements IStorage {
         else {
             storages = new ConcurrentHashMap<>();
         }
-        NBTItem nbtItem = new NBTItem(itemStack);
-        uuid = nbtItem.getUUID(MEItemStorageCell.UUID_KEY);
+        UUID tmp = NBT.get(itemStack, x -> {
+            return x.getUUID(MEItemStorageCell.UUID_KEY);
+        });
+        if (tmp == null) {
+            tmp = UUID.randomUUID();
+            UUID finalTmp = tmp;
+            NBT.modify(itemStack, x -> {
+                x.setUUID(MEItemStorageCell.UUID_KEY, finalTmp);
+            });
+        }
+        uuid = tmp;
         cache.put(uuid, this);
     }
 
-    @Nullable public static ResultWithItem<MEStorageCellCache> getMEStorageCellCache(@Nonnull ItemStack itemStack) {
-        ResultWithItem<Boolean> isCurrentServerResult = MEItemStorageCell.isCurrentServer(itemStack);
-        if (!isCurrentServerResult.getResult()) {
+    @Nullable public static MEStorageCellCache getMEStorageCellCache(@Nonnull ItemStack itemStack) {
+        if (!MEItemStorageCell.isCurrentServer(itemStack)) {
             return null;
         }
-        itemStack = isCurrentServerResult.getItemStack();
-        NBTItem nbtItem = new NBTItem(itemStack);
+
         UUID uuid = UUID.randomUUID();
-        if (!nbtItem.hasTag(MEItemStorageCell.UUID_KEY, NBTType.NBTTagIntArray)) {
-            nbtItem.setUUID(MEItemStorageCell.UUID_KEY, uuid);
+        if (!NBT.get(itemStack, x -> {
+            return x.hasTag(MEItemStorageCell.UUID_KEY, NBTType.NBTTagIntArray);
+        })) {
+            UUID finalUuid = uuid;
+            NBT.modify(itemStack, x -> {
+                x.setUUID(MEItemStorageCell.UUID_KEY, finalUuid);
+            });
         } else {
-            uuid = nbtItem.getUUID(MEItemStorageCell.UUID_KEY);
-            if (getMEStorageCellCache(uuid) != null)
-                return new ResultWithItem<>(getMEStorageCellCache(uuid), itemStack);
+            uuid = NBT.get(itemStack, x -> {
+                return x.getUUID(MEItemStorageCell.UUID_KEY);
+            });
+            if (getMEStorageCellCache(uuid) != null) return getMEStorageCellCache(uuid);
         }
 
-        return SlimeAEPlugin.getStorageCellDataController().loadData(nbtItem.getItem());
+        return SlimeAEPlugin.getStorageCellDataController().loadData(itemStack);
     }
 
     @Nullable public static MEStorageCellCache getMEStorageCellCache(UUID uuid) {
@@ -77,7 +86,7 @@ public class MEStorageCellCache implements IStorage {
     private void trim(@Nonnull ItemStack template) {
         if (storages.containsKey(template) && storages.getOrDefault(template, 0) == 0) {
             storages.remove(template);
-            SlimeAEPlugin.getStorageCellDataController().deleteAsync(this, template);
+            SlimeAEPlugin.getStorageCellDataController().markDirty(this);
         }
     }
 
@@ -99,7 +108,7 @@ public class MEStorageCellCache implements IStorage {
             else toAdd = itemStack.getAmount();
             stored += toAdd;
             storages.put(template, amount + toAdd);
-            SlimeAEPlugin.getStorageCellDataController().updateAsync(this, template, amount + toAdd, amount == 0);
+            SlimeAEPlugin.getStorageCellDataController().markDirty(this);
             itemStack.setAmount(itemStack.getAmount() - toAdd);
             trim(itemStack);
         }
@@ -132,8 +141,7 @@ public class MEStorageCellCache implements IStorage {
                     itemStacks.addAll(List.of(tmp));
                     stored -= request.getAmount();
                     storages.put(request.getTemplate(), amount - request.getAmount());
-                    SlimeAEPlugin.getStorageCellDataController()
-                            .updateAsync(this, request.getTemplate(), amount - request.getAmount(), false);
+                    SlimeAEPlugin.getStorageCellDataController().markDirty(this);
                 } else {
                     ItemStack[] tmp = ItemUtils.createItems(request.getTemplate(), amount);
                     itemStacks.addAll(List.of(tmp));

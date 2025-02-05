@@ -21,7 +21,6 @@ import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.abstracts.Card;
 import me.ddggdd135.slimeae.core.AutoCraftingSession;
 import me.ddggdd135.slimeae.core.NetworkInfo;
-import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
@@ -58,7 +57,7 @@ public class CraftingCard extends Card {
                 ItemStack setting = ItemUtils.getSettingItem(blockMenu.getInventory(), settingSlot);
                 ItemStack itemStack = blockMenu.getItemInSlot(slot);
 
-                if (SlimefunUtils.isItemSimilar(setting, MenuItems.Setting, true, false)) {
+                if (setting == null || setting.getType().isAir()) {
                     continue;
                 }
 
@@ -80,9 +79,7 @@ public class CraftingCard extends Card {
         if (item instanceof MEExportBus) {
             for (int slot : MEExportBus.Setting_Slots) {
                 ItemStack setting = ItemUtils.getSettingItem(blockMenu.getInventory(), slot);
-                if (setting == null
-                        || setting.getType().isAir()
-                        || SlimefunUtils.isItemSimilar(setting, MenuItems.Setting, true, false)) {
+                if (setting == null || setting.getType().isAir()) {
                     continue;
                 }
                 if (!networkInfo.getStorage().contains(new ItemRequest(setting, setting.getAmount()))) {

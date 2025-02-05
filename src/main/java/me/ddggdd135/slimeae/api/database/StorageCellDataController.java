@@ -1,16 +1,13 @@
 package me.ddggdd135.slimeae.api.database;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.bukkit.inventory.ItemStack;
-
+import java.util.*;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import me.ddggdd135.slimeae.api.MEStorageCellCache;
-import me.ddggdd135.slimeae.api.ResultWithItem;
 import me.ddggdd135.slimeae.utils.SerializeUtils;
 
 public class StorageCellDataController extends DatabaseController<MEStorageCellCache> {
+    public final Set<MEStorageCellCache> needSave = new HashSet<>();
+
     public StorageCellDataController() {
         super(MEStorageCellCache.class);
     }
@@ -27,6 +24,13 @@ public class StorageCellDataController extends DatabaseController<MEStorageCellC
                 + "item_base64 TEXT, "
                 + "amount BIGINT"
                 + ");");
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void shutdown() {
+        saveAllAsync();
+        super.shutdown();
     }
 
     @Override
@@ -98,7 +102,7 @@ public class StorageCellDataController extends DatabaseController<MEStorageCellC
         return SerializeUtils.getItemHash(itemStack);
     }
 
-    public ResultWithItem<MEStorageCellCache> loadData(ItemStack itemStack) {
+    public MEStorageCellCache loadData(ItemStack itemStack) {
         MEStorageCellCache storageCellCache = new MEStorageCellCache(itemStack);
         Map<ItemStack, Integer> storage = storageCellCache.getSourceStorage();
         int stored = 0;
@@ -117,6 +121,18 @@ public class StorageCellDataController extends DatabaseController<MEStorageCellC
 
         storageCellCache.updateStored(stored);
 
-        return new ResultWithItem<>(storageCellCache, itemStack);
+        return storageCellCache;
+    }
+
+    public void markDirty(MEStorageCellCache data) {
+        needSave.add(data);
+    }
+
+    public void saveAllAsync() {
+        Set<MEStorageCellCache> diff = new HashSet<>(needSave);
+        needSave.clear();
+        for (MEStorageCellCache data : diff) {
+            updateAsync(data);
+        }
     }
 }

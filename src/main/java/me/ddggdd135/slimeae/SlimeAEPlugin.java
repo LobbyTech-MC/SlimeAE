@@ -11,6 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import java.util.logging.Level;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.api.database.StorageCellDataController;
 import me.ddggdd135.slimeae.core.NetworkData;
 import me.ddggdd135.slimeae.core.NetworkInfo;
@@ -27,16 +31,8 @@ import me.ddggdd135.slimeae.core.listeners.BlockListener;
 import me.ddggdd135.slimeae.core.listeners.NetworkListener;
 import me.ddggdd135.slimeae.core.listeners.NetworksIntegrationListener;
 import me.ddggdd135.slimeae.core.slimefun.CraftingCard;
-import me.ddggdd135.slimeae.integrations.FluffyMachinesIntegration;
-import me.ddggdd135.slimeae.integrations.InfinityIntegration;
-import me.ddggdd135.slimeae.integrations.JustEnoughGuideIntegration;
-import me.ddggdd135.slimeae.integrations.NetworksExpansionIntegration;
-import me.ddggdd135.slimeae.integrations.NetworksIntegration;
-import me.ddggdd135.slimeae.integrations.TranscEndenceIntegration;
-import me.ddggdd135.slimeae.tasks.NetworkCheckTask;
-import me.ddggdd135.slimeae.tasks.NetworkRefreshTask;
-import me.ddggdd135.slimeae.tasks.NetworkTickerTask;
-import net.Zrips.CMILib.Colors.CMIChatColor;
+import me.ddggdd135.slimeae.integrations.*;
+import me.ddggdd135.slimeae.tasks.*;
 import net.guizhanss.minecraft.guizhanlib.updater.GuizhanUpdater;
 
 /**
@@ -57,6 +53,8 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
     private final NetworkTickerTask networkTicker = new NetworkTickerTask();
     private final NetworkCheckTask networkChecker = new NetworkCheckTask();
     private final NetworkRefreshTask networkRefresher = new NetworkRefreshTask();
+    private final NetworkTimeConsumingTask networkTimeConsumingTask = new NetworkTimeConsumingTask();
+    private final DataSavingTask dataSavingTask = new DataSavingTask();
     private final SlimeAECommand slimeAECommand = new SlimeAECommand();
 
     @Override
@@ -77,17 +75,7 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         Bukkit.getConsoleSender().sendMessage("############################################");
         tryUpdate();
 
-        // 保存默认配置
-        saveDefaultConfig();
-
-        // 重载网络配置
-        NetworkInfo.reloadConfig();
-
-        // 重载矿石生成配置
-        SlimefunBlockPopulator.reloadConfig();
-
-        // 重载合成卡冷却时间配置
-        CraftingCard.reloadConfig();
+        reloadConfig0();
 
         // Plugin startup logic
         SlimefunAEItemGroups.onSetup(this);
@@ -120,10 +108,14 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         networkTicker.start(this);
         networkChecker.start(this);
         networkRefresher.start(this);
+        networkTimeConsumingTask.start(this);
+        dataSavingTask.start(this);
 
-        slimeAECommand.addSubCommand(new HelpCommand());
-        slimeAECommand.addSubCommand(new CleardataCommand());
         slimeAECommand.addSubCommand(new ApplyUUIDCommand());
+        slimeAECommand.addSubCommand(new CleardataCommand());
+        slimeAECommand.addSubCommand(new HelpCommand());
+        slimeAECommand.addSubCommand(new ReloadCommand());
+        slimeAECommand.addSubCommand(new SavedataCommand());
         slimeAECommand.addSubCommand(new UuidCommand());
         slimeAECommand.addSubCommand(new ViewitemsCommand());
 
@@ -259,7 +251,33 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
     }
 
     @Nonnull
+    public static NetworkTimeConsumingTask getNetworkTimeConsumingTask() {
+        return getInstance().networkTimeConsumingTask;
+    }
+
+    @Nonnull
+    public static DataSavingTask getDataSavingTask() {
+        return getInstance().dataSavingTask;
+    }
+
+    @Nonnull
     public static SlimeAECommand getSlimeAECommand() {
         return getInstance().slimeAECommand;
+    }
+
+    public void reloadConfig0() {
+        // 保存默认配置
+        saveDefaultConfig();
+
+        reloadConfig();
+
+        // 重载网络配置
+        NetworkInfo.reloadConfig();
+
+        // 重载矿石生成配置
+        SlimefunBlockPopulator.reloadConfig();
+
+        // 重载合成卡冷却时间配置
+        CraftingCard.reloadConfig();
     }
 }

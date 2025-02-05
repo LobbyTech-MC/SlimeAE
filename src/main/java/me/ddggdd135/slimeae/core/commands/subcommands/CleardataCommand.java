@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.MEStorageCellCache;
-import me.ddggdd135.slimeae.api.ResultWithItem;
 import me.ddggdd135.slimeae.api.SubCommand;
 import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
 
@@ -55,14 +54,14 @@ public class CleardataCommand extends SubCommand {
                     return false;
                 }
 
-                ResultWithItem<MEStorageCellCache> data = MEItemStorageCell.getStorage(itemStack);
+                MEStorageCellCache data = MEItemStorageCell.getStorage(itemStack);
                 if (data == null) {
                     commandSender.sendMessage(CMIChatColor.translate("&e你确定你拿着存储元件？"));
                     return false;
                 }
-                data.getResult().getSourceStorage().clear();
-                player.getInventory().setItemInMainHand(MEItemStorageCell.updateLore(data.getItemStack()));
-                SlimeAEPlugin.getStorageCellDataController().delete(data.getResult());
+                data.getSourceStorage().clear();
+                player.getInventory().setItemInMainHand(MEItemStorageCell.updateLore(itemStack));
+                SlimeAEPlugin.getStorageCellDataController().delete(data);
                 commandSender.sendMessage(CMIChatColor.translate("&a成功清除了存储元件数据"));
 
                 return false;

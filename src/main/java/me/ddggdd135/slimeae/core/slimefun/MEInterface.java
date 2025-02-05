@@ -165,21 +165,18 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
     @OverridingMethodsMustInvokeSuper
     public void init(@Nonnull BlockMenuPreset preset) {
         preset.drawBackground(BORDER_SLOTS);
-        for (int slot : SETTING_SLOTS) {
+        for (int slot : getSettingSlots()) {
             preset.addMenuClickHandler(slot, ItemUtils.getSettingSlotClickHandler());
         }
         for (int slot : PATTERN_SLOTS) {
             preset.addMenuClickHandler(slot, ItemUtils.getPatternSlotClickHandler());
-        }
-        for (int slot : getCardSlots()) {
-            preset.addMenuClickHandler(slot, ItemUtils.getCardSlotClickHandler());
         }
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block block) {
-        for (int slot : SETTING_SLOTS) {
+        for (int slot : getSettingSlots()) {
             if (menu.getItemInSlot(slot) == null
                     || menu.getItemInSlot(slot).getType().isAir())
                 ItemUtils.setSettingItem(menu.getInventory(), slot, MenuItems.Setting);
@@ -193,6 +190,7 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
                     || menu.getItemInSlot(slot).getType().isAir()) {
                 menu.replaceExistingItem(slot, MenuItems.Card);
             }
+            menu.addMenuClickHandler(slot, ItemUtils.getCardSlotClickHandler(block));
         }
     }
 
@@ -255,4 +253,8 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
 
     @Override
     public void onNetworkTick(Block block, NetworkInfo networkInfo) {}
+
+    public int[] getSettingSlots() {
+        return SETTING_SLOTS;
+    }
 }

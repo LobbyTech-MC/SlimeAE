@@ -15,30 +15,11 @@ import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.abstracts.Card;
 import me.ddggdd135.slimeae.api.abstracts.MEObject;
 import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
-import me.ddggdd135.slimeae.core.slimefun.AccelerationCard;
-import me.ddggdd135.slimeae.core.slimefun.Charger;
-import me.ddggdd135.slimeae.core.slimefun.CookingAllocator;
-import me.ddggdd135.slimeae.core.slimefun.CraftingCard;
-import me.ddggdd135.slimeae.core.slimefun.CraftingMonitor;
-import me.ddggdd135.slimeae.core.slimefun.CrystalCertusQuartz;
-import me.ddggdd135.slimeae.core.slimefun.Inscriber;
-import me.ddggdd135.slimeae.core.slimefun.MEController;
-import me.ddggdd135.slimeae.core.slimefun.MECraftPlanningTerminal;
-import me.ddggdd135.slimeae.core.slimefun.MECraftingTerminal;
-import me.ddggdd135.slimeae.core.slimefun.MECreativeItemStorageCell;
-import me.ddggdd135.slimeae.core.slimefun.MEDrive;
-import me.ddggdd135.slimeae.core.slimefun.MEExportBus;
-import me.ddggdd135.slimeae.core.slimefun.MEIEBus;
-import me.ddggdd135.slimeae.core.slimefun.MEImportBus;
-import me.ddggdd135.slimeae.core.slimefun.MEInterface;
-import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
-import me.ddggdd135.slimeae.core.slimefun.MEPatternTerminal;
-import me.ddggdd135.slimeae.core.slimefun.MEStorageBus;
-import me.ddggdd135.slimeae.core.slimefun.METerminal;
-import me.ddggdd135.slimeae.core.slimefun.MEUnit;
-import me.ddggdd135.slimeae.core.slimefun.MolecularAssembler;
-import me.ddggdd135.slimeae.core.slimefun.NetworksExpansionSwitch;
-import me.ddggdd135.slimeae.core.slimefun.Pattern;
+import me.ddggdd135.slimeae.core.slimefun.*;
+import me.ddggdd135.slimeae.core.slimefun.tools.MemoryCard;
+import me.ddggdd135.slimeae.core.slimefun.tools.NetworkTool;
+import me.ddggdd135.slimeae.core.slimefun.tools.WirelessTerminal;
+import me.ddggdd135.slimeae.core.slimefun.tools.Wrench;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 
 public class SlimefunAEItems {
@@ -97,6 +78,16 @@ public class SlimefunAEItems {
                     "&fME驱动器",
                     "",
                     "{#3366ff>}用于放置ME存储元件{#33ccf3<}"));
+    public static final SlimefunItemStack ME_IO_PORT = new SlimefunItemStack(
+            "ME_IO_PORT",
+            new AdvancedCustomItemStack(
+                    Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
+                            ? Material.CHISELED_BOOKSHELF
+                            : Material.BOOKSHELF,
+                    "&fME IO端口",
+                    "",
+                    "{#3366ff>}将物品存储元件里的物品输入至ME网络{#33ccf3<}",
+                    "{#3366ff>}或者将ME网络里的物品输出至物品元件{#33ccf3<}"));
     public static final SlimefunItemStack MOLECULAR_ASSEMBLER = new SlimefunItemStack(
             "MOLECULAR_ASSEMBLER",
             new AdvancedCustomItemStack(
@@ -148,6 +139,9 @@ public class SlimefunAEItems {
                     "&e支持蓬松桶和无尽存储单元",
                     "&e支持网络量子存储和网络抽屉",
                     "&e不支持原版容器"));
+    public static final SlimefunItemStack ME_TERMINAL = new SlimefunItemStack(
+            "ME_TERMINAL",
+            new AdvancedCustomItemStack(Material.SHROOMLIGHT, "&fME终端", "", "{#3366ff>}管理AE网络中的物品{#33ccf3<}"));
     public static final SlimefunItemStack ME_CRAFTING_TERMINAL = new SlimefunItemStack(
             "ME_CRAFTING_TERMINAL", new AdvancedCustomItemStack(Material.CRAFTING_TABLE, "&fME合成终端"));
     public static final SlimefunItemStack ME_CRAFT_PLANNING_TERMINAL = new SlimefunItemStack(
@@ -155,9 +149,9 @@ public class SlimefunAEItems {
     public static final SlimefunItemStack ME_PATTERN_TERMINAL = new SlimefunItemStack(
             "ME_PATTERN_TERMINAL",
             new AdvancedCustomItemStack(Material.LOOM, "&fME样板终端", "", "{#3366ff>}可以制作编码样板{#33ccf3<}"));
-    public static final SlimefunItemStack ME_TERMINAL = new SlimefunItemStack(
-            "ME_TERMINAL",
-            new AdvancedCustomItemStack(Material.SHROOMLIGHT, "&fME终端", "", "{#3366ff>}管理AE网络中的物品{#33ccf3<}"));
+    public static final SlimefunItemStack ME_SECURITY_TERMINAL = new SlimefunItemStack(
+            "ME_SECURITY_TERMINAL",
+            new AdvancedCustomItemStack(Material.ENDER_CHEST, "&fME安全终端", "", "{#3366ff>}用于连接无线终端{#33ccf3<}"));
     public static final SlimefunItemStack ENERGY_ACCEPTOR = new SlimefunItemStack(
             "ME_ENERGY_ACCEPTOR",
             new AdvancedCustomItemStack(Material.WHITE_STAINED_GLASS, "&f能源接收器", "", "&c现在它还没用 敬请期待"));
@@ -188,6 +182,8 @@ public class SlimefunAEItems {
             new SlimefunItemStack("QUARTZ_DUST", new AdvancedCustomItemStack(Material.SUGAR, "{#ffffff}下界石英粉"));
     public static final SlimefunItemStack SKY_STONE_DUST = new SlimefunItemStack(
             "SKY_STONE_DUST", new AdvancedCustomItemStack(Material.GUNPOWDER, "{#Bright_Gray}陨石粉"));
+    public static final SlimefunItemStack FLUIX_PEARL =
+            new SlimefunItemStack("FLUIX_PEARL", new AdvancedCustomItemStack(Material.ENDER_EYE, "&d福鲁伊克斯珍珠"));
     public static final SlimefunItemStack PRINTED_SILICON =
             new SlimefunItemStack("PRINTED_SILICON", new AdvancedCustomItemStack(Material.ORANGE_DYE, "{#Sky_Blue}硅板"));
     public static final SlimefunItemStack PRINTED_LOGIC_CIRCUIT = new SlimefunItemStack(
@@ -220,6 +216,8 @@ public class SlimefunAEItems {
                                     : Material.SHULKER_SHELL,
                             "{#Sky_Blue}工程处理器")
                     .addFlags(ItemFlag.values()));
+    public static final SlimefunItemStack WIRELESS_RECEIVER =
+            new SlimefunItemStack("WIRELESS_RECEIVER", new AdvancedCustomItemStack(Material.REDSTONE_TORCH, "&d无线接收器"));
     public static final SlimefunItemStack ME_STORAGE_HOUSING = new SlimefunItemStack(
             "ME_STORAGE_HOUSING",
             new AdvancedCustomItemStack(
@@ -290,17 +288,19 @@ public class SlimefunAEItems {
     public static final SlimefunItemStack ACCELERATION_CARD = new SlimefunItemStack(
             "ACCELERATION_CARD",
             new AdvancedCustomItemStack(
-                    Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
-                            ? Material.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE
-                            : Material.SHULKER_SHELL,
-                    "{#33ccf3}加速卡"));
+                            Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
+                                    ? Material.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE
+                                    : Material.SHULKER_SHELL,
+                            "{#33ccf3}加速卡")
+                    .addFlags(ItemFlag.values()));
     public static final SlimefunItemStack CRAFTING_CARD = new SlimefunItemStack(
             "CRAFTING_CARD",
             new AdvancedCustomItemStack(
-                    Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
-                            ? Material.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE
-                            : Material.SHULKER_SHELL,
-                    "{#33ccf3}合成卡"));
+                            Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
+                                    ? Material.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE
+                                    : Material.SHULKER_SHELL,
+                            "{#33ccf3}合成卡")
+                    .addFlags(ItemFlag.values()));
     //    public static final SlimefunItemStack CAPACITY_CARD = new SlimefunItemStack(
     //            "CAPACITY_CARD",
     //            new AdvancedCustomItemStack(
@@ -320,6 +320,28 @@ public class SlimefunAEItems {
             new AdvancedCustomItemStack(
                     Version.getCurrent().isEqualOrHigher(Version.v1_20_R1) ? Material.PRISMARINE_SHARD : Material.PAPER,
                     "{#33ccf3}编码样板"));
+
+    // TOOLS
+    public static final SlimefunItemStack MEMORY_CARD = new SlimefunItemStack(
+            "MEMORY_CARD",
+            new AdvancedCustomItemStack(Material.PAPER, "&e内存卡", "", "&e复制ME设备的设置", "", "&eShift右键 复制设置", "&e右键 应用设置"));
+    public static final SlimefunItemStack WIRELESS_TERMINAL = new SlimefunItemStack(
+            "WIRELESS_TERMINAL",
+            new AdvancedCustomItemStack(Material.ITEM_FRAME, "{#Sky_Blue}无线终端", "", "&e便捷的访问AE网络", "&e需要使用ME安全终端进行绑定"));
+    public static final SlimefunItemStack CERTUS_QUARTZ_WRENCH = new SlimefunItemStack(
+            "CERTUS_QUARTZ_WRENCH",
+            new AdvancedCustomItemStack(Material.DIAMOND_HOE, "{#Zumthor}赛特斯石英扳手", "", "&e右键可将大部分AE设备拆卸为掉落物形式"));
+    public static final SlimefunItemStack QUARTZ_WRENCH = new SlimefunItemStack(
+            "QUARTZ_WRENCH",
+            new AdvancedCustomItemStack(Material.IRON_HOE, "&f下界石英扳手", "", "&e手持扳手右键可将大部分AE设备拆卸为掉落物形式"));
+    public static final SlimefunItemStack NETWORK_TOOL = new SlimefunItemStack(
+            "NETWORK_TOOL",
+            new AdvancedCustomItemStack(
+                    Material.NETHERITE_HOE,
+                    "{#Fuchsia_Pink}网络工具",
+                    "",
+                    "&e右键可查看整个AE网络的各个网络元件",
+                    "&eShift右键可将大部分AE设备拆卸为掉落物形式"));
 
     public static void onSetup(SlimeAEPlugin plugin) {
         // Infos
@@ -387,6 +409,18 @@ public class SlimefunAEItems {
                     ME_GLASS_CABLE,
                     new ItemStack(Material.IRON_INGOT),
                     ENGINEERING_PROCESSOR,
+                    new ItemStack(Material.IRON_INGOT)
+                })
+                .register(plugin);
+        new MEIOPort(SlimefunAEItemGroups.MACHINE, ME_IO_PORT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    new ItemStack(Material.GLASS),
+                    new ItemStack(Material.GLASS),
+                    new ItemStack(Material.GLASS),
+                    ME_DRIVE,
+                    ME_GLASS_CABLE,
+                    ME_DRIVE,
+                    new ItemStack(Material.IRON_INGOT),
+                    LOGIC_PROCESSOR,
                     new ItemStack(Material.IRON_INGOT)
                 })
                 .register(plugin);
@@ -484,6 +518,10 @@ public class SlimefunAEItems {
                             ME_INTERFACE, new ItemStack(Material.STICKY_PISTON), new ItemStack(Material.PISTON)
                         })
                 .register(plugin);
+        new METerminal(SlimefunAEItemGroups.MACHINE, ME_TERMINAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    QUARTZ_GLASS, FORMATION_CORE, ANNIHILATION_CORE, LOGIC_PROCESSOR
+                })
+                .register(plugin);
         new MECraftingTerminal(
                         SlimefunAEItemGroups.MACHINE,
                         ME_CRAFTING_TERMINAL,
@@ -502,9 +540,21 @@ public class SlimefunAEItems {
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_CRAFTING_TERMINAL, ENGINEERING_PROCESSOR})
                 .register(plugin);
-        new METerminal(SlimefunAEItemGroups.MACHINE, ME_TERMINAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                    new ItemStack(Material.GLASS), FORMATION_CORE, ANNIHILATION_CORE, LOGIC_PROCESSOR
-                })
+        new MESecurityTerminal(
+                        SlimefunAEItemGroups.MACHINE,
+                        ME_SECURITY_TERMINAL,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            new ItemStack(Material.IRON_INGOT),
+                            ME_DRIVE,
+                            new ItemStack(Material.IRON_INGOT),
+                            ME_GLASS_CABLE,
+                            ME_ITEM_STORAGE_COMPONENT_16K,
+                            ME_GLASS_CABLE,
+                            new ItemStack(Material.IRON_INGOT),
+                            ENGINEERING_PROCESSOR,
+                            new ItemStack(Material.IRON_INGOT)
+                        })
                 .register(plugin);
         new SlimefunItem(
                         SlimefunAEItemGroups.MACHINE,
@@ -555,7 +605,7 @@ public class SlimefunAEItems {
                 CRYSTAL_CERTUS_QUARTZ,
                 SlimefunAERecipeTypes.BLOCK_DESTROY,
                 new ItemStack[] {null, null, null, null, CERTUS_QUARTZ_ORE});
-        crystal_certus_quartz.setRecipeOutput(ItemUtils.createItems(CRYSTAL_CERTUS_QUARTZ, 5)[0]);
+        crystal_certus_quartz.setRecipeOutput(CRYSTAL_CERTUS_QUARTZ.asQuantity(5));
         crystal_certus_quartz.register(plugin);
         CrystalCertusQuartz crystalCertusQuartz = new CrystalCertusQuartz(plugin, CRYSTAL_CERTUS_QUARTZ);
         crystalCertusQuartz.register();
@@ -590,6 +640,22 @@ public class SlimefunAEItems {
         new SlimefunItem(SlimefunAEItemGroups.MATERIAL, SKY_STONE_DUST, SlimefunAERecipeTypes.CHARGER, new ItemStack[] {
                     FLUIX_DUST
                 })
+                .register(plugin);
+        new SlimefunItem(
+                        SlimefunAEItemGroups.MATERIAL,
+                        FLUIX_PEARL,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            FLUIX_DUST,
+                            CRYSTAL_FLUIX,
+                            FLUIX_DUST,
+                            CRYSTAL_FLUIX,
+                            new ItemStack(Material.ENDER_PEARL),
+                            CRYSTAL_FLUIX,
+                            FLUIX_DUST,
+                            CRYSTAL_FLUIX,
+                            FLUIX_DUST
+                        })
                 .register(plugin);
         new SlimefunItem(
                         SlimefunAEItemGroups.MATERIAL,
@@ -633,6 +699,21 @@ public class SlimefunAEItems {
                         ENGINEERING_PROCESSOR,
                         SlimefunAERecipeTypes.INSCRIBER,
                         new ItemStack[] {PRINTED_ENGINEERING_CIRCUIT, new ItemStack(Material.REDSTONE), PRINTED_SILICON
+                        })
+                .register(plugin);
+        new SlimefunItem(
+                        SlimefunAEItemGroups.MATERIAL,
+                        WIRELESS_RECEIVER,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            null,
+                            FLUIX_PEARL,
+                            null,
+                            new ItemStack(Material.IRON_INGOT),
+                            QUARTZ_GLASS,
+                            new ItemStack(Material.IRON_INGOT),
+                            null,
+                            new ItemStack(Material.IRON_INGOT),
                         })
                 .register(plugin);
         new SlimefunItem(
@@ -800,7 +881,6 @@ public class SlimefunAEItems {
                             new ItemStack(Material.IRON_INGOT),
                             new ItemStack(Material.GOLD_INGOT),
                             new ItemStack(Material.IRON_INGOT),
-                            null
                         },
                         new SlimefunItemStack(SlimefunAEItems.BASIC_CARD, 2))
                 .register(plugin);
@@ -817,7 +897,6 @@ public class SlimefunAEItems {
                             new ItemStack(Material.DIAMOND),
                             new ItemStack(Material.GOLD_INGOT),
                             new ItemStack(Material.IRON_INGOT),
-                            null
                         },
                         new SlimefunItemStack(SlimefunAEItems.ADVANCED_CARD, 2))
                 .register(plugin);
@@ -825,15 +904,13 @@ public class SlimefunAEItems {
                         SlimefunAEItemGroups.MATERIAL,
                         ACCELERATION_CARD,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {ADVANCED_CARD, CRYSTAL_FLUIX, null, null, null, null, null, null, null})
+                        new ItemStack[] {ADVANCED_CARD, CRYSTAL_FLUIX})
                 .register(plugin);
         new CraftingCard(
                         SlimefunAEItemGroups.MATERIAL,
                         CRAFTING_CARD,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
-                            BASIC_CARD, new ItemStack(Material.CRAFTING_TABLE), null, null, null, null, null, null, null
-                        })
+                        new ItemStack[] {BASIC_CARD, new ItemStack(Material.CRAFTING_TABLE)})
                 .register(plugin);
         //        new SlimefunItem(
         //                        SlimefunAEItemGroups.MATERIAL,
@@ -933,5 +1010,66 @@ public class SlimefunAEItems {
         new MECreativeItemStorageCell(
                         SlimefunAEItemGroups.CELL, ME_CREATIVE_ITEM_STORAGE_CELL, RecipeType.NULL, new ItemStack[0])
                 .register(plugin);
+        // TOOLS
+
+        new MemoryCard(SlimefunAEItemGroups.TOOL, MEMORY_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    LOGIC_PROCESSOR,
+                    new ItemStack(Material.IRON_INGOT),
+                    new ItemStack(Material.IRON_INGOT),
+                    new ItemStack(Material.GOLD_INGOT),
+                    new ItemStack(Material.REDSTONE),
+                    new ItemStack(Material.GOLD_INGOT)
+                })
+                .register(plugin);
+        new WirelessTerminal(
+                        SlimefunAEItemGroups.TOOL,
+                        WIRELESS_TERMINAL,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            WIRELESS_RECEIVER,
+                            null,
+                            null,
+                            ME_TERMINAL,
+                            null,
+                            null,
+                            SlimefunItems.CARBONADO_EDGED_CAPACITOR
+                        })
+                .register(plugin);
+        new Wrench(
+                        SlimefunAEItemGroups.TOOL,
+                        CERTUS_QUARTZ_WRENCH,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            CRYSTAL_CERTUS_QUARTZ,
+                            null,
+                            CRYSTAL_CERTUS_QUARTZ,
+                            null,
+                            CRYSTAL_CERTUS_QUARTZ,
+                            null,
+                            CRYSTAL_CERTUS_QUARTZ,
+                            null,
+                            CRYSTAL_CERTUS_QUARTZ
+                        })
+                .register(plugin);
+        new Wrench(SlimefunAEItemGroups.TOOL, QUARTZ_WRENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    new ItemStack(Material.QUARTZ),
+                    null,
+                    new ItemStack(Material.QUARTZ),
+                    null,
+                    new ItemStack(Material.QUARTZ),
+                    null,
+                    new ItemStack(Material.QUARTZ),
+                    null,
+                    new ItemStack(Material.QUARTZ)
+                })
+                .register(plugin);
+        new NetworkTool(SlimefunAEItemGroups.TOOL, NETWORK_TOOL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    CERTUS_QUARTZ_WRENCH, QUARTZ_GLASS, null, CALCULATION_PROCESSOR, new ItemStack(Material.CHEST)
+                })
+                .register(plugin);
+        RecipeType.ENHANCED_CRAFTING_TABLE.register(
+                new ItemStack[] {QUARTZ_WRENCH, QUARTZ_GLASS, null, CALCULATION_PROCESSOR, new ItemStack(Material.CHEST)
+                },
+                NETWORK_TOOL);
     }
 }
