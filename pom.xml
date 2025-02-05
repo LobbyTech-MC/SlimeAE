@@ -1,17 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
+    <modelVersion>4.0.0</modelVersion>
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
     <version>UNOFFICIAL</version>
     <packaging>jar</packaging>
 
-    <name>SlimeAEPlugin</name>
+    <name>SlimeAE</name>
 
     <properties>
+        <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
+        <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
+        <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
+        <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-391c520-Beta.jar</Slimefun4-systemPath>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -133,7 +136,7 @@
             <artifactId>Slimefun4</artifactId>
             <version>UNOFFICIAL</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Slimefun-391c520-Beta.jar</systemPath>
+            <systemPath>${Slimefun4-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.Zrips</groupId>
@@ -152,7 +155,7 @@
             <artifactId>FluffyMachines</artifactId>
             <version>2.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/FluffyMachines.jar</systemPath>
+            <systemPath>${FluffyMachines-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.TimetownDev</groupId>
@@ -171,14 +174,14 @@
             <artifactId>NetworksExpansion</artifactId>
             <version>4e10d9b0e3</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/NetworksExpansion.jar</systemPath>
+            <systemPath>${NetworksExpansion-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>me.sfiguz7.transcendence</groupId>
             <artifactId>TranscEndence</artifactId>
             <version>2352cccd7b</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/TranscEndence.jar</systemPath>
+            <systemPath>${TranscEndence-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.balugaq</groupId>

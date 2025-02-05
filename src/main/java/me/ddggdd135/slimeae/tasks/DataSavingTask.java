@@ -1,9 +1,12 @@
 package me.ddggdd135.slimeae.tasks;
 
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
+
 import org.bukkit.scheduler.BukkitScheduler;
+
+import me.ddggdd135.slimeae.SlimeAEPlugin;
 
 public class DataSavingTask implements Runnable {
     private int tickRate;

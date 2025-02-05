@@ -1,14 +1,17 @@
 package me.ddggdd135.slimeae.tasks;
 
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.scheduler.BukkitScheduler;
+
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 import me.ddggdd135.slimeae.core.NetworkInfo;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public class NetworkTimeConsumingTask implements Runnable {
     private int tickRate;

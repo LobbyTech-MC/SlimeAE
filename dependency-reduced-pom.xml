@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
-  <name>SlimeAEPlugin</name>
-  <version>34c0535-Beta</version>
+  <name>SlimeAE</name>
+  <version>d6f25bb-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -141,39 +141,43 @@
       <artifactId>Slimefun4</artifactId>
       <version>UNOFFICIAL</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/Slimefun-391c520-Beta.jar</systemPath>
+      <systemPath>${Slimefun4-systemPath}</systemPath>
     </dependency>
     <dependency>
       <groupId>com.github.SlimefunGuguProject</groupId>
       <artifactId>FluffyMachines</artifactId>
       <version>2.0.0</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/FluffyMachines.jar</systemPath>
+      <systemPath>${FluffyMachines-systemPath}</systemPath>
     </dependency>
     <dependency>
       <groupId>com.ytdd9527</groupId>
       <artifactId>NetworksExpansion</artifactId>
       <version>4e10d9b0e3</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/NetworksExpansion.jar</systemPath>
+      <systemPath>${NetworksExpansion-systemPath}</systemPath>
     </dependency>
     <dependency>
       <groupId>me.sfiguz7.transcendence</groupId>
       <artifactId>TranscEndence</artifactId>
       <version>2352cccd7b</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/TranscEndence.jar</systemPath>
+      <systemPath>${TranscEndence-systemPath}</systemPath>
     </dependency>
   </dependencies>
   <properties>
     <git.ref.slug>master</git.ref.slug>
-    <java.version>21</java.version>
-    <git.commit.timestamp>1738474584</git.commit.timestamp>
-    <git.ref>master</git.ref>
-    <git.commit.short>34c0535</git.commit.short>
-    <git.commit.timestamp.datetime>2025-02-02T05:36:24Z</git.commit.timestamp.datetime>
-    <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
-    <git.commit>34c0535ec705bb337626cb39b3c7a4a16f8e40e5</git.commit>
+    <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
+    <git.commit.short>d6f25bb</git.commit.short>
+    <git.commit>d6f25bbfcf58ff718c462f5737ef0bff1efc46a2</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>21</java.version>
+    <git.commit.timestamp>1738777887</git.commit.timestamp>
+    <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
+    <git.ref>master</git.ref>
+    <git.commit.timestamp.datetime>2025-02-05T17:51:27Z</git.commit.timestamp.datetime>
+    <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
+    <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
+    <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-391c520-Beta.jar</Slimefun4-systemPath>
   </properties>
 </project>

@@ -1,16 +1,18 @@
 package me.ddggdd135.slimeae.api.interfaces;
 
 
-import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
-
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import java.util.HashMap;
 import java.util.Map;
-import me.ddggdd135.slimeae.api.abstracts.Card;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.ddggdd135.slimeae.api.abstracts.Card;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 public interface ICardHolder {
     Map<Location, Map<Card, Integer>> cache = new HashMap<>();
