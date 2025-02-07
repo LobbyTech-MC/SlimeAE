@@ -4,8 +4,9 @@ import static me.ddggdd135.slimeae.api.interfaces.IMEObject.Valid_Faces;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
-
+import java.util.Stack;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.*;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -25,35 +26,40 @@ import me.ddggdd135.slimeae.integrations.networks.NetworksStorage;
 
 public class NetworkUtils {
     public static void scan(Block block, Set<Location> blocks) {
-        for (BlockFace blockFace : Valid_Faces) {
-            Location testLocation = block.getLocation().add(blockFace.getDirection());
-            if (blocks.contains(testLocation)) continue;
-            if (SlimeAEPlugin.getNetworkData().AllNetworkBlocks.containsKey(testLocation)) {
-                blocks.add(testLocation);
-                scan(testLocation.getBlock(), blocks);
-            } else {
-                SlimefunBlockData blockData = StorageCacheUtils.getBlock(testLocation);
-                if (blockData == null) {
-                    continue;
-                }
-                SlimefunItem slimefunItem = SlimefunItem.getById(blockData.getSfId());
-                if (slimefunItem instanceof IMEObject IMEObject) {
+        Stack<Location> stack = new Stack<>();
+        stack.push(block.getLocation());
+        while (!stack.empty()) {
+            Location next = stack.pop();
+            for (BlockFace blockFace : Valid_Faces) {
+                Location testLocation = next.clone().add(blockFace.getDirection());
+                if (blocks.contains(testLocation)) continue;
+                if (SlimeAEPlugin.getNetworkData().AllNetworkBlocks.containsKey(testLocation)) {
                     blocks.add(testLocation);
-                    SlimeAEPlugin.getNetworkData().AllNetworkBlocks.put(testLocation, IMEObject);
-
-                    if (slimefunItem instanceof IMEController IMEController) {
-                        SlimeAEPlugin.getNetworkData().AllControllers.put(testLocation, IMEController);
+                    stack.push(testLocation);
+                } else {
+                    SlimefunBlockData blockData = StorageCacheUtils.getBlock(testLocation);
+                    if (blockData == null) {
+                        continue;
                     }
+                    SlimefunItem slimefunItem = SlimefunItem.getById(blockData.getSfId());
+                    if (slimefunItem instanceof IMEObject IMEObject) {
+                        blocks.add(testLocation);
+                        SlimeAEPlugin.getNetworkData().AllNetworkBlocks.put(testLocation, IMEObject);
 
-                    if (slimefunItem instanceof IMEStorageObject IMEStorageObject) {
-                        SlimeAEPlugin.getNetworkData().AllStorageObjects.put(testLocation, IMEStorageObject);
+                        if (slimefunItem instanceof IMEController IMEController) {
+                            SlimeAEPlugin.getNetworkData().AllControllers.put(testLocation, IMEController);
+                        }
+
+                        if (slimefunItem instanceof IMEStorageObject IMEStorageObject) {
+                            SlimeAEPlugin.getNetworkData().AllStorageObjects.put(testLocation, IMEStorageObject);
+                        }
+
+                        if (slimefunItem instanceof IMECraftHolder IMECraftHolder) {
+                            SlimeAEPlugin.getNetworkData().AllCraftHolders.put(testLocation, IMECraftHolder);
+                        }
+
+                        stack.push(testLocation);
                     }
-
-                    if (slimefunItem instanceof IMECraftHolder IMECraftHolder) {
-                        SlimeAEPlugin.getNetworkData().AllCraftHolders.put(testLocation, IMECraftHolder);
-                    }
-
-                    scan(testLocation.getBlock(), blocks);
                 }
             }
         }
@@ -63,18 +69,5 @@ public class NetworkUtils {
         Set<Location> result = new HashSet<>();
         scan(block, result);
         return result;
-    }
-
-    public static <T> T doAntiNetworksTask(IStorage storage, Function<IStorage, T> function) {
-        if (storage instanceof NetworksStorage) return null;
-        if (storage instanceof StorageCollection storageCollection) {
-            StorageCollection tmp =
-                    new StorageCollection(storageCollection.getStorages().toArray(IStorage[]::new));
-            tmp.getStorages().removeIf(x -> x instanceof NetworksStorage);
-
-            return function.apply(tmp);
-        }
-
-        return function.apply(storage);
     }
 }

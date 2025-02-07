@@ -11,12 +11,13 @@ import org.bukkit.inventory.ItemStack;
 
 import com.balugaq.netex.api.data.ItemContainer;
 import com.balugaq.netex.api.data.StorageUnitData;
-import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import com.ytdd9527.networksexpansion.implementation.machines.unit.NetworksDrawer;
-
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.ItemStorage;
@@ -35,10 +36,7 @@ public class DrawerStorage implements IStorage {
         if (!SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded())
             throw new RuntimeException("NetworksExpansion is not loaded");
         this.block = block;
-        SlimefunBlockData blockData = StorageCacheUtils.getBlock(block.getLocation());
-        if (blockData != null && SlimefunItem.getById(blockData.getSfId()) instanceof NetworksDrawer networksDrawer) {
-            data = NetworksDrawer.getStorageData(block.getLocation());
-        }
+        data = NetworksDrawer.getStorageData(block.getLocation());
         this.isReadOnly = isReadOnly;
     }
 
@@ -82,11 +80,11 @@ public class DrawerStorage implements IStorage {
 
     @Override
     @Nonnull
-    public Map<ItemStack, Integer> getStorage() {
-        Map<ItemStack, Integer> storage = new HashMap<>();
+    public Map<ItemStack, Long> getStorage() {
+        Map<ItemStack, Long> storage = new HashMap<>();
         if (data == null) return storage;
         for (ItemContainer itemContainer : data.getStoredItems()) {
-            storage.put(itemContainer.getSample(), itemContainer.getAmount());
+            storage.put(itemContainer.getSample(), (long) itemContainer.getAmount());
         }
 
         return storage;
@@ -105,6 +103,18 @@ public class DrawerStorage implements IStorage {
             }
         }
 
-        return 0;
+        return -1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DrawerStorage that)) return false;
+        return Objects.equals(data.getId(), that.data.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return data.getId();
     }
 }

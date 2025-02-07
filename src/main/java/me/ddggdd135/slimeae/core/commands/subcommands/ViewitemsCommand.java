@@ -123,7 +123,7 @@ public class ViewitemsCommand extends SubCommand {
 
             menu.replaceExistingItem(getChangeSort(), MenuItems.CHANGE_SORT_STACK);
             menu.addMenuClickHandler(getChangeSort(), (ignore, i, cursor, clickAction) -> {
-                Comparator<Map.Entry<ItemStack, Integer>> sort = METerminal.int2Sort(sortCache.get(data.getUuid()));
+                Comparator<Map.Entry<ItemStack, Long>> sort = METerminal.int2Sort(sortCache.get(data.getUuid()));
                 if (sort == ALPHABETICAL_SORT) sortCache.put(data.getUuid(), 1);
                 if (sort == NUMERICAL_SORT) sortCache.put(data.getUuid(), 0);
                 updateGui(menu, data);
@@ -214,13 +214,13 @@ public class ViewitemsCommand extends SubCommand {
     }
 
     private void updateGui(AEMenu menu, MEStorageCellCache data) {
-        Map<ItemStack, Integer> storage = data.getStorage();
+        Map<ItemStack, Long> storage = data.getStorage();
 
         // 获取过滤器
         String filter = filterCache.get(data.getUuid()).toLowerCase(Locale.ROOT);
 
         // 过滤和排序逻辑
-        List<Map.Entry<ItemStack, Integer>> items = new ArrayList<>(storage.entrySet());
+        List<Map.Entry<ItemStack, Long>> items = new ArrayList<>(storage.entrySet());
         if (!filter.isEmpty()) {
             if (!SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded())
                 items.removeIf(x -> {
@@ -246,7 +246,7 @@ public class ViewitemsCommand extends SubCommand {
             }
         }
 
-        if (storage instanceof CreativeItemIntegerMap) items.sort(MATERIAL_SORT);
+        if (storage instanceof CreativeItemMap) items.sort(MATERIAL_SORT);
         else items.sort(METerminal.int2Sort(sortCache.get(data.getUuid())));
 
         // 计算分页
@@ -272,7 +272,7 @@ public class ViewitemsCommand extends SubCommand {
                 menu.replaceExistingItem(slot, MenuItems.Empty);
                 continue;
             }
-            Map.Entry<ItemStack, Integer> entry = items.get(i + startIndex);
+            Map.Entry<ItemStack, Long> entry = items.get(i + startIndex);
             ItemStack itemStack = entry.getKey();
 
             if (itemStack == null || itemStack.getType().isAir()) {

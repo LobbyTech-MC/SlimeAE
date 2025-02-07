@@ -1,14 +1,8 @@
 package me.ddggdd135.slimeae.api;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import it.unimi.dsi.fastutil.objects.Reference2IntMap;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -24,10 +18,13 @@ public class StorageCollection implements IStorage {
     private final Set<ItemStack> notIncluded;
 
     public StorageCollection(@Nonnull IStorage... storages) {
-        this.storages = new HashSet<>(List.of(storages));
+        this.storages = new HashSet<>();
         this.takeCache = new HashMap<>();
         this.pushCache = new HashMap<>();
         this.notIncluded = new HashSet<>();
+        for (IStorage storage : storages) {
+            addStorage(storage);
+        }
     }
 
     public Set<IStorage> getStorages() {
@@ -36,11 +33,23 @@ public class StorageCollection implements IStorage {
 
     public void addStorage(@Nullable IStorage storage) {
         if (storage == null) return;
+        if (storage instanceof StorageCollection storageCollection) {
+            storages.addAll(storageCollection.getStorages());
+            return;
+        }
         storages.add(storage);
         notIncluded.clear();
     }
 
     public boolean removeStorage(@Nonnull IStorage storage) {
+        if (storage instanceof StorageCollection storageCollection) {
+            boolean result = false;
+            for (IStorage iStorage : storageCollection.getStorages()) {
+                result |= removeStorage(iStorage);
+            }
+
+            return result;
+        }
         Map.Entry<ItemStack, IStorage> toRemove = null;
         for (Map.Entry<ItemStack, IStorage> entry : takeCache.entrySet()) {
             if (entry.getValue() == storage) {
@@ -75,27 +84,24 @@ public class StorageCollection implements IStorage {
                 storage.pushItem(itemStack);
             }
         }
-        ItemStack[] finalItemStacks = itemStacks;
-        List<IStorage> sorted = new ArrayList<>(storages.stream()
-                .sorted(Comparator.comparing(
-                        x -> {
-                            int tierx = 0;
-                            for (ItemStack itemStack : finalItemStacks) {
-                                tierx += x.getTier(itemStack);
-                            }
 
-                            return tierx;
-                        },
-                        Integer::compare))
-                .toList());
-        Collections.reverse(sorted);
+        List<IStorage> sorted = new ArrayList<>(storages);
+        Reference2IntMap<IStorage> tierMap = new Reference2IntOpenHashMap<>();
+
+        // 计算每个 storage 的 tier 并缓存结果
+        for (IStorage storage : sorted) {
+            int totalTier = Arrays.stream(itemStacks).mapToInt(storage::getTier).sum();
+            tierMap.put(storage, totalTier);
+        }
+
+        // 移除 tier 小于 0 的 storage
+        sorted.removeIf(storage -> tierMap.getInt(storage) < 0);
+
+        // 根据缓存的 tier 排序
+        sorted.sort(Comparator.comparingInt(tierMap::getInt).reversed());
+
         for (IStorage storage : sorted) {
             storage.pushItem(itemStacks);
-            for (ItemStack itemStack : itemStacks) {
-                if (itemStack.getAmount() == 0 && !itemStack.getType().isAir()) {
-                    pushCache.put(itemStack.asOne(), storage);
-                }
-            }
             itemStacks = ItemUtils.trimItems(itemStacks);
             if (itemStacks.length == 0) return;
         }
@@ -103,7 +109,7 @@ public class StorageCollection implements IStorage {
 
     @Override
     public boolean contains(@Nonnull ItemRequest[] requests) {
-        Map<ItemStack, Integer> storage = getStorage();
+        Map<ItemStack, Long> storage = getStorage();
         for (ItemRequest request : requests) {
             if (notIncluded.contains(request.getTemplate())) return false;
             if (!ItemUtils.contains(storage, request)) {
@@ -117,7 +123,7 @@ public class StorageCollection implements IStorage {
     @Nonnull
     @Override
     public ItemStack[] tryTakeItem(@Nonnull ItemRequest[] requests) {
-        Map<ItemStack, Integer> rest = new HashMap<>();
+        Map<ItemStack, Long> rest = new HashMap<>();
         ItemStorage found = new ItemStorage();
         // init rest
         for (ItemRequest request : requests) {
@@ -128,7 +134,7 @@ public class StorageCollection implements IStorage {
             }
         }
         ItemUtils.trim(rest);
-        for (Map.Entry<ItemStack, Integer> entry : rest.entrySet()) {
+        for (Map.Entry<ItemStack, Long> entry : rest.entrySet()) {
             if (takeCache.containsKey(entry.getKey())) {
                 IStorage storage = takeCache.get(entry.getKey());
                 ItemStack[] itemStacks = storage.tryTakeItem(ItemUtils.createRequests(rest));
@@ -157,11 +163,11 @@ public class StorageCollection implements IStorage {
     }
 
     @Override
-    public @Nonnull Map<ItemStack, Integer> getStorage() {
-        Map<ItemStack, Integer> result = new HashMap<>();
+    public @Nonnull Map<ItemStack, Long> getStorage() {
+        Map<ItemStack, Long> result = new HashMap<>();
         for (IStorage storage : storages) {
-            Map<ItemStack, Integer> tmp = storage.getStorage();
-            if (tmp instanceof CreativeItemIntegerMap) return tmp;
+            Map<ItemStack, Long> tmp = storage.getStorage();
+            if (tmp instanceof CreativeItemMap) return tmp;
             for (ItemStack itemStack : tmp.keySet()) {
                 if (result.containsKey(itemStack)) {
                     result.put(itemStack, result.get(itemStack) + tmp.get(itemStack));

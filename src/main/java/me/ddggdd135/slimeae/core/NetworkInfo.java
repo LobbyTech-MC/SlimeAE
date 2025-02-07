@@ -23,20 +23,24 @@ import me.ddggdd135.guguslimefunlib.api.AEMenu;
 import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.ConcurrentHashSet;
 import me.ddggdd135.slimeae.api.CraftingRecipe;
+import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.StorageCollection;
 import me.ddggdd135.slimeae.api.interfaces.IDisposable;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 
 public class NetworkInfo implements IDisposable {
-    private Location controller;
-    private Set<Location> children = new HashSet<>();
-    private Set<Location> craftingHolders = new HashSet<>();
-    private Map<Location, Set<CraftingRecipe>> recipeMap = new ConcurrentHashMap<>();
+    private final Location controller;
+    private Set<Location> children = new ConcurrentHashSet<>();
+    private final Set<Location> craftingHolders = new ConcurrentHashSet<>();
+    private final Map<Location, Set<CraftingRecipe>> recipeMap = new ConcurrentHashMap<>();
     private IStorage storage = new StorageCollection();
-    private Set<AutoCraftingSession> craftingSessions = new HashSet<>();
+    private IStorage storageNoNetworks = new StorageCollection();
+    private final Set<AutoCraftingSession> craftingSessions = new ConcurrentHashSet<>();
     private final AEMenu autoCraftingMenu = new AEMenu("&e自动合成任务");
+    private final ItemStorage tmpStorage = new ItemStorage();
 
     // 缓存配置值
     private static int maxCraftingSessions;
@@ -53,8 +57,8 @@ public class NetworkInfo implements IDisposable {
 
     // 重载配置
     public static void reloadConfig() {
-        maxCraftingSessions = SlimeAEPlugin.getInstance().getConfig().getInt("auto-crafting.max-sessions", 8);
-        maxCraftingAmount = SlimeAEPlugin.getInstance().getConfig().getInt("auto-crafting.max-amount", 4096);
+        maxCraftingSessions = SlimeAEPlugin.getInstance().getConfig().getInt("auto-crafting.max-sessions", 32);
+        maxCraftingAmount = SlimeAEPlugin.getInstance().getConfig().getInt("auto-crafting.max-amount", 32768);
     }
 
     // 静态初始化块,在类加载时加载配置
@@ -75,12 +79,14 @@ public class NetworkInfo implements IDisposable {
     public NetworkInfo(@Nonnull Location controller) {
         this.controller = controller;
         autoCraftingMenu.setSize(54);
+        tmpStorage.setReadonly(true);
     }
 
     public NetworkInfo(@Nonnull Location controller, @Nonnull Set<Location> children) {
         this.controller = controller;
         this.children = children;
         autoCraftingMenu.setSize(54);
+        tmpStorage.setReadonly(true);
     }
 
     @Nonnull
@@ -90,6 +96,15 @@ public class NetworkInfo implements IDisposable {
 
     public void setStorage(@Nonnull IStorage storage) {
         this.storage = storage;
+    }
+
+    @Nonnull
+    public IStorage getStorageNoNetworks() {
+        return storageNoNetworks;
+    }
+
+    public void setStorageNoNetworks(@Nonnull IStorage storage) {
+        this.storageNoNetworks = storage;
     }
 
     @Override
@@ -145,11 +160,12 @@ public class NetworkInfo implements IDisposable {
         return null;
     }
 
+    @Nonnull
     public Set<AutoCraftingSession> getCraftingSessions() {
         return craftingSessions;
     }
 
-    public void openAutoCraftingSessionsMenu(Player player) {
+    public void openAutoCraftingSessionsMenu(@Nonnull Player player) {
         updateAutoCraftingMenu();
         autoCraftingMenu.open(player);
     }
@@ -171,7 +187,7 @@ public class NetworkInfo implements IDisposable {
             ItemStack itemStack;
             if (itemStacks.length == 1) {
                 itemStack = itemStacks[0].clone();
-                itemStack.setAmount(Math.min(64, session.getCount()));
+                itemStack.setAmount((int) Math.min(64, session.getCount()));
             } else {
                 itemStack = new AdvancedCustomItemStack(
                         Material.BARREL,
@@ -179,7 +195,7 @@ public class NetworkInfo implements IDisposable {
                         Arrays.stream(itemStacks)
                                 .map(x -> "  &e- &f" + ItemUtils.getItemName(x) + "&f x " + x.getAmount())
                                 .toArray(String[]::new));
-                itemStack.setAmount(Math.min(64, session.getCount()));
+                itemStack.setAmount((int) Math.min(64, session.getCount()));
             }
             ItemMeta meta = itemStack.getItemMeta();
             List<String> lore = meta.getLore();
@@ -196,5 +212,10 @@ public class NetworkInfo implements IDisposable {
             i++;
         }
         autoCraftingMenu.getContents();
+    }
+
+    @Nonnull
+    public ItemStorage getTempStorage() {
+        return tmpStorage;
     }
 }

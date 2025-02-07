@@ -10,7 +10,12 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.ItemRequest;
+import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
+import me.ddggdd135.slimeae.utils.ItemUtils;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class NetworkRefreshTask implements Runnable {
     private int tickRate;
@@ -49,7 +54,17 @@ public class NetworkRefreshTask implements Runnable {
                 Set<NetworkInfo> allNetworkData = new HashSet<>(SlimeAEPlugin.getNetworkData().AllNetworkData);
 
                 for (NetworkInfo networkInfo : allNetworkData) {
-                    SlimeAEPlugin.getNetworkData().refreshNetwork(networkInfo.getController());
+                    NetworkInfo info = SlimeAEPlugin.getNetworkData().refreshNetwork(networkInfo.getController());
+                    IStorage tempStorage = info.getTempStorage();
+                    Set<ItemStack> toPush =
+                            new HashSet<>(tempStorage.getStorage().keySet());
+                    for (ItemStack itemStack : toPush) {
+                        ItemStack[] items =
+                                tempStorage.tryTakeItem(new ItemRequest(itemStack, Integer.MAX_VALUE, true));
+                        info.getStorage().pushItem(items);
+                        items = ItemUtils.trimItems(items);
+                        tempStorage.pushItem(items);
+                    }
                 }
             }
         } catch (Exception | LinkageError x) {

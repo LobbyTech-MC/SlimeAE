@@ -16,15 +16,24 @@ import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.mooy1.infinityexpansion.items.storage.StorageCache;
 import io.github.mooy1.infinityexpansion.items.storage.StorageUnit;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
-import me.ddggdd135.slimeae.utils.ReflectionUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class InfinityBarrelStorage implements IStorage {
     private StorageCache cache;
+    private Location location;
     private boolean isReadOnly;
 
     public InfinityBarrelStorage(@Nonnull Block block) {
@@ -38,6 +47,7 @@ public class InfinityBarrelStorage implements IStorage {
             cache = storageUnit.getCache(block.getLocation());
         }
         this.isReadOnly = isReadOnly;
+        this.location = block.getLocation();
     }
 
     @Override
@@ -50,9 +60,8 @@ public class InfinityBarrelStorage implements IStorage {
         if (cache == null) return false;
         boolean toReturn = true;
         for (ItemRequest request : requests) {
-            if (Boolean.TRUE.equals(ReflectionUtils.invokePrivateMethod(
-                    cache, "matches", new Class<?>[] {ItemStack.class}, request.getTemplate()))) {
-                int amount = ReflectionUtils.getField(cache, "amount");
+            if (cache.matches(request.getTemplate())) {
+                int amount = cache.amount();
                 toReturn = toReturn && amount >= request.getAmount();
             }
         }
@@ -65,12 +74,11 @@ public class InfinityBarrelStorage implements IStorage {
         if (cache == null) return new ItemStack[0];
         ItemStorage toReturn = new ItemStorage();
         for (ItemRequest request : requests) {
-            if (Boolean.TRUE.equals(ReflectionUtils.invokePrivateMethod(
-                    cache, "matches", new Class<?>[] {ItemStack.class}, request.getTemplate()))) {
-                int amount = ReflectionUtils.<Integer>getField(cache, "amount") - 1;
-                int toTake = Math.min(amount, request.getAmount());
+            if (cache.matches(request.getTemplate())) {
+                int amount = cache.amount() - 1;
+                long toTake = Math.min(amount, request.getAmount());
                 if (toTake != 0) {
-                    cache.amount(amount + 1 - toTake);
+                    cache.amount((int) (amount + 1 - toTake));
                     toReturn.addItem(ItemUtils.createItems(request.getTemplate(), toTake));
                 }
             }
@@ -79,17 +87,16 @@ public class InfinityBarrelStorage implements IStorage {
     }
 
     @Override
-    public @Nonnull Map<ItemStack, Integer> getStorage() {
-        Map<ItemStack, Integer> storage = new HashMap<>();
-        Material material = ReflectionUtils.getField(cache, "material");
-        ItemMeta meta = ReflectionUtils.getField(cache, "meta");
+    public @Nonnull Map<ItemStack, Long> getStorage() {
+        Map<ItemStack, Long> storage = new HashMap<>();
+        Material material = cache.material();
+        ItemMeta meta = cache.meta();
 
-        if (cache == null || material == null || ReflectionUtils.<Integer>getField(cache, "amount") <= 0)
-            return storage;
+        if (material == null || cache.amount() <= 0) return storage;
         ItemStack itemStack = new ItemStack(material);
         if (meta != null) itemStack.setItemMeta(meta);
 
-        storage.put(itemStack.asOne(), ReflectionUtils.<Integer>getField(cache, "amount") - 1);
+        storage.put(itemStack.asOne(), (long) (cache.amount() - 1));
         return storage;
     }
 
@@ -100,15 +107,21 @@ public class InfinityBarrelStorage implements IStorage {
 
     @Override
     public int getTier(@Nonnull ItemStack itemStack) {
-        Material material = ReflectionUtils.getField(cache, "material");
-        ItemMeta meta = ReflectionUtils.getField(cache, "meta");
-        if (cache == null || material == null || ReflectionUtils.<Integer>getField(cache, "amount") <= 0) return 0;
-        ItemStack stored = new ItemStack(material);
-        if (meta != null) stored.setItemMeta(meta);
-        if (Boolean.TRUE.equals(
-                ReflectionUtils.invokePrivateMethod(cache, "matches", new Class<?>[] {ItemStack.class}, itemStack)))
-            return 2000;
+        if (cache == null || cache.amount() <= 0) return -1;
+        if (cache.material() == itemStack.getType()) return 2000;
 
-        return 0;
+        return -1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InfinityBarrelStorage that)) return false;
+        return Objects.equals(location, that.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return location.hashCode();
     }
 }

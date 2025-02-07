@@ -1,69 +1,47 @@
 package me.ddggdd135.slimeae.integrations.networks;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import org.bukkit.inventory.ItemStack;
-
+import com.ytdd9527.networksexpansion.implementation.machines.unit.NetworksDrawer;
 import io.github.sefiraat.networks.network.NetworkRoot;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.ItemRequest;
-import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
+import java.util.*;
+import me.ddggdd135.slimeae.api.StorageCollection;
+import me.ddggdd135.slimeae.integrations.networksexpansion.DrawerStorage;
+import me.ddggdd135.slimeae.utils.ItemUtils;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 
-public class NetworksStorage implements IStorage {
+public class NetworksStorage extends StorageCollection {
     private final NetworkRoot networkRoot;
 
     public NetworksStorage(NetworkRoot networkRoot) {
         this.networkRoot = networkRoot;
+
+        Set<Location> barrels = new HashSet<>();
+        for (BarrelIdentity barrelIdentity : networkRoot.getInputAbleBarrels()) {
+            barrels.add(barrelIdentity.getLocation());
+        }
+
+        for (BarrelIdentity barrelIdentity : networkRoot.getOutputAbleBarrels()) {
+            barrels.add(barrelIdentity.getLocation());
+        }
+
+        for (Location location : barrels) {
+            addStorage(ItemUtils.getStorage(location.getBlock(), true));
+        }
+
+        Set<Location> drawers = new HashSet<>();
+
+        drawers.addAll(networkRoot.getInputAbleCargoStorageUnitDatas().values());
+        drawers.addAll(networkRoot.getOutputAbleCargoStorageUnitDatas().values());
+
+        for (Location location : drawers) {
+            if (NetworksDrawer.getStorageData(location) == null) continue;
+            Block block = location.getBlock();
+            addStorage(new DrawerStorage(block));
+        }
     }
 
     public NetworkRoot getNetworkRoot() {
         return networkRoot;
-    }
-
-    @Override
-    public void pushItem(@Nonnull ItemStack[] itemStacks) {
-        SlimeAEPlugin.getNetworksExpansionIntegration().doBannedTask(networkRoot, root -> {
-            for (ItemStack itemStack : itemStacks) {
-                root.addItemStack(itemStack);
-            }
-        });
-    }
-
-    @Override
-    public boolean contains(@Nonnull ItemRequest[] requests) {
-        io.github.sefiraat.networks.network.stackcaches.ItemRequest[] networkRequests =
-                SlimeAEPlugin.getNetworksIntegration().asNetworkRequests(requests);
-        return SlimeAEPlugin.getNetworksExpansionIntegration().doBannedTask(networkRoot, root -> {
-            for (io.github.sefiraat.networks.network.stackcaches.ItemRequest request : networkRequests) {
-                if (!root.contains(request)) return false;
-            }
-
-            return true;
-        });
-    }
-
-    @Override
-    @Nonnull
-    public ItemStack[] tryTakeItem(@Nonnull ItemRequest[] requests) {
-        io.github.sefiraat.networks.network.stackcaches.ItemRequest[] networkRequests =
-                SlimeAEPlugin.getNetworksIntegration().asNetworkRequests(requests);
-        return SlimeAEPlugin.getNetworksExpansionIntegration().doBannedTask(networkRoot, root -> {
-            return Arrays.stream(networkRequests).map(root::getItemStack).toArray(ItemStack[]::new);
-        });
-    }
-
-    @Override
-    @Nonnull
-    public Map<ItemStack, Integer> getStorage() {
-        return SlimeAEPlugin.getNetworksExpansionIntegration()
-                .doBannedTask(networkRoot, NetworkRoot::getAllNetworkItems);
-    }
-
-    @Override
-    public int getEmptySlots() {
-        return 0;
     }
 }

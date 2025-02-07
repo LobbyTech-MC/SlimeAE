@@ -14,6 +14,10 @@ import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import io.ncbpfluffybear.fluffymachines.items.Barrel;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.ItemStorage;
@@ -84,7 +88,7 @@ public class FluffyBarrelStorage implements IStorage {
         ItemStorage toReturn = new ItemStorage();
         for (ItemRequest request : requests) {
             if (SlimefunUtils.isItemSimilar(request.getTemplate(), storedItem, true, false)) {
-                int toTake = Math.min(stored, request.getAmount());
+                long toTake = Math.min(stored, request.getAmount());
                 if (toTake != 0) {
                     stored -= toTake;
                     toReturn.addItem(ItemUtils.createItems(request.getTemplate(), toTake));
@@ -96,10 +100,10 @@ public class FluffyBarrelStorage implements IStorage {
     }
 
     @Override
-    public @Nonnull Map<ItemStack, Integer> getStorage() {
-        Map<ItemStack, Integer> storage = new HashMap<>();
+    public @Nonnull Map<ItemStack, Long> getStorage() {
+        Map<ItemStack, Long> storage = new HashMap<>();
         if (blockMenu == null || barrel == null || barrel.getStored(block) <= 0) return storage;
-        storage.put(barrel.getStoredItem(block).asOne(), barrel.getStored(block) - 1);
+        storage.put(barrel.getStoredItem(block).asOne(), (long) (barrel.getStored(block) - 1));
         return storage;
     }
 
@@ -111,10 +115,21 @@ public class FluffyBarrelStorage implements IStorage {
     @Override
     public int getTier(@Nonnull ItemStack itemStack) {
         ItemStack storedItem = barrel.getStoredItem(block);
-        if (SlimefunUtils.isItemSimilar(itemStack, storedItem, true, false)) {
-            return 2000;
-        }
+        if (storedItem == null || storedItem.getType().isAir()) return -1;
+        if (itemStack.getType() == storedItem.getType()) return 2000;
 
-        return 0;
+        return -1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FluffyBarrelStorage that)) return false;
+        return Objects.equals(block.getLocation(), that.block.getLocation());
+    }
+
+    @Override
+    public int hashCode() {
+        return block.getLocation().hashCode();
     }
 }

@@ -110,7 +110,7 @@ public class MEUnit extends SlimefunItem implements IMEStorageObject, InventoryB
             @Override
             public ItemStack[] tryTakeItem(@Nonnull ItemRequest[] requests) {
                 if (blockMenu == null) return new ItemStack[0];
-                Map<ItemStack, Integer> amounts = ItemUtils.getAmounts(ItemUtils.createItems(requests));
+                Map<ItemStack, Long> amounts = ItemUtils.getAmounts(ItemUtils.createItems(requests));
                 ItemStorage found = new ItemStorage();
 
                 for (ItemStack itemStack : amounts.keySet()) {
@@ -120,13 +120,13 @@ public class MEUnit extends SlimefunItem implements IMEStorageObject, InventoryB
                         if (SlimefunUtils.isItemSimilar(item, itemStack, true, false)) {
                             if (item.getAmount() > amounts.get(itemStack)) {
                                 found.addItem(ItemUtils.createItems(itemStack, amounts.get(itemStack)));
-                                int rest = item.getAmount() - amounts.get(itemStack);
-                                item.setAmount(rest);
+                                long rest = item.getAmount() - amounts.get(itemStack);
+                                item.setAmount((int) rest);
                                 break;
                             } else {
                                 found.addItem(ItemUtils.createItems(itemStack, item.getAmount()));
                                 blockMenu.replaceExistingItem(slot, new ItemStack(Material.AIR));
-                                int rest = amounts.get(itemStack) - item.getAmount();
+                                long rest = amounts.get(itemStack) - item.getAmount();
                                 if (rest != 0) amounts.put(itemStack, rest);
                                 else break;
                             }
@@ -138,7 +138,7 @@ public class MEUnit extends SlimefunItem implements IMEStorageObject, InventoryB
             }
 
             @Override
-            public @Nonnull Map<ItemStack, Integer> getStorage() {
+            public @Nonnull Map<ItemStack, Long> getStorage() {
                 if (blockMenu == null) return new HashMap<>();
                 return ItemUtils.getAmounts(blockMenu.getContents());
             }

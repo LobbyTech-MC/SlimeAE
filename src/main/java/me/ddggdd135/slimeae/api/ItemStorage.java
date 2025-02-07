@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 
 import org.bukkit.inventory.ItemStack;
@@ -14,10 +14,13 @@ import me.ddggdd135.slimeae.utils.ItemUtils;
 
 public class ItemStorage implements IStorage {
     @Nonnull
-    private Map<ItemStack, Integer> storage = new HashMap<>();
+    private Map<ItemStack, Long> storage = new ConcurrentHashMap<>();
 
-    private void trim(@Nonnull ItemStack template) {
-        if (storage.containsKey(template) && storage.get(template) == 0) {
+    private boolean isReadonly;
+
+    private void trim(@Nonnull ItemStack itemStack) {
+        ItemStack template = itemStack.asOne();
+        if (storage.getOrDefault(template, 0L) == 0) {
             storage.remove(template);
         }
     }
@@ -32,53 +35,66 @@ public class ItemStorage implements IStorage {
         this(storage.getStorage());
     }
 
-    public ItemStorage(@Nonnull Map<ItemStack, Integer> items) {
+    public ItemStorage(@Nonnull Map<ItemStack, Long> items) {
         storage = new HashMap<>(items);
     }
 
     @Override
     public void pushItem(@Nonnull ItemStack[] itemStacks) {
+        if (isReadonly) return;
         for (ItemStack itemStack : itemStacks) {
             ItemStack template = itemStack.asOne();
-            if (storage.containsKey(template)) {
-                int amount = storage.get(template);
-                amount += itemStack.getAmount();
-                storage.put(template, amount);
-            } else {
-                storage.put(template, itemStack.getAmount());
-            }
+            long amount = storage.getOrDefault(template, 0L);
+            amount += itemStack.getAmount();
+            storage.put(template, amount);
             itemStack.setAmount(0);
             trim(itemStack);
         }
     }
 
     public void addItem(@Nonnull ItemStack[] itemStacks) {
+        addItem(itemStacks, false);
+    }
+
+    public void addItem(@Nonnull ItemStack[] itemStacks, boolean force) {
+        if (isReadonly && !force) return;
         for (ItemStack itemStack : itemStacks) {
             if (itemStack == null || itemStack.getType().isAir()) continue;
             ItemStack template = itemStack.asOne();
-            if (storage.containsKey(template)) {
-                int amount = storage.get(template);
-                amount += itemStack.getAmount();
-                storage.put(template, amount);
-            } else {
-                storage.put(template, itemStack.getAmount());
-            }
+            long amount = storage.getOrDefault(template, 0L);
+            amount += itemStack.getAmount();
+            storage.put(template, amount);
             trim(itemStack);
         }
     }
 
-    public void addItem(@Nonnull Map<ItemStack, Integer> storage) {
+    public void addItem(@Nonnull Map<ItemStack, Long> storage) {
+        addItem(storage, false);
+    }
+
+    public void addItem(@Nonnull Map<ItemStack, Long> storage, boolean force) {
+        if (isReadonly && !force) return;
         this.storage = ItemUtils.addItems(this.storage, storage);
     }
 
-    public void addItem(@Nonnull ItemStack itemStack, int amount) {
+    public void addItem(@Nonnull ItemStack itemStack, long amount) {
+        addItem(itemStack, amount, false);
+    }
+
+    public void addItem(@Nonnull ItemStack itemStack, long amount, boolean force) {
+        if (isReadonly && !force) return;
         ItemStack template = itemStack.asOne();
-        int a = storage.getOrDefault(template, 0);
+        long a = storage.getOrDefault(template, 0L);
         a += amount;
         storage.put(template, a);
     }
 
     public void addItem(@Nonnull ItemStack itemStack) {
+        addItem(itemStack, false);
+    }
+
+    public void addItem(@Nonnull ItemStack itemStack, boolean force) {
+        if (isReadonly && !force) return;
         addItem(new ItemStack[] {itemStack});
     }
 
@@ -92,26 +108,24 @@ public class ItemStorage implements IStorage {
     public ItemStack[] tryTakeItem(@Nonnull ItemRequest[] requests) {
         List<ItemStack> itemStacks = new ArrayList<>();
         for (ItemRequest request : requests) {
-            if (storage.containsKey(request.getTemplate())) {
-                int amount = storage.get(request.getTemplate());
-                if (amount >= request.getAmount()) {
-                    ItemStack[] tmp = ItemUtils.createItems(request.getTemplate(), request.getAmount());
-                    itemStacks.addAll(List.of(tmp));
-                    storage.put(request.getTemplate(), amount - request.getAmount());
-                } else {
-                    ItemStack[] tmp = ItemUtils.createItems(request.getTemplate(), amount);
-                    itemStacks.addAll(List.of(tmp));
-                    storage.put(request.getTemplate(), 0);
-                }
-                trim(request.getTemplate());
+            long amount = storage.getOrDefault(request.getTemplate(), 0L);
+            if (amount >= request.getAmount()) {
+                ItemStack[] tmp = ItemUtils.createItems(request.getTemplate(), request.getAmount());
+                itemStacks.addAll(List.of(tmp));
+                storage.put(request.getTemplate(), amount - request.getAmount());
+            } else {
+                ItemStack[] tmp = ItemUtils.createItems(request.getTemplate(), amount);
+                itemStacks.addAll(List.of(tmp));
+                storage.put(request.getTemplate(), 0L);
             }
+            trim(request.getTemplate());
         }
-        return itemStacks.toArray(new ItemStack[0]);
+        return itemStacks.toArray(ItemStack[]::new);
     }
 
     @Override
     @Nonnull
-    public Map<ItemStack, Integer> getStorage() {
+    public Map<ItemStack, Long> getStorage() {
         return new HashMap<>(storage);
     }
 
@@ -120,13 +134,16 @@ public class ItemStorage implements IStorage {
         return 0;
     }
 
-    @Override
-    public boolean canHasEmptySlots() {
-        return false;
-    }
-
     @Nonnull
     public ItemStack[] toItemStacks() {
         return ItemUtils.createItems(storage);
+    }
+
+    public void setReadonly(boolean readonly) {
+        isReadonly = readonly;
+    }
+
+    public boolean isReadonly() {
+        return isReadonly;
     }
 }
