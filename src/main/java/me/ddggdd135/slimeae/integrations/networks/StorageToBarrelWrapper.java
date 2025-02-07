@@ -1,7 +1,5 @@
 package me.ddggdd135.slimeae.integrations.networks;
 
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -12,11 +10,7 @@ import io.github.sefiraat.networks.network.barrel.BarrelType;
 import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
 import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
-import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
 
 public class StorageToBarrelWrapper extends BarrelIdentity {
     protected final IStorage storage;

@@ -1,14 +1,18 @@
 package me.ddggdd135.slimeae.integrations.networks;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+
 import com.ytdd9527.networksexpansion.implementation.machines.unit.NetworksDrawer;
+
 import io.github.sefiraat.networks.network.NetworkRoot;
 import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
-import java.util.*;
 import me.ddggdd135.slimeae.api.StorageCollection;
 import me.ddggdd135.slimeae.integrations.networksexpansion.DrawerStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
 
 public class NetworksStorage extends StorageCollection {
     private final NetworkRoot networkRoot;

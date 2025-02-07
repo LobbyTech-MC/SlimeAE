@@ -1,15 +1,18 @@
 package me.ddggdd135.slimeae.integrations.networks;
 
-import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.inventory.ItemStack;
+
+import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
-import org.bukkit.inventory.ItemStack;
 
 @Deprecated
 public class BarrelIdentityToStorageWrapper implements IStorage {

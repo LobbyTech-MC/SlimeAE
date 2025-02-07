@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -14,8 +15,6 @@ import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.utils.ItemUtils;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public class NetworkRefreshTask implements Runnable {
     private int tickRate;
