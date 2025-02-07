@@ -10,6 +10,10 @@ import javax.annotation.Nonnull;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
+
 public class CreativeItemMap implements Map<ItemStack, Long> {
     public static final Set<ItemStack> allItemStacks;
     public static final Set<Map.Entry<ItemStack, Long>> allAmount;
