@@ -1,4 +1,4 @@
-package me.ddggdd135.slimeae.core.slimefun;
+package me.ddggdd135.slimeae.core.slimefun.buses;
 
 import javax.annotation.Nullable;
 

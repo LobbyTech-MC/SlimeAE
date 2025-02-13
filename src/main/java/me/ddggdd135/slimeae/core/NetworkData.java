@@ -7,9 +7,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
-
-import org.bukkit.Location;
-
+import me.ddggdd135.slimeae.api.ConcurrentHashSet;
+import me.ddggdd135.slimeae.api.CraftingRecipe;
 import me.ddggdd135.slimeae.api.StorageCollection;
 import me.ddggdd135.slimeae.api.interfaces.IMEController;
 import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
@@ -80,14 +79,19 @@ public class NetworkData {
         storageCollection.addStorage(networksStorage);
         info.setStorage(storageCollection);
 
-        info.getCraftingHolders().clear();
+        Set<Location> newCraftingHolders = new ConcurrentHashSet<>();
+        Map<Location, Set<CraftingRecipe>> newRecipeMap = new ConcurrentHashMap<>();
         for (Location location : info.getChildren()) {
             if (!AllCraftHolders.containsKey(location)) continue;
             IMECraftHolder slimefunItem = AllCraftHolders.get(location);
-            info.getCraftingHolders().add(location);
-            info.getRecipeMap()
-                    .put(location, new HashSet<>(List.of(slimefunItem.getSupportedRecipes(location.getBlock()))));
+            newCraftingHolders.add(location);
+            newRecipeMap.put(location, new HashSet<>(List.of(slimefunItem.getSupportedRecipes(location.getBlock()))));
         }
+
+        info.getCraftingHolders().clear();
+        info.getCraftingHolders().addAll(newCraftingHolders);
+        info.getRecipeMap().clear();
+        info.getRecipeMap().putAll(newRecipeMap);
 
         return info;
     }

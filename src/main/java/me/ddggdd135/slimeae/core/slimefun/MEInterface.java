@@ -40,17 +40,9 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 public class MEInterface extends TickingBlock implements IMECraftHolder, InventoryBlock, ICardHolder {
-    public static final int[] BORDER_SLOTS =
-            new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 27, 28, 29, 30, 31, 32, 33, 34, 35, 48, 49, 50, 51, 52, 53};
-    public static final int[] SETTING_SLOTS = new int[] {9, 10, 11, 12, 13, 14, 15, 16, 17};
-    public static final int[] ITEM_SLOTS = new int[] {18, 19, 20, 21, 22, 23, 24, 25, 26};
-    public static final int[] PATTERN_SLOTS = new int[] {
-        36, 37, 38, 39, 40, 41, 42, 43, 44,
-    };
     public static final BlockFace[] VaildBlockFace = new BlockFace[] {
         BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN
     };
-    public static final int[] CARD_SLOTS = new int[] {45, 46, 47};
 
     @Override
     public boolean isSynchronized() {
@@ -66,11 +58,11 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
         if (info == null) return;
 
         IStorage networkStorage = info.getStorage();
-        for (int slot : ITEM_SLOTS) {
+        for (int slot : getItemSlots()) {
             int settingSlot = slot - 9;
             ItemStack setting = ItemUtils.getSettingItem(blockMenu.getInventory(), settingSlot);
             ItemStack itemStack = blockMenu.getItemInSlot(slot);
-            if (SlimefunUtils.isItemSimilar(setting, MenuItems.Setting, true, false)) {
+            if (SlimefunUtils.isItemSimilar(setting, MenuItems.SETTING, true, false)) {
                 if (itemStack != null && !itemStack.getType().isAir()) networkStorage.pushItem(itemStack);
                 continue;
             }
@@ -127,14 +119,14 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
                 BlockMenu blockMenu = StorageCacheUtils.getMenu(b.getLocation());
 
                 if (blockMenu != null) {
-                    blockMenu.dropItems(b.getLocation(), ITEM_SLOTS);
+                    blockMenu.dropItems(b.getLocation(), getItemSlots());
                 }
 
-                for (int slot : PATTERN_SLOTS) {
+                for (int slot : getPatternSlots()) {
                     ItemStack itemStack = blockMenu.getItemInSlot(slot);
                     if (itemStack != null
                             && itemStack.getType() != Material.AIR
-                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.Pattern, true, false))) {
+                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.PATTERN, true, false))) {
                         b.getWorld().dropItemNaturally(b.getLocation(), itemStack);
                     }
                 }
@@ -143,7 +135,7 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
                     ItemStack itemStack = blockMenu.getItemInSlot(slot);
                     if (itemStack != null
                             && itemStack.getType() != Material.AIR
-                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.Card, true, false))) {
+                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.CARD, true, false))) {
                         b.getWorld().dropItemNaturally(b.getLocation(), itemStack);
                     }
                 }
@@ -153,22 +145,22 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
 
     @Override
     public int[] getInputSlots() {
-        return ITEM_SLOTS;
+        return getItemSlots();
     }
 
     @Override
     public int[] getOutputSlots() {
-        return ITEM_SLOTS;
+        return getItemSlots();
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void init(@Nonnull BlockMenuPreset preset) {
-        preset.drawBackground(BORDER_SLOTS);
+        preset.drawBackground(getBoarderSlots());
         for (int slot : getSettingSlots()) {
             preset.addMenuClickHandler(slot, ItemUtils.getSettingSlotClickHandler());
         }
-        for (int slot : PATTERN_SLOTS) {
+        for (int slot : getPatternSlots()) {
             preset.addMenuClickHandler(slot, ItemUtils.getPatternSlotClickHandler());
         }
     }
@@ -179,16 +171,16 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
         for (int slot : getSettingSlots()) {
             if (menu.getItemInSlot(slot) == null
                     || menu.getItemInSlot(slot).getType().isAir())
-                ItemUtils.setSettingItem(menu.getInventory(), slot, MenuItems.Setting);
+                ItemUtils.setSettingItem(menu.getInventory(), slot, MenuItems.SETTING);
         }
-        for (int slot : PATTERN_SLOTS) {
+        for (int slot : getPatternSlots()) {
             if (menu.getItemInSlot(slot) == null
-                    || menu.getItemInSlot(slot).getType().isAir()) menu.replaceExistingItem(slot, MenuItems.Pattern);
+                    || menu.getItemInSlot(slot).getType().isAir()) menu.replaceExistingItem(slot, MenuItems.PATTERN);
         }
         for (int slot : getCardSlots()) {
             if (menu.getItemInSlot(slot) == null
                     || menu.getItemInSlot(slot).getType().isAir()) {
-                menu.replaceExistingItem(slot, MenuItems.Card);
+                menu.replaceExistingItem(slot, MenuItems.CARD);
             }
             menu.addMenuClickHandler(slot, ItemUtils.getCardSlotClickHandler(block));
         }
@@ -234,7 +226,7 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return new CraftingRecipe[0];
         Set<CraftingRecipe> result = new HashSet<>();
-        for (int slot : PATTERN_SLOTS) {
+        for (int slot : getPatternSlots()) {
             ItemStack patternItem = blockMenu.getItemInSlot(slot);
             if (patternItem == null || patternItem.getType().isAir()) continue;
             SlimefunItem slimefunItem = SlimefunItem.getByItem(patternItem);
@@ -248,13 +240,27 @@ public class MEInterface extends TickingBlock implements IMECraftHolder, Invento
 
     @Override
     public int[] getCardSlots() {
-        return CARD_SLOTS;
+        return new int[] {45, 46, 47};
     }
 
     @Override
     public void onNetworkTick(Block block, NetworkInfo networkInfo) {}
 
     public int[] getSettingSlots() {
-        return SETTING_SLOTS;
+        return new int[] {9, 10, 11, 12, 13, 14, 15, 16, 17};
+    }
+
+    public int[] getPatternSlots() {
+        return new int[] {
+            36, 37, 38, 39, 40, 41, 42, 43, 44,
+        };
+    }
+
+    public int[] getItemSlots() {
+        return new int[] {18, 19, 20, 21, 22, 23, 24, 25, 26};
+    }
+
+    public int[] getBoarderSlots() {
+        return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 27, 28, 29, 30, 31, 32, 33, 34, 35, 48, 49, 50, 51, 52, 53};
     }
 }

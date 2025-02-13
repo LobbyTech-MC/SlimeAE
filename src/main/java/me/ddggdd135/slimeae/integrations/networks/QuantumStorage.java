@@ -5,9 +5,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
-
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 
@@ -19,7 +16,8 @@ import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
-import me.ddggdd135.slimeae.utils.ItemUtils;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 public class QuantumStorage implements IStorage {
     private QuantumCache quantumCache;
@@ -36,8 +34,7 @@ public class QuantumStorage implements IStorage {
             throw new RuntimeException("Networks is not loaded");
         this.block = block;
         SlimefunBlockData blockData = StorageCacheUtils.getBlock(block.getLocation());
-        if (blockData != null
-                && SlimefunItem.getById(blockData.getSfId()) instanceof NetworkQuantumStorage networkQuantumStorage) {
+        if (blockData != null && SlimefunItem.getById(blockData.getSfId()) instanceof NetworkQuantumStorage) {
             quantumCache = NetworkQuantumStorage.getCaches().get(block.getLocation());
         }
         this.isReadOnly = isReadOnly;
@@ -59,7 +56,8 @@ public class QuantumStorage implements IStorage {
             }
             if (!(stored > size)) {
                 quantumCache.setAmount(stored);
-                NetworkQuantumStorage.syncBlock(block.getLocation(), quantumCache);
+                // 下面这一行吃性能
+                // NetworkQuantumStorage.syncBlock(block.getLocation(), quantumCache);
             }
         }
     }
@@ -90,12 +88,13 @@ public class QuantumStorage implements IStorage {
                 long toTake = Math.min(stored, request.getAmount());
                 if (toTake != 0) {
                     stored -= toTake;
-                    toReturn.addItem(ItemUtils.createItems(request.getTemplate(), toTake));
+                    toReturn.addItem(request.getTemplate(), toTake);
                 }
             }
         }
         quantumCache.setAmount(stored + 1);
-        NetworkQuantumStorage.syncBlock(block.getLocation(), quantumCache);
+        // 下面这一行吃性能
+        // NetworkQuantumStorage.syncBlock(block.getLocation(), quantumCache);
         return toReturn.toItemStacks();
     }
 
@@ -115,11 +114,15 @@ public class QuantumStorage implements IStorage {
 
     @Override
     public int getTier(@Nonnull ItemStack itemStack) {
+        if (quantumCache == null || quantumCache.getAmount() <= 0) return -1;
         ItemStack storedItem = quantumCache.getItemStack();
-        if (SlimefunUtils.isItemSimilar(itemStack, storedItem, true, false)) {
-            return 1000;
-        }
+        if (storedItem == null || storedItem.getType().isAir()) return -1;
+        if (storedItem.getType() == itemStack.getType()) return 2000;
 
         return 0;
+    }
+
+    public void sync() {
+        NetworkQuantumStorage.syncBlock(block.getLocation(), quantumCache);
     }
 }

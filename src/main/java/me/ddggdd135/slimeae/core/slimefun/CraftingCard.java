@@ -21,6 +21,7 @@ import me.ddggdd135.slimeae.api.ItemRequest;
 import me.ddggdd135.slimeae.api.abstracts.Card;
 import me.ddggdd135.slimeae.core.AutoCraftingSession;
 import me.ddggdd135.slimeae.core.NetworkInfo;
+import me.ddggdd135.slimeae.core.slimefun.buses.MEExportBus;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
@@ -51,8 +52,8 @@ public class CraftingCard extends Card {
         }
 
         // ME接口
-        if (item instanceof MEInterface) {
-            for (int slot : MEInterface.ITEM_SLOTS) {
+        if (item instanceof MEInterface meInterface) {
+            for (int slot : meInterface.getItemSlots()) {
                 int settingSlot = slot - 9;
                 ItemStack setting = ItemUtils.getSettingItem(blockMenu.getInventory(), settingSlot);
                 ItemStack itemStack = blockMenu.getItemInSlot(slot);
@@ -76,8 +77,8 @@ public class CraftingCard extends Card {
             cooldowns.put(loc, currentTick);
         }
         // ME输出总线
-        if (item instanceof MEExportBus) {
-            for (int slot : MEExportBus.Setting_Slots) {
+        if (item instanceof MEExportBus meExportBus) {
+            for (int slot : meExportBus.getSettingSlots()) {
                 ItemStack setting = ItemUtils.getSettingItem(blockMenu.getInventory(), slot);
                 if (setting == null || setting.getType().isAir()) {
                     continue;

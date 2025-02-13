@@ -12,8 +12,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
+import me.ddggdd135.slimeae.api.StorageCollection;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
+import me.ddggdd135.slimeae.integrations.networks.QuantumStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 
 public class NetworkRefreshTask implements Runnable {
@@ -54,6 +56,7 @@ public class NetworkRefreshTask implements Runnable {
 
                 for (NetworkInfo networkInfo : allNetworkData) {
                     NetworkInfo info = SlimeAEPlugin.getNetworkData().refreshNetwork(networkInfo.getController());
+                    if (info == null) continue;
                     IStorage tempStorage = info.getTempStorage();
                     Set<ItemStack> toPush =
                             new HashSet<>(tempStorage.getStorage().keySet());
@@ -63,6 +66,13 @@ public class NetworkRefreshTask implements Runnable {
                         info.getStorage().pushItem(items);
                         items = ItemUtils.trimItems(items);
                         tempStorage.pushItem(items);
+                    }
+
+                    StorageCollection storageCollection = (StorageCollection) networkInfo.getStorage();
+                    for (IStorage storage : storageCollection.getStorages()) {
+                        if (storage instanceof QuantumStorage quantumStorage) {
+                            quantumStorage.sync();
+                        }
                     }
                 }
             }

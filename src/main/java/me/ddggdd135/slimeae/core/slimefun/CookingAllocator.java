@@ -38,8 +38,8 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 
 public class CookingAllocator extends MEBus implements IMECraftDevice {
-    private Map<Block, CraftingRecipe> recipeMap = new HashMap<>();
-    private Set<Block> running = new HashSet<>();
+    private final Map<Block, CraftingRecipe> recipeMap = new HashMap<>();
+    private final Set<Block> running = new HashSet<>();
 
     public CookingAllocator(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(itemGroup, item, recipeType, recipe);
@@ -62,7 +62,7 @@ public class CookingAllocator extends MEBus implements IMECraftDevice {
                     ItemStack itemStack = blockMenu.getItemInSlot(slot);
                     if (itemStack != null
                             && itemStack.getType() != Material.AIR
-                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.Card, true, false))) {
+                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.CARD, true, false))) {
                         block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
                     }
                 }

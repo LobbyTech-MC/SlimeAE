@@ -1,35 +1,58 @@
-package me.ddggdd135.slimeae.core.slimefun;
-
-import javax.annotation.Nonnull;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.inventory.ItemStack;
+package me.ddggdd135.slimeae.core.slimefun.buses;
 
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBreakHandler;
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.ItemRequest;
-import me.ddggdd135.slimeae.api.abstracts.MEBus;
+import me.ddggdd135.slimeae.api.abstracts.AdvancedMEBus;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
+import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.ItemStack;
 
-public class MEExportBus extends MEBus {
+public class MEAdvancedExportBus extends AdvancedMEBus {
 
     public static final int[] Setting_Slots = new int[] {3, 4, 5, 12, 13, 14, 21, 22, 23};
 
-    public MEExportBus(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+    public MEAdvancedExportBus(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(itemGroup, item, recipeType, recipe);
+        addItemHandler(new SimpleBlockBreakHandler() {
+            @Override
+            public void onBlockBreak(@Nonnull Block b) {
+                Location loc = b.getLocation();
+                StorageCacheUtils.removeData(loc, DATA_KEY_DIRECTIONS);
+                MULTI_DIRECTION_MAP.remove(loc);
+                BlockMenu blockMenu = StorageCacheUtils.getMenu(loc);
+                if (blockMenu == null) return;
+                for (int slot : getCardSlots()) {
+                    ItemStack itemStack = blockMenu.getItemInSlot(slot);
+                    if (itemStack != null
+                            && itemStack.getType() != Material.AIR
+                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.CARD, true, false))) {
+                        b.getWorld().dropItemNaturally(b.getLocation(), itemStack);
+                    }
+                }
+
+                blockMenu.dropItems(b.getLocation(), getSettingSlots());
+            }
+        });
     }
 
     @Override
@@ -42,29 +65,32 @@ public class MEExportBus extends MEBus {
         NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
         if (info == null) return;
 
-        BlockFace direction = getDirection(blockMenu);
-        if (direction == BlockFace.SELF) return;
-
-        Block target = block.getRelative(direction);
-        BlockMenu targetInv = StorageCacheUtils.getMenu(target.getLocation());
-        if (targetInv == null) return;
+        Set<BlockFace> directions = getDirections(block.getLocation());
+        if (directions.isEmpty()) return;
 
         IStorage networkStorage = info.getStorage();
 
-        for (int slot : Setting_Slots) {
-            ItemStack setting = ItemUtils.getSettingItem(blockMenu.getInventory(), slot);
-            if (setting == null || setting.getType().isAir()) {
-                continue;
-            }
+        for (BlockFace direction : directions) {
+            Block target = block.getRelative(direction);
+            BlockMenu targetInv = StorageCacheUtils.getMenu(target.getLocation());
+            if (targetInv == null) continue;
 
-            int[] inputSlots =
-                    targetInv.getPreset().getSlotsAccessedByItemTransport(targetInv, ItemTransportFlow.INSERT, setting);
-            if (inputSlots == null || inputSlots.length == 0) continue;
+            for (int slot : Setting_Slots) {
+                ItemStack setting = ItemUtils.getSettingItem(blockMenu.getInventory(), slot);
+                if (setting == null || setting.getType().isAir()) {
+                    continue;
+                }
 
-            if (targetInv.fits(setting, inputSlots)) {
-                ItemStack[] taken = networkStorage.tryTakeItem(new ItemRequest(setting, setting.getAmount()));
-                if (taken.length != 0) {
-                    targetInv.pushItem(taken[0], inputSlots);
+                int[] inputSlots = targetInv
+                        .getPreset()
+                        .getSlotsAccessedByItemTransport(targetInv, ItemTransportFlow.INSERT, setting);
+                if (inputSlots == null || inputSlots.length == 0) continue;
+
+                if (targetInv.fits(setting, inputSlots)) {
+                    ItemStack[] taken = networkStorage.tryTakeItem(new ItemRequest(setting, setting.getAmount()));
+                    if (taken.length != 0) {
+                        targetInv.pushItem(taken[0], inputSlots);
+                    }
                 }
             }
         }
@@ -129,7 +155,7 @@ public class MEExportBus extends MEBus {
     }
 
     @Override
-    public int[] getBackgroundSlots() {
+    public int[] getBorderSlots() {
         return new int[] {
             0,
             1,

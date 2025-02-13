@@ -20,7 +20,7 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
-import me.ddggdd135.slimeae.core.slimefun.MESecurityTerminal;
+import me.ddggdd135.slimeae.core.slimefun.terminals.MESecurityTerminal;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 public class WirelessTerminal extends SlimefunItem {

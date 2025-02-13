@@ -35,6 +35,13 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import me.ddggdd135.guguslimefunlib.api.abstracts.TickingBlock;
 import me.ddggdd135.guguslimefunlib.api.interfaces.InventoryBlock;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
@@ -77,7 +84,7 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
         return 33;
     }
 
-    public int[] getBackgroundSlots() {
+    public int[] getBorderSlots() {
         return new int[] {
             0,
             1,
@@ -158,7 +165,7 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
                     ItemStack itemStack = blockMenu.getItemInSlot(slot);
                     if (itemStack != null
                             && itemStack.getType() != Material.AIR
-                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.Card, true, false))) {
+                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.CARD, true, false))) {
                         b.getWorld().dropItemNaturally(b.getLocation(), itemStack);
                     }
                 }
@@ -178,10 +185,10 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
 
     @Override
     public void init(@Nonnull BlockMenuPreset preset) {
-        preset.drawBackground(getBackgroundSlots());
+        preset.drawBackground(getBorderSlots());
 
-        if (getOtherBackgroundSlots() != null && getOtherBackgroundStack() != null) {
-            preset.drawBackground(getOtherBackgroundStack(), getOtherBackgroundSlots());
+        if (getOtherBorderSlots() != null && getOtherBorderStack() != null) {
+            preset.drawBackground(getOtherBorderStack(), getOtherBorderSlots());
         }
 
         preset.addItem(
@@ -246,7 +253,7 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
         for (int slot : getCardSlots()) {
             if (menu.getItemInSlot(slot) == null
                     || menu.getItemInSlot(slot).getType().isAir()) {
-                menu.replaceExistingItem(slot, MenuItems.Card);
+                menu.replaceExistingItem(slot, MenuItems.CARD);
             }
             menu.addMenuClickHandler(slot, ItemUtils.getCardSlotClickHandler(block));
         }
@@ -268,13 +275,16 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
                 slimefunItem.getItem(),
                 "&8设置朝向: " + blockFace.name() + " (" + CMIChatColor.stripColor(slimefunItem.getItemName()) + ")");
         final ItemMeta itemMeta = displayStack.getItemMeta();
+        List<String> lores = new ArrayList<>();
+        lores.add("{#e4ed32}左键点击: &8设置朝向");
+        lores.add("{#e4ed32}Shift+左键点击: &8打开目标方块");
         if (active) {
             itemMeta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, true);
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            lores.add("");
+            lores.add("&c已设置朝向此容器!");
         }
-        itemMeta.setLore(List.of(
-                CMIChatColor.translate("{#e4ed32}左键点击: &8设置朝向"),
-                CMIChatColor.translate("{#e4ed32}Shift+左键点击: &8打开目标方块")));
+        itemMeta.setLore(CMIChatColor.translate(lores));
         displayStack.setItemMeta(itemMeta);
         return displayStack;
     }
@@ -286,13 +296,16 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
             final ItemStack displayStack = new CustomItemStack(
                     blockMaterial, "&8设置朝向 " + blockFace.name() + " (" + CMIMaterial.get(blockMaterial) + ")");
             final ItemMeta itemMeta = displayStack.getItemMeta();
+            List<String> lores = new ArrayList<>();
+            lores.add("{#e4ed32}左键点击: &8设置朝向");
+            lores.add("{#e4ed32}Shift+左键点击: &8打开目标方块");
             if (active) {
                 itemMeta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, true);
                 itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                lores.add("");
+                lores.add("&c已设置朝向此容器!");
             }
-            itemMeta.setLore(List.of(
-                    CMIChatColor.translate("{#e4ed32}左键点击: &8设置朝向"),
-                    CMIChatColor.translate("{#e4ed32}Shift+左键点击: &8打开目标方块")));
+            itemMeta.setLore(CMIChatColor.translate(lores));
             displayStack.setItemMeta(itemMeta);
             return displayStack;
         } else {
@@ -333,7 +346,7 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
         }
     }
 
-    private void updateGui(SlimefunBlockData data) {
+    void updateGui(SlimefunBlockData data) {
         BlockMenu blockMenu = data.getBlockMenu();
         if (blockMenu == null || !blockMenu.hasViewer()) {
             return;
@@ -386,11 +399,11 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
         }
     }
 
-    protected @Nullable int[] getOtherBackgroundSlots() {
+    protected @Nullable int[] getOtherBorderSlots() {
         return null;
     }
 
-    @Nullable protected CustomItemStack getOtherBackgroundStack() {
+    @Nullable protected CustomItemStack getOtherBorderStack() {
         return null;
     }
 

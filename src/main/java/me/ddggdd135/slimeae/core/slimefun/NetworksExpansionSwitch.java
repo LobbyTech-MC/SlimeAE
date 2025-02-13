@@ -32,6 +32,9 @@ import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
  * 只能在网络拓展里用
  */
 public class NetworksExpansionSwitch extends NetworkObject implements IMEStorageObject {
+    private static boolean allowNetworks2AE;
+    private static boolean allowAE2Networks;
+
     public NetworksExpansionSwitch(
             ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(itemGroup, item, recipeType, recipe, NodeType.STORAGE_MONITOR);
@@ -45,6 +48,7 @@ public class NetworksExpansionSwitch extends NetworkObject implements IMEStorage
 
     @Override
     @Nullable public IStorage getStorage(Block block) {
+        if (!allowNetworks2AE) return null;
         NodeDefinition definition = NetworkStorage.getNode(block.getLocation());
         if (definition == null || definition.getNode() == null) {
             if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded())
@@ -68,5 +72,22 @@ public class NetworksExpansionSwitch extends NetworkObject implements IMEStorage
         }
 
         return result;
+    }
+
+    public static void reloadConfig() {
+        allowNetworks2AE = SlimeAEPlugin.getInstance()
+                .getConfig()
+                .getBoolean("networks-expansion-switch.allow-networks-to-ae", true);
+        allowAE2Networks = SlimeAEPlugin.getInstance()
+                .getConfig()
+                .getBoolean("networks-expansion-switch.allow-ae-to-networks", true);
+    }
+
+    public static boolean isAllowAE2Networks() {
+        return allowAE2Networks;
+    }
+
+    public static boolean isAllowNetworks2AE() {
+        return allowNetworks2AE;
     }
 }

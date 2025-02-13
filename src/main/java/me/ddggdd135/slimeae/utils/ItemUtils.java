@@ -145,7 +145,7 @@ public class ItemUtils {
      */
     @Nonnull
     public static ItemStack[] trimItems(@Nonnull ItemStack[] itemStacks) {
-        List<ItemStack> itemStackList = new ArrayList<>();
+        List<ItemStack> itemStackList = new ArrayList<>(itemStacks.length);
         for (ItemStack itemStack : itemStacks) {
             if (itemStack == null || itemStack.getType().isAir()) continue;
             if (itemStack.getAmount() > 0) {
@@ -358,32 +358,33 @@ public class ItemUtils {
     @Nullable public static IStorage getStorage(
             @Nonnull Block block, boolean checkNetwork, boolean isReadOnly, boolean allowVanilla) {
         SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(block.getLocation());
-        if (slimefunBlockData == null) return null;
-        SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
+        if (slimefunBlockData != null) {
+            SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
 
-        if (checkNetwork && slimefunItem instanceof IMEObject) {
-            if (!(slimefunItem instanceof MEInterface)) return null;
-            else isReadOnly = true;
-        }
-        if (SlimeAEPlugin.getInfinityIntegration().isLoaded()) {
-            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof StorageUnit) {
-                return new InfinityBarrelStorage(block);
+            if (checkNetwork && slimefunItem instanceof IMEObject) {
+                if (!(slimefunItem instanceof MEInterface)) return null;
+                else isReadOnly = true;
             }
-        }
-        if (SlimeAEPlugin.getFluffyMachinesIntegration().isLoaded()) {
-            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof Barrel) {
-                return new FluffyBarrelStorage(block);
+            if (SlimeAEPlugin.getInfinityIntegration().isLoaded()) {
+                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof StorageUnit) {
+                    return new InfinityBarrelStorage(block);
+                }
             }
-        }
-        if (SlimeAEPlugin.getNetworksIntegration().isLoaded()
-                || SlimeAEPlugin.getNetworksIntegration().isLoaded()) {
-            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworkQuantumStorage) {
-                return new QuantumStorage(block);
+            if (SlimeAEPlugin.getFluffyMachinesIntegration().isLoaded()) {
+                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof Barrel) {
+                    return new FluffyBarrelStorage(block);
+                }
             }
-        }
-        if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()) {
-            if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworksDrawer) {
-                return new DrawerStorage(block);
+            if (SlimeAEPlugin.getNetworksIntegration().isLoaded()
+                    || SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()) {
+                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworkQuantumStorage) {
+                    return new QuantumStorage(block);
+                }
+            }
+            if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()) {
+                if (SlimefunItem.getById(slimefunBlockData.getSfId()) instanceof NetworksDrawer) {
+                    return new DrawerStorage(block);
+                }
             }
         }
 
@@ -571,6 +572,10 @@ public class ItemUtils {
     }
 
     @Nullable public static ItemStack getItemStack(@Nonnull Block block, boolean checkNetwork) {
+        return getItemStack(block, checkNetwork, false);
+    }
+
+    @Nullable public static ItemStack getItemStack(@Nonnull Block block, boolean checkNetwork, boolean allowVanilla) {
         SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(block.getLocation());
         if (checkNetwork
                 && slimefunBlockData != null
@@ -586,12 +591,13 @@ public class ItemUtils {
                 if (item == null || item.getType().isAir()) continue;
                 return item;
             }
-            //        } else if (PaperLib.getBlockState(block, false).getState() instanceof Container) {
-            //            ItemStack[] items = getVanillaItemStacks(block);
-            //            for (ItemStack itemStack : items) {
-            //                if (itemStack != null && !itemStack.getType().isAir()) return itemStack;
-            //            }
+        } else if (allowVanilla && PaperLib.getBlockState(block, false).getState() instanceof Container) {
+            ItemStack[] items = getVanillaItemStacks(block);
+            for (ItemStack itemStack : items) {
+                if (itemStack != null && !itemStack.getType().isAir()) return itemStack;
+            }
         }
+
         return null;
     }
 
@@ -639,13 +645,13 @@ public class ItemUtils {
                     ClickAction clickAction) {
                 Inventory inventory = inventoryClickEvent.getClickedInventory();
                 ItemStack current = getSettingItem(inventory, i);
-                if (current != null && SlimefunUtils.isItemSimilar(current, MenuItems.Setting, true, false)) {
+                if (current != null && SlimefunUtils.isItemSimilar(current, MenuItems.SETTING, true, false)) {
                     if (cursor != null && !cursor.getType().isAir()) {
                         setSettingItem(inventory, i, cursor);
                     }
                 } else {
                     if (cursor == null || cursor.getType().isAir()) {
-                        inventory.setItem(i, MenuItems.Setting);
+                        inventory.setItem(i, MenuItems.SETTING);
                     } else {
                         setSettingItem(inventory, i, cursor);
                     }
@@ -673,7 +679,7 @@ public class ItemUtils {
                     ClickAction clickAction) {
                 Inventory inventory = inventoryClickEvent.getClickedInventory();
                 ItemStack current = inventory.getItem(i);
-                if (current != null && SlimefunUtils.isItemSimilar(current, MenuItems.Pattern, true, false)) {
+                if (current != null && SlimefunUtils.isItemSimilar(current, MenuItems.PATTERN, true, false)) {
                     if (cursor != null
                             && !cursor.getType().isAir()
                             && SlimefunItem.getByItem(cursor) instanceof Pattern) {
@@ -683,7 +689,7 @@ public class ItemUtils {
                 } else {
                     if (cursor == null || cursor.getType().isAir()) {
                         inventoryClickEvent.getWhoClicked().setItemOnCursor(current);
-                        inventory.setItem(i, MenuItems.Pattern);
+                        inventory.setItem(i, MenuItems.PATTERN);
                     } else if (SlimefunItem.getByItem(cursor) instanceof Pattern) {
                         inventory.setItem(i, cursor);
                         inventoryClickEvent.getWhoClicked().setItemOnCursor(current);
@@ -712,7 +718,7 @@ public class ItemUtils {
                     ClickAction clickAction) {
                 Inventory inventory = inventoryClickEvent.getClickedInventory();
                 ItemStack current = inventory.getItem(i);
-                if (current != null && SlimefunUtils.isItemSimilar(current, MenuItems.Card, true, false)) {
+                if (current != null && SlimefunUtils.isItemSimilar(current, MenuItems.CARD, true, false)) {
                     if (cursor != null && !cursor.getType().isAir() && SlimefunItem.getByItem(cursor) instanceof Card) {
                         inventory.setItem(i, cursor);
                         inventoryClickEvent.getWhoClicked().setItemOnCursor(null);
@@ -720,7 +726,7 @@ public class ItemUtils {
                 } else {
                     if (cursor == null || cursor.getType().isAir()) {
                         inventoryClickEvent.getWhoClicked().setItemOnCursor(current);
-                        inventory.setItem(i, MenuItems.Card);
+                        inventory.setItem(i, MenuItems.CARD);
                     } else if (SlimefunItem.getByItem(cursor) instanceof Card) {
                         inventory.setItem(i, cursor);
                         inventoryClickEvent.getWhoClicked().setItemOnCursor(current);
@@ -756,6 +762,21 @@ public class ItemUtils {
      */
     @Nonnull
     public static ItemStack createDisplayItem(@Nonnull ItemStack itemStack, long amount, boolean addLore) {
+        return createDisplayItem(itemStack, amount, addLore, false);
+    }
+
+    /**
+     * 创建用于显示的物品堆
+     *
+     * @param itemStack     原始物品堆
+     * @param amount        显示数量
+     * @param addLore       是否添加描述
+     * @param addPinnedLore 是否添加置顶提示
+     * @return 用于显示的物品堆
+     */
+    @Nonnull
+    public static ItemStack createDisplayItem(
+            @Nonnull ItemStack itemStack, long amount, boolean addLore, boolean addPinnedLore) {
         ItemStack result = new ItemStack(itemStack.getType());
         ItemMeta meta = itemStack.getItemMeta();
         result.setAmount((int) Math.min(itemStack.getMaxStackSize(), Math.max(1, amount)));
@@ -763,8 +784,9 @@ public class ItemUtils {
             List<String> lore = meta.getLore();
             if (lore == null) lore = new ArrayList<>();
             lore.add("");
-            lore.add(CMIChatColor.translate("&e物品数量 " + amount));
-            meta.setLore(lore);
+            lore.add("&e物品数量 " + amount);
+            if (addPinnedLore) lore.add("&e===已置顶===");
+            meta.setLore(CMIChatColor.translate(lore));
         }
         result.setItemMeta(meta);
         NBT.modify(result, x -> {
@@ -779,6 +801,7 @@ public class ItemUtils {
         ItemMeta meta = result.getItemMeta();
         if (hasLore) {
             List<String> lore = meta.getLore();
+            if (lore.get(lore.size() - 1).contains("===已置顶===")) lore.remove(lore.size() - 1);
             lore.remove(lore.size() - 1);
             lore.remove(lore.size() - 1);
             meta.setLore(lore);
@@ -832,5 +855,16 @@ public class ItemUtils {
             }
         }
         return found.toItemStacks();
+    }
+
+    @Nonnull
+    public static ItemStack[] removeAll(@Nonnull ItemStack[] itemStacks, @Nonnull Set<ItemStack> toRemove) {
+        List<ItemStack> result = new ArrayList<>(itemStacks.length);
+        for (ItemStack itemStack : itemStacks) {
+            if (toRemove.contains(itemStack.asOne())) continue;
+            result.add(itemStack);
+        }
+
+        return result.toArray(ItemStack[]::new);
     }
 }

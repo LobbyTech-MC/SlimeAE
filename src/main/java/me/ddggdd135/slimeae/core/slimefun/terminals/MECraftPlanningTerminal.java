@@ -1,22 +1,18 @@
-package me.ddggdd135.slimeae.core.slimefun;
+package me.ddggdd135.slimeae.core.slimefun.terminals;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
+import com.balugaq.jeg.api.groups.SearchGroup;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import java.util.*;
+import javax.annotation.Nonnull;
 import me.ddggdd135.guguslimefunlib.api.AEMenu;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
@@ -25,8 +21,14 @@ import me.ddggdd135.slimeae.api.exceptions.NoEnoughMaterialsException;
 import me.ddggdd135.slimeae.core.AutoCraftingSession;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
+import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
+import me.ddggdd135.slimeae.core.managers.PinnedManager;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class MECraftPlanningTerminal extends METerminal {
     public MECraftPlanningTerminal(
@@ -38,14 +40,66 @@ public class MECraftPlanningTerminal extends METerminal {
     public void updateGui(@Nonnull Block block) {
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;
-        for (int slot : getDisplaySlots()) {
-            blockMenu.replaceExistingItem(slot, MenuItems.Empty);
-            blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
-        }
+
         NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
-        if (info == null) return;
+        if (info == null) {
+            // 清空显示槽
+            for (int slot : getDisplaySlots()) {
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+            }
+            return;
+        }
 
         CraftingRecipe[] recipes = info.getRecipes().toArray(CraftingRecipe[]::new);
+
+        ItemStack[] itemStacks =
+                Arrays.stream(recipes).map(x -> x.getOutput()[0]).toList().toArray(ItemStack[]::new);
+        Player player0 = (Player) blockMenu.getInventory().getViewers().get(0);
+
+        // 获取过滤器
+        String filter = getFilter(block).toLowerCase(Locale.ROOT);
+
+        // 过滤和排序逻辑
+        List<Map.Entry<ItemStack, Long>> items = new ArrayList<>(Arrays.stream(itemStacks)
+                .map(x -> new AbstractMap.SimpleEntry<>(x, 0L))
+                .toList());
+        if (!filter.isEmpty()) {
+            if (!SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded())
+                items.removeIf(x -> {
+                    String itemType = x.getKey().getType().toString().toLowerCase(Locale.ROOT);
+                    if (itemType.startsWith(filter)) {
+                        return false;
+                    }
+                    String name = CMIChatColor.stripColor(
+                            ItemUtils.getItemName(x.getKey()).toLowerCase(Locale.ROOT));
+
+                    return !name.contains(filter);
+                });
+            else {
+                boolean isPinyinSearch = JustEnoughGuide.getConfigManager().isPinyinSearch();
+                SearchGroup group = new SearchGroup(null, player0, filter, isPinyinSearch);
+                List<SlimefunItem> slimefunItems = group.filterItems(player0, filter, isPinyinSearch);
+                items.removeIf(x -> {
+                    SlimefunItem slimefunItem = SlimefunItem.getByItem(x.getKey());
+                    if (slimefunItem == null) return true;
+                    return !slimefunItems.contains(slimefunItem);
+                });
+            }
+        }
+
+        List<ItemStack> storage = List.of(itemStacks);
+        PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
+        List<ItemStack> pinnedItems = pinnedManager.getPinnedItems(player0);
+        if (pinnedItems == null) pinnedItems = new ArrayList<>();
+        if (filter.isEmpty()) {
+            for (ItemStack pinned : pinnedItems) {
+                if (!storage.contains(pinned)) continue;
+                items.add(0, new AbstractMap.SimpleEntry<>(pinned, 0L));
+            }
+        }
+
+        itemStacks = items.stream().map(Map.Entry::getKey).toArray(ItemStack[]::new);
+
         int page = getPage(block);
         if (page > Math.ceil(recipes.length / (double) getDisplaySlots().length) - 1) {
             page = (int) (Math.ceil(recipes.length / (double) getDisplaySlots().length) - 1);
@@ -53,20 +107,52 @@ public class MECraftPlanningTerminal extends METerminal {
             setPage(block, page);
         }
 
-        ItemStack[] itemStacks =
-                Arrays.stream(recipes).map(x -> x.getOutput()[0]).toList().toArray(ItemStack[]::new);
-        for (int i = 0; i < getDisplaySlots().length; i++) {
-            if (itemStacks.length - 1 < i + page * getDisplaySlots().length) break;
-            ItemStack itemStack = itemStacks[i + page * getDisplaySlots().length];
-            CraftingRecipe recipe = recipes[i + page * getDisplaySlots().length];
-            if (itemStack == null || itemStack.getType().isAir()) continue;
-            int slot = getDisplaySlots()[i];
-            ItemStack result = ItemUtils.createDisplayItem(itemStack, 1, false);
+        int startIndex = page * getDisplaySlots().length;
+        int endIndex = startIndex + getDisplaySlots().length;
+
+        if (startIndex == endIndex) {
+            for (int slot : getDisplaySlots()) {
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+            }
+        }
+
+        for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
+            int slot = getDisplaySlots()[i + startIndex];
+            if (i + startIndex >= items.size()) {
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                continue;
+            }
+
+            ItemStack itemStack = itemStacks[i + startIndex];
+            CraftingRecipe recipe = recipes[i + startIndex];
+
+            if (itemStack == null || itemStack.getType().isAir()) {
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                continue;
+            }
+
+            ItemStack result = ItemUtils.createDisplayItem(itemStack, 1, false, false);
+
             ItemMeta meta = result.getItemMeta();
-            meta.setLore(List.of(CMIChatColor.translate("  &e可合成")));
+            List<String> lore = new ArrayList<>();
+            lore.add("");
+            lore.add("  &e可合成");
+            if (pinnedItems.contains(itemStack.asOne())) lore.add("&e===已置顶===");
+            meta.setLore(CMIChatColor.translate(lore));
             result.setItemMeta(meta);
+
             blockMenu.replaceExistingItem(slot, result);
             blockMenu.addMenuClickHandler(slot, (player, i1, itemStack12, clickAction) -> {
+                if (SlimefunUtils.isItemSimilar(
+                        player.getItemOnCursor(), SlimefunAEItems.AE_TERMINAL_TOPPER, true, false)) {
+                    ItemStack template = itemStack.asOne();
+                    List<ItemStack> pinned = pinnedManager.getPinnedItems(player);
+                    if (pinned == null) pinned = new ArrayList<>();
+                    if (!pinned.contains(template)) pinnedManager.addPinned(player, template);
+                    else pinnedManager.removePinned(player, template);
+                    updateGui(block);
+                    return false;
+                }
                 player.closeInventory();
                 player.sendMessage(CMIChatColor.translate("&e输入合成数量"));
                 ChatUtils.awaitInput(player, msg -> {
@@ -86,10 +172,10 @@ public class MECraftPlanningTerminal extends METerminal {
                         AutoCraftingSession session = new AutoCraftingSession(info, recipe, amount);
                         session.refreshGUI(45, false);
                         AEMenu menu = session.getMenu();
-                        int[] background = new int[] {45, 46, 48, 49, 50, 52, 53};
+                        int[] borders = new int[] {45, 46, 48, 49, 50, 52, 53};
                         int acceptSlot = 47;
                         int cancelSlot = 51;
-                        for (int slot1 : background) {
+                        for (int slot1 : borders) {
                             menu.replaceExistingItem(slot1, ChestMenuUtils.getBackground());
                             menu.addMenuClickHandler(slot1, ChestMenuUtils.getEmptyClickHandler());
                         }

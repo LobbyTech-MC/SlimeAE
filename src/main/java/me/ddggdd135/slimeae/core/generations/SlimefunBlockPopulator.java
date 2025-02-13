@@ -14,11 +14,8 @@ import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
 
 public class SlimefunBlockPopulator extends BlockPopulator {
-
-    // 缓存配置值
     private static boolean enableOreGen;
 
-    // 重载配置的方法
     public static void reloadConfig() {
         enableOreGen = SlimeAEPlugin.getInstance().getConfig().getBoolean("world-gen.enable-ore-gen", true);
     }

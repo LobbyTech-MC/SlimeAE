@@ -19,9 +19,16 @@ public interface IStorage {
      */
     void pushItem(@Nonnull ItemStack[] itemStacks);
 
+    // 添加boolean
+    //    default void pushItem(@Nonnull ItemStack itemStack) {
+    //        pushItem(new ItemStack[] {itemStack});
+    //    }
+
     /**
      * 将单个物品推送到存储中
+     *
      * @param itemStack 要存储的物品
+     * @return
      */
     default void pushItem(@Nonnull ItemStack itemStack) {
         pushItem(new ItemStack[] {itemStack});

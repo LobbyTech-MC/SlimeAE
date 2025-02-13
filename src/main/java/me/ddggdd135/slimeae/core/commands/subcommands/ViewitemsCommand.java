@@ -1,8 +1,6 @@
 package me.ddggdd135.slimeae.core.commands.subcommands;
 
-import static me.ddggdd135.slimeae.core.slimefun.METerminal.ALPHABETICAL_SORT;
-import static me.ddggdd135.slimeae.core.slimefun.METerminal.MATERIAL_SORT;
-import static me.ddggdd135.slimeae.core.slimefun.METerminal.NUMERICAL_SORT;
+import static me.ddggdd135.slimeae.core.slimefun.terminals.METerminal.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,7 +13,16 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
+import me.ddggdd135.guguslimefunlib.api.AEMenu;
+import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.*;
+import me.ddggdd135.slimeae.core.items.MenuItems;
+import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
+import me.ddggdd135.slimeae.core.slimefun.terminals.METerminal;
+import me.ddggdd135.slimeae.utils.ItemUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -32,19 +39,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.inventory.InvUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import me.ddggdd135.guguslimefunlib.api.AEMenu;
-import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.CreativeItemMap;
-import me.ddggdd135.slimeae.api.ItemRequest;
-import me.ddggdd135.slimeae.api.MEStorageCellCache;
-import me.ddggdd135.slimeae.api.SubCommand;
-import me.ddggdd135.slimeae.core.items.MenuItems;
-import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
-import me.ddggdd135.slimeae.core.slimefun.METerminal;
-import me.ddggdd135.slimeae.utils.ItemUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 
 public class ViewitemsCommand extends SubCommand {
     private final Map<UUID, String> filterCache = new HashMap<>();
@@ -101,7 +95,7 @@ public class ViewitemsCommand extends SubCommand {
             AEMenu menu = new AEMenu("&e存储元件 " + data.getUuid().toString());
             menu.setPlayerInventoryClickable(true);
             menu.setEmptySlotsClickable(true);
-            for (int slot : getBackgroundSlots()) {
+            for (int slot : getBorderSlots()) {
                 menu.addItem(slot, ChestMenuUtils.getBackground());
                 menu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
             }
@@ -153,7 +147,7 @@ public class ViewitemsCommand extends SubCommand {
             });
 
             for (int slot : getDisplaySlots()) {
-                menu.replaceExistingItem(slot, MenuItems.Empty);
+                menu.replaceExistingItem(slot, MenuItems.EMPTY);
                 menu.addMenuClickHandler(slot, new ChestMenu.AdvancedMenuClickHandler() {
                     @Override
                     public boolean onClick(
@@ -166,7 +160,7 @@ public class ViewitemsCommand extends SubCommand {
                         ItemStack itemStack = menu.getItemInSlot(i);
                         if (itemStack != null
                                 && !itemStack.getType().isAir()
-                                && !SlimefunUtils.isItemSimilar(itemStack, MenuItems.Empty, true, false)) {
+                                && !SlimefunUtils.isItemSimilar(itemStack, MenuItems.EMPTY, true, false)) {
                             ItemStack template = ItemUtils.getDisplayItem(itemStack, true);
                             template.setAmount(template.getMaxStackSize());
                             if (clickAction.isShiftClicked()
@@ -266,17 +260,23 @@ public class ViewitemsCommand extends SubCommand {
         int startIndex = page * getDisplaySlots().length;
         int endIndex = Math.min(startIndex + getDisplaySlots().length, items.size());
 
+        if (startIndex == endIndex) {
+            for (int slot : getDisplaySlots()) {
+                menu.replaceExistingItem(slot, MenuItems.EMPTY);
+            }
+        }
+
         for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
             int slot = getDisplaySlots()[i];
             if (i + startIndex >= items.size()) {
-                menu.replaceExistingItem(slot, MenuItems.Empty);
+                menu.replaceExistingItem(slot, MenuItems.EMPTY);
                 continue;
             }
             Map.Entry<ItemStack, Long> entry = items.get(i + startIndex);
             ItemStack itemStack = entry.getKey();
 
             if (itemStack == null || itemStack.getType().isAir()) {
-                menu.replaceExistingItem(slot, MenuItems.Empty);
+                menu.replaceExistingItem(slot, MenuItems.EMPTY);
                 continue;
             }
 
@@ -305,7 +305,7 @@ public class ViewitemsCommand extends SubCommand {
                 .start();
     }
 
-    private int[] getBackgroundSlots() {
+    private int[] getBorderSlots() {
         return new int[] {17, 26};
     }
 

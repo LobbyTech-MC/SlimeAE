@@ -11,6 +11,9 @@ softdepend:
   - Networks-Changed
   - TranscEndence
   - JustEnoughGuide
+  - Galactifun
+  - ObsidianExpansion
+  - ExoticGarden
   - GuizhanLibPlugin
 depend:
   - Slimefun

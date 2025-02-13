@@ -27,21 +27,20 @@ import me.ddggdd135.slimeae.core.generations.SlimefunBlockPopulator;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItemGroups;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
 import me.ddggdd135.slimeae.core.listeners.BlockListener;
+import me.ddggdd135.slimeae.core.listeners.CardListener;
 import me.ddggdd135.slimeae.core.listeners.NetworkListener;
 import me.ddggdd135.slimeae.core.listeners.NetworksIntegrationListener;
+import me.ddggdd135.slimeae.core.managers.PinnedManager;
 import me.ddggdd135.slimeae.core.slimefun.CraftingCard;
-import me.ddggdd135.slimeae.integrations.FluffyMachinesIntegration;
-import me.ddggdd135.slimeae.integrations.InfinityIntegration;
-import me.ddggdd135.slimeae.integrations.JustEnoughGuideIntegration;
-import me.ddggdd135.slimeae.integrations.NetworksExpansionIntegration;
-import me.ddggdd135.slimeae.integrations.NetworksIntegration;
-import me.ddggdd135.slimeae.integrations.TranscEndenceIntegration;
-import me.ddggdd135.slimeae.tasks.DataSavingTask;
-import me.ddggdd135.slimeae.tasks.NetworkCheckTask;
-import me.ddggdd135.slimeae.tasks.NetworkRefreshTask;
-import me.ddggdd135.slimeae.tasks.NetworkTickerTask;
-import me.ddggdd135.slimeae.tasks.NetworkTimeConsumingTask;
+import me.ddggdd135.slimeae.core.slimefun.MECleaner;
+import me.ddggdd135.slimeae.core.slimefun.NetworksExpansionSwitch;
+import me.ddggdd135.slimeae.integrations.*;
+import me.ddggdd135.slimeae.tasks.*;
 import net.guizhanss.minecraft.guizhanlib.updater.GuizhanUpdater;
+import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * SlimeAE插件的主类
@@ -57,17 +56,25 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
     private final NetworksExpansionIntegration networksExpansionIntegration = new NetworksExpansionIntegration();
     private final TranscEndenceIntegration transcEndenceIntegration = new TranscEndenceIntegration();
     private final JustEnoughGuideIntegration justEnoughGuideIntegration = new JustEnoughGuideIntegration();
+    private final GalactifunIntegration galactifunIntegration = new GalactifunIntegration();
+    private final ObsidianExpansionIntegration obsidianExpansionIntegration = new ObsidianExpansionIntegration();
+    private final ExoticGardenIntegration exoticGardenIntegration = new ExoticGardenIntegration();
+
     private final StorageCellDataController storageCellDataController = new StorageCellDataController();
+
     private final NetworkTickerTask networkTicker = new NetworkTickerTask();
     private final NetworkCheckTask networkChecker = new NetworkCheckTask();
     private final NetworkRefreshTask networkRefresher = new NetworkRefreshTask();
     private final NetworkTimeConsumingTask networkTimeConsumingTask = new NetworkTimeConsumingTask();
     private final DataSavingTask dataSavingTask = new DataSavingTask();
     private final SlimeAECommand slimeAECommand = new SlimeAECommand();
+    private PinnedManager pinnedManager;
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
         instance = this;
+        pinnedManager = new PinnedManager();
 
         if (!getServer().getPluginManager().isPluginEnabled("GuizhanLibPlugin")) {
             getLogger().log(Level.SEVERE, "本插件需要 鬼斩前置库插件(GuizhanLibPlugin) 才能运行!");
@@ -90,16 +97,20 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         SlimefunAEItems.onSetup(this);
 
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CardListener(), this);
         Bukkit.getPluginManager().registerEvents(new NetworkListener(), this);
         if (networksExpansionIntegration.isLoaded())
             Bukkit.getPluginManager().registerEvents(new NetworksIntegrationListener(), this);
 
-        if (infinityIntegration.isLoaded()) getLogger().info("无尽贪婪已支持");
-        if (fluffyMachinesIntegration.isLoaded()) getLogger().info("蓬松科技已支持");
-        if (networksIntegration.isLoaded()) getLogger().info("网络已支持");
-        if (networksExpansionIntegration.isLoaded()) getLogger().info("网络拓展已支持");
-        if (transcEndenceIntegration.isLoaded()) getLogger().info("末地科技已支持");
-        if (justEnoughGuideIntegration.isLoaded()) getLogger().info("更好的粘液书已支持");
+        if (infinityIntegration.isLoaded()) getLogger().info("无尽贪婪已接入");
+        if (fluffyMachinesIntegration.isLoaded()) getLogger().info("蓬松科技已接入");
+        if (networksIntegration.isLoaded()) getLogger().info("网络已接入");
+        if (networksExpansionIntegration.isLoaded()) getLogger().info("网络拓展已接入");
+        if (transcEndenceIntegration.isLoaded()) getLogger().info("末地科技已接入");
+        if (justEnoughGuideIntegration.isLoaded()) getLogger().info("更好的粘液书已接入");
+        if (galactifunIntegration.isLoaded()) getLogger().info("星系已接入");
+        if (obsidianExpansionIntegration.isLoaded()) getLogger().info("黑曜石科技已接入");
+        if (exoticGardenIntegration.isLoaded()) getLogger().info("异域花园已接入");
 
         storageCellDataController.init();
 
@@ -129,10 +140,14 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
 
         getCommand("SlimeAE").setExecutor(slimeAECommand);
         getCommand("SlimeAE").setTabCompleter(slimeAECommand);
+
+        int pluginId = 24737;
+        metrics = new Metrics(this, pluginId);
     }
 
     @Override
     public void onDisable() {
+        metrics.shutdown();
         // Plugin shutdown logic
         for (World world : Bukkit.getWorlds()) {
             world.getPopulators().removeIf(x -> x instanceof SlimefunBlockPopulator);
@@ -238,6 +253,33 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         return getInstance().justEnoughGuideIntegration;
     }
 
+    /**
+     * 获取星系集成实例
+     * @return 星系集成实例
+     */
+    @Nonnull
+    public static GalactifunIntegration getGalactifunIntegration() {
+        return getInstance().galactifunIntegration;
+    }
+
+    /**
+     * 获取黑曜石科技集成实例
+     * @return 黑曜石科技集成实例
+     */
+    @Nonnull
+    public static ObsidianExpansionIntegration getObsidianExpansionIntegration() {
+        return getInstance().obsidianExpansionIntegration;
+    }
+
+    /**
+     * 获取异域花园集成实例
+     * @return 异域花园集成实例
+     */
+    @Nonnull
+    public static ExoticGardenIntegration getExoticGardenIntegration() {
+        return getInstance().exoticGardenIntegration;
+    }
+
     @Nonnull
     public static StorageCellDataController getStorageCellDataController() {
         return getInstance().storageCellDataController;
@@ -273,6 +315,11 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         return getInstance().slimeAECommand;
     }
 
+    @Nonnull
+    public static PinnedManager getPinnedManager() {
+        return getInstance().pinnedManager;
+    }
+
     public void reloadConfig0() {
         // 保存默认配置
         saveDefaultConfig();
@@ -287,5 +334,11 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
 
         // 重载合成卡冷却时间配置
         CraftingCard.reloadConfig();
+
+        // 重载网络交换机配置
+        if (networksExpansionIntegration.isLoaded()) NetworksExpansionSwitch.reloadConfig();
+
+        // 重载ME清除器配置
+        MECleaner.reloadConfig();
     }
 }

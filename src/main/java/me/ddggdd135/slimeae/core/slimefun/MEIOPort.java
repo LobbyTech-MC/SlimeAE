@@ -36,11 +36,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock, ICardHolder {
-    public static final int[] BORDER_SLOTS =
-            new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 22, 26, 27, 31, 35, 36, 40, 44, 48, 49, 50, 51, 52, 53};
-    public static final int[] CARD_SLOTS = new int[] {45, 46, 47};
-    public static final int[] ME_STORAGE_CELL_INPUT_SLOTS = new int[] {10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39};
-    public static final int[] ME_STORAGE_CELL_OUTPUT_SLOTS = new int[] {14, 15, 16, 23, 24, 25, 32, 33, 34, 41, 42, 43};
 
     @Override
     public boolean isSynchronized() {
@@ -60,10 +55,11 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
         IStorage networkStorage = info.getStorage();
         ItemStack setting = blockMenu.getItemInSlot(getSettingSlot());
         if (setting == null || setting.getType().isAir()) return;
-        if (!InvUtils.fits(blockMenu.getInventory(), SlimefunAEItems.ME_ITEM_STORAGE_COMPONENT_1K, getOutputSlots()))
+        if (!InvUtils.fits(
+                blockMenu.getInventory(), SlimefunAEItems.ME_ITEM_STORAGE_COMPONENT_1K, getMeStorageCellOutputSlots()))
             return;
         if (SlimefunUtils.isItemSimilar(setting, MenuItems.INPUT_MODE, true, false)) {
-            for (int slot : getInputSlots()) {
+            for (int slot : getMeStorageCellInputSlots()) {
                 ItemStack itemStack = blockMenu.getItemInSlot(slot);
                 if (itemStack != null
                         && !itemStack.getType().isAir()
@@ -72,7 +68,7 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
                     MEStorageCellCache meStorageCellCache = MEItemStorageCell.getStorage(itemStack);
                     if (meStorageCellCache.getStorage().isEmpty()) {
                         blockMenu.replaceExistingItem(slot, null);
-                        blockMenu.pushItem(MEItemStorageCell.updateLore(itemStack), getOutputSlots());
+                        blockMenu.pushItem(MEItemStorageCell.updateLore(itemStack), getMeStorageCellOutputSlots());
                         return;
                     }
 
@@ -80,7 +76,7 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
                             .filter(x -> x.getValue() > 0)
                             .map(Map.Entry::getKey)
                             .toArray(ItemStack[]::new)[0];
-                    ItemStack[] tmp = meStorageCellCache.tryTakeItem(new ItemRequest(target, 10240, true));
+                    ItemStack[] tmp = meStorageCellCache.tryTakeItem(new ItemRequest(target, 40960, true));
                     networkStorage.pushItem(tmp);
                     tmp = ItemUtils.trimItems(tmp);
                     meStorageCellCache.pushItem(tmp);
@@ -91,7 +87,7 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
             return;
         }
 
-        for (int slot : getInputSlots()) {
+        for (int slot : getMeStorageCellInputSlots()) {
             ItemStack itemStack = blockMenu.getItemInSlot(slot);
             if (itemStack != null
                     && !itemStack.getType().isAir()
@@ -100,7 +96,7 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
                 MEStorageCellCache meStorageCellCache = MEItemStorageCell.getStorage(itemStack);
                 if (meStorageCellCache.getStored() >= meStorageCellCache.getSize()) {
                     blockMenu.replaceExistingItem(slot, null);
-                    blockMenu.pushItem(MEItemStorageCell.updateLore(itemStack), getOutputSlots());
+                    blockMenu.pushItem(MEItemStorageCell.updateLore(itemStack), getMeStorageCellOutputSlots());
                     return;
                 }
 
@@ -110,7 +106,7 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
                         .filter(x -> x.getValue() > 0)
                         .map(Map.Entry::getKey)
                         .toArray(ItemStack[]::new)[0];
-                ItemStack[] tmp = networkStorage.tryTakeItem(new ItemRequest(target, 10240, true));
+                ItemStack[] tmp = networkStorage.tryTakeItem(new ItemRequest(target, 40960, true));
                 meStorageCellCache.pushItem(tmp);
                 tmp = ItemUtils.trimItems(tmp);
                 networkStorage.pushItem(tmp);
@@ -137,14 +133,14 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
                 BlockMenu blockMenu = StorageCacheUtils.getMenu(b.getLocation());
                 if (blockMenu == null) return;
 
-                blockMenu.dropItems(b.getLocation(), getInputSlots());
-                blockMenu.dropItems(b.getLocation(), getOutputSlots());
+                blockMenu.dropItems(b.getLocation(), getMeStorageCellInputSlots());
+                blockMenu.dropItems(b.getLocation(), getMeStorageCellOutputSlots());
 
                 for (int slot : getCardSlots()) {
                     ItemStack itemStack = blockMenu.getItemInSlot(slot);
                     if (itemStack != null
                             && itemStack.getType() != Material.AIR
-                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.Card, true, false))) {
+                            && !(SlimefunUtils.isItemSimilar(itemStack, MenuItems.CARD, true, false))) {
                         b.getWorld().dropItemNaturally(b.getLocation(), itemStack);
                     }
                 }
@@ -154,18 +150,18 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
 
     @Override
     public int[] getInputSlots() {
-        return ME_STORAGE_CELL_INPUT_SLOTS;
+        return getMeStorageCellInputSlots();
     }
 
     @Override
     public int[] getOutputSlots() {
-        return ME_STORAGE_CELL_OUTPUT_SLOTS;
+        return getMeStorageCellOutputSlots();
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void init(@Nonnull BlockMenuPreset preset) {
-        preset.drawBackground(BORDER_SLOTS);
+        preset.drawBackground(getBorderSlots());
     }
 
     @Override
@@ -174,7 +170,7 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
         for (int slot : getCardSlots()) {
             if (menu.getItemInSlot(slot) == null
                     || menu.getItemInSlot(slot).getType().isAir()) {
-                menu.replaceExistingItem(slot, MenuItems.Card);
+                menu.replaceExistingItem(slot, MenuItems.CARD);
             }
             menu.addMenuClickHandler(slot, ItemUtils.getCardSlotClickHandler(block));
         }
@@ -198,7 +194,7 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
 
     @Override
     public int[] getCardSlots() {
-        return CARD_SLOTS;
+        return new int[] {45, 46, 47};
     }
 
     @Override
@@ -223,5 +219,17 @@ public class MEIOPort extends TickingBlock implements IMEObject, InventoryBlock,
 
         tickCards(block, slimefunItem, data);
         onMEIOPortTick(block, slimefunItem, data);
+    }
+
+    public int[] getBorderSlots() {
+        return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 22, 26, 27, 31, 35, 36, 40, 44, 48, 49, 50, 51, 52, 53};
+    }
+
+    public int[] getMeStorageCellInputSlots() {
+        return new int[] {10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39};
+    }
+
+    public int[] getMeStorageCellOutputSlots() {
+        return new int[] {14, 15, 16, 23, 24, 25, 32, 33, 34, 41, 42, 43};
     }
 }

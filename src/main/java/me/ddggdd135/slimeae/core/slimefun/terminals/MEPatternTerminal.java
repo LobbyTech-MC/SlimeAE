@@ -1,4 +1,4 @@
-package me.ddggdd135.slimeae.core.slimefun;
+package me.ddggdd135.slimeae.core.slimefun.terminals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +27,7 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
+import me.ddggdd135.slimeae.core.slimefun.Pattern;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.ddggdd135.slimeae.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -38,7 +39,7 @@ public class MEPatternTerminal extends METerminal {
     }
 
     @Override
-    public int[] getBackgroundSlots() {
+    public int[] getBorderSlots() {
         return new int[] {0, 1, 3, 5, 12, 13, 14, 21, 23, 30, 31, 32, 34, 35, 39, 41, 48, 49, 50, 51, 52, 53};
     }
 
@@ -153,27 +154,26 @@ public class MEPatternTerminal extends METerminal {
         if (craftingTypeItem == null || SlimefunUtils.isItemSimilar(craftingTypeItem, MenuItems.COOKING, true)) {
             toOut.setAmount(1);
             in.subtract();
-            CraftingRecipe recipe = new CraftingRecipe(
-                    CraftType.COOKING,
-                    Arrays.stream(getCraftSlots())
-                            .mapToObj(blockMenu::getItemInSlot)
-                            .filter(Objects::nonNull)
-                            .filter(x -> !x.getType().isAir())
-                            .toArray(ItemStack[]::new),
-                    Arrays.stream(getCraftOutputSlots())
-                            .mapToObj(blockMenu::getItemInSlot)
-                            .filter(Objects::nonNull)
-                            .filter(x -> !x.getType().isAir())
-                            .toArray(ItemStack[]::new));
+            ItemStack[] input = Arrays.stream(getCraftSlots())
+                    .mapToObj(blockMenu::getItemInSlot)
+                    .filter(Objects::nonNull)
+                    .filter(x -> !x.getType().isAir())
+                    .toArray(ItemStack[]::new);
+            ItemStack[] output = Arrays.stream(getCraftOutputSlots())
+                    .mapToObj(blockMenu::getItemInSlot)
+                    .filter(Objects::nonNull)
+                    .filter(x -> !x.getType().isAir())
+                    .toArray(ItemStack[]::new);
+            if (input.length == 0 || output.length == 0) return;
+            CraftingRecipe recipe = new CraftingRecipe(CraftType.COOKING, input, output);
             Pattern.setRecipe(toOut, recipe);
         } else {
-            ItemStack[] inputs;
             List<ItemStack> inputList = new ArrayList<>();
             for (int slot : getCraftSlots()) {
                 inputList.add(blockMenu.getItemInSlot(slot));
             }
 
-            inputs = inputList.toArray(ItemStack[]::new);
+            ItemStack[] inputs = inputList.toArray(ItemStack[]::new);
 
             ItemStack[] outputs;
             List<ItemStack> outputList = new ArrayList<>();
@@ -188,15 +188,7 @@ public class MEPatternTerminal extends METerminal {
             else recipe = RecipeUtils.getRecipe(inputs);
 
             if (recipe == null) return;
-            for (int i = 0; i < getCraftSlots().length; i++) {
-                int slot = getCraftSlots()[i];
-                ItemStack itemStack = blockMenu.getItemInSlot(slot);
-                ItemStack target = recipe.getInput().length - 1 >= i ? recipe.getInput()[i] : null;
-                if (target == null && itemStack != null) return;
-                if (target != null && itemStack == null) return;
-                if (target == null) continue;
-                if (!target.equals(itemStack)) return;
-            }
+
             toOut.setAmount(1);
             in.subtract();
             Pattern.setRecipe(toOut, recipe);

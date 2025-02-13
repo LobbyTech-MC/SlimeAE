@@ -1,4 +1,4 @@
-package me.ddggdd135.slimeae.core.slimefun;
+package me.ddggdd135.slimeae.core.slimefun.terminals;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -43,6 +43,8 @@ import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
+import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
+import me.ddggdd135.slimeae.core.managers.PinnedManager;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
@@ -61,7 +63,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
     public static final String SORT_KEY = "sort";
     public static final String FILTER_KEY = "filter";
 
-    public int[] getBackgroundSlots() {
+    public int[] getBorderSlots() {
         return new int[] {17, 26};
     }
 
@@ -185,13 +187,15 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         if (info == null) {
             // 清空显示槽
             for (int slot : getDisplaySlots()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.Empty);
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
             }
             return;
         }
 
         IStorage networkStorage = info.getStorage();
         Map<ItemStack, Long> storage = networkStorage.getStorage();
+
+        Player player = (Player) blockMenu.getInventory().getViewers().get(0);
 
         // 获取过滤器
         String filter = getFilter(block).toLowerCase(Locale.ROOT);
@@ -211,7 +215,6 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
                     return !name.contains(filter);
                 });
             else {
-                Player player = (Player) blockMenu.getInventory().getViewers().get(0);
                 boolean isPinyinSearch = JustEnoughGuide.getConfigManager().isPinyinSearch();
                 SearchGroup group = new SearchGroup(null, player, filter, isPinyinSearch);
                 List<SlimefunItem> slimefunItems = group.filterItems(player, filter, isPinyinSearch);
@@ -226,6 +229,19 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         if (storage instanceof CreativeItemMap) items.sort(MATERIAL_SORT);
         else items.sort(getSort(block));
 
+        int pinnedCount = 0;
+        if (filter.isEmpty()) {
+            PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
+            List<ItemStack> pinnedItems = pinnedManager.getPinnedItems(player);
+            if (pinnedItems == null) pinnedItems = new ArrayList<>();
+
+            for (ItemStack pinned : pinnedItems) {
+                if (!storage.containsKey(pinned)) continue;
+                items.add(0, new AbstractMap.SimpleEntry<>(pinned, storage.get(pinned)));
+                pinnedCount++;
+            }
+        }
+
         // 计算分页
         int page = getPage(block);
         int maxPage = (int) Math.max(0, Math.ceil(items.size() / (double) getDisplaySlots().length) - 1);
@@ -238,21 +254,30 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         int startIndex = page * getDisplaySlots().length;
         int endIndex = startIndex + getDisplaySlots().length;
 
+        if (startIndex == endIndex) {
+            for (int slot : getDisplaySlots()) {
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+            }
+        }
+
         for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
             int slot = getDisplaySlots()[i];
             if (i + startIndex >= items.size()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.Empty);
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
                 continue;
             }
             Map.Entry<ItemStack, Long> entry = items.get(i + startIndex);
             ItemStack itemStack = entry.getKey();
 
             if (itemStack == null || itemStack.getType().isAir()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.Empty);
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
                 continue;
             }
 
-            blockMenu.replaceExistingItem(slot, ItemUtils.createDisplayItem(itemStack, entry.getValue()));
+            blockMenu.replaceExistingItem(
+                    slot,
+                    ItemUtils.createDisplayItem(
+                            itemStack, entry.getValue(), true, i < pinnedCount - page * getDisplaySlots().length));
         }
     }
 
@@ -272,7 +297,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
     @Override
     @OverridingMethodsMustInvokeSuper
     public void init(@Nonnull BlockMenuPreset preset) {
-        for (int slot : getBackgroundSlots()) {
+        for (int slot : getBorderSlots()) {
             preset.addItem(slot, ChestMenuUtils.getBackground());
             preset.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -327,7 +352,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         });
 
         for (int slot : getDisplaySlots()) {
-            menu.replaceExistingItem(slot, MenuItems.Empty);
+            menu.replaceExistingItem(slot, MenuItems.EMPTY);
             menu.addMenuClickHandler(slot, new ChestMenu.AdvancedMenuClickHandler() {
                 @Override
                 public boolean onClick(
@@ -343,9 +368,20 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
                     ItemStack itemStack = menu.getItemInSlot(i);
                     if (itemStack != null
                             && !itemStack.getType().isAir()
-                            && !SlimefunUtils.isItemSimilar(itemStack, MenuItems.Empty, true, false)) {
+                            && !SlimefunUtils.isItemSimilar(itemStack, MenuItems.EMPTY, true, false)) {
                         ItemStack template = ItemUtils.getDisplayItem(itemStack, true);
                         template.setAmount(template.getMaxStackSize());
+
+                        if (SlimefunUtils.isItemSimilar(cursor, SlimefunAEItems.AE_TERMINAL_TOPPER, true, false)) {
+                            PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
+                            List<ItemStack> pinned = pinnedManager.getPinnedItems(player);
+                            if (pinned == null) pinned = new ArrayList<>();
+                            if (!pinned.contains(template.asOne())) pinnedManager.addPinned(player, template);
+                            else pinnedManager.removePinned(player, template);
+                            updateGui(block);
+                            return false;
+                        }
+
                         if (clickAction.isShiftClicked()
                                 && InvUtils.fits(
                                         playerInventory,

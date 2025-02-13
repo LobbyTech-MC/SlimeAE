@@ -24,12 +24,14 @@ public class StorageCollection implements IStorage {
     private final Map<ItemStack, IStorage> takeCache;
     private final Map<ItemStack, IStorage> pushCache;
     private final Set<ItemStack> notIncluded;
+    private final Set<ItemStack> full;
 
     public StorageCollection(@Nonnull IStorage... storages) {
         this.storages = new HashSet<>();
         this.takeCache = new HashMap<>();
         this.pushCache = new HashMap<>();
         this.notIncluded = new HashSet<>();
+        this.full = new HashSet<>();
         for (IStorage storage : storages) {
             addStorage(storage);
         }
@@ -47,6 +49,7 @@ public class StorageCollection implements IStorage {
         }
         storages.add(storage);
         notIncluded.clear();
+        full.clear();
     }
 
     public boolean removeStorage(@Nonnull IStorage storage) {
@@ -85,6 +88,7 @@ public class StorageCollection implements IStorage {
 
     @Override
     public void pushItem(@Nonnull ItemStack[] itemStacks) {
+        itemStacks = ItemUtils.removeAll(itemStacks, full);
         for (ItemStack itemStack : itemStacks) {
             ItemStack template = itemStack.asOne();
             if (pushCache.containsKey(template)) {
@@ -98,7 +102,10 @@ public class StorageCollection implements IStorage {
 
         // 计算每个 storage 的 tier 并缓存结果
         for (IStorage storage : sorted) {
-            int totalTier = Arrays.stream(itemStacks).mapToInt(storage::getTier).sum();
+            int totalTier = 0;
+            for (ItemStack itemStack : itemStacks) {
+                totalTier += storage.getTier(itemStack);
+            }
             tierMap.put(storage, totalTier);
         }
 
@@ -112,6 +119,10 @@ public class StorageCollection implements IStorage {
             storage.pushItem(itemStacks);
             itemStacks = ItemUtils.trimItems(itemStacks);
             if (itemStacks.length == 0) return;
+        }
+
+        for (ItemStack itemStack : itemStacks) {
+            full.add(itemStack.asOne());
         }
     }
 
@@ -135,6 +146,7 @@ public class StorageCollection implements IStorage {
         ItemStorage found = new ItemStorage();
         // init rest
         for (ItemRequest request : requests) {
+            if (notIncluded.contains(request.getTemplate())) continue;
             if (rest.containsKey(request.getTemplate())) {
                 rest.put(request.getTemplate(), rest.get(request.getTemplate()) + request.getAmount());
             } else {
@@ -158,6 +170,7 @@ public class StorageCollection implements IStorage {
             for (ItemStack itemStack : itemStacks) {
                 if (itemStack != null && !itemStack.getType().isAir()) {
                     takeCache.put(itemStack.asOne(), storage);
+                    full.remove(itemStack.asOne());
                 }
             }
             rest = ItemUtils.takeItems(rest, ItemUtils.getAmounts(itemStacks));
