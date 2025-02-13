@@ -1,8 +1,5 @@
 package me.ddggdd135.slimeae.core.items;
 
-import com.ytdd9527.networksexpansion.implementation.ExpansionItemStacks;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +7,10 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
+import com.ytdd9527.networksexpansion.implementation.ExpansionItemStacks;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 

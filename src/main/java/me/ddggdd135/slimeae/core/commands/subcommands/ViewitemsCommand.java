@@ -1,6 +1,8 @@
 package me.ddggdd135.slimeae.core.commands.subcommands;
 
-import static me.ddggdd135.slimeae.core.slimefun.terminals.METerminal.*;
+import static me.ddggdd135.slimeae.core.slimefun.terminals.METerminal.ALPHABETICAL_SORT;
+import static me.ddggdd135.slimeae.core.slimefun.terminals.METerminal.MATERIAL_SORT;
+import static me.ddggdd135.slimeae.core.slimefun.terminals.METerminal.NUMERICAL_SORT;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,16 +15,7 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import me.ddggdd135.guguslimefunlib.api.AEMenu;
-import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.*;
-import me.ddggdd135.slimeae.core.items.MenuItems;
-import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
-import me.ddggdd135.slimeae.core.slimefun.terminals.METerminal;
-import me.ddggdd135.slimeae.utils.ItemUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,6 +32,19 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.inventory.InvUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import me.ddggdd135.guguslimefunlib.api.AEMenu;
+import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.CreativeItemMap;
+import me.ddggdd135.slimeae.api.ItemRequest;
+import me.ddggdd135.slimeae.api.MEStorageCellCache;
+import me.ddggdd135.slimeae.api.SubCommand;
+import me.ddggdd135.slimeae.core.items.MenuItems;
+import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
+import me.ddggdd135.slimeae.core.slimefun.terminals.METerminal;
+import me.ddggdd135.slimeae.utils.ItemUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 
 public class ViewitemsCommand extends SubCommand {
     private final Map<UUID, String> filterCache = new HashMap<>();

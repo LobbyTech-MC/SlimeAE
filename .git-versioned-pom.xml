@@ -5,16 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>25faf8f-Beta</version>
+    <version>62a3d00-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAE</name>
 
     <properties>
+        <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/Galactifun.jar</Galactifun-systemPath>
+        <ObsidianExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/ObsidianExpansion.jar</ObsidianExpansion-systemPath>
+        <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/ExoticGarden.jar</ExoticGarden-systemPath>
         <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
         <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
         <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
-        <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-391c520-Beta.jar</Slimefun4-systemPath>
+        <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-2a74d13-Beta.jar</Slimefun4-systemPath>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -45,6 +48,14 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>me.ddggdd135.slimeae.libs</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
@@ -160,7 +171,7 @@
         <dependency>
             <groupId>com.github.TimetownDev</groupId>
             <artifactId>GuguSlimefunLib</artifactId>
-            <version>45627c6f8e</version>
+            <version>6ba46473de</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -188,6 +199,33 @@
             <artifactId>JustEnoughGuide</artifactId>
             <version>44fecd8d71</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.SlimefunGuguProject</groupId>
+            <artifactId>Galactifun</artifactId>
+            <version>c9005283c8</version>
+            <scope>system</scope>
+            <systemPath>${Galactifun-systemPath}</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.github.SlimefunGuguProject</groupId>
+            <artifactId>ObsidianExpansion</artifactId>
+            <version>72ba142</version>
+            <scope>system</scope>
+            <systemPath>${ObsidianExpansion-systemPath}</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.github.SlimefunGuguProject</groupId>
+            <artifactId>ExoticGarden</artifactId>
+            <version>0994db4b6f</version>
+            <scope>system</scope>
+            <systemPath>${ExoticGarden-systemPath}</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
