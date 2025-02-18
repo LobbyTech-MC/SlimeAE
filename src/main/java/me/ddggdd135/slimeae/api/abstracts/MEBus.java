@@ -1,27 +1,5 @@
 package me.ddggdd135.slimeae.api.abstracts;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Container;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 
@@ -39,8 +17,9 @@ import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.ddggdd135.guguslimefunlib.api.abstracts.TickingBlock;
 import me.ddggdd135.guguslimefunlib.api.interfaces.InventoryBlock;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
-import me.ddggdd135.slimeae.api.interfaces.ICardHolder;
-import me.ddggdd135.slimeae.api.interfaces.IMEObject;
+import me.ddggdd135.slimeae.api.blockdata.MEBusData;
+import me.ddggdd135.slimeae.api.blockdata.MEBusDataAdapter;
+import me.ddggdd135.slimeae.api.interfaces.*;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;
@@ -49,10 +28,9 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import net.Zrips.CMILib.Items.CMIMaterial;
 
-public abstract class MEBus extends TickingBlock implements IMEObject, InventoryBlock, ICardHolder {
+public abstract class MEBus extends TickingBlock implements IMEObject, InventoryBlock, ICardHolder, IDataBlock {
     protected static final Map<Location, BlockFace> SELECTED_DIRECTION_MAP = new HashMap<>();
-
-    private static final int[] CARD_SLOTS = {45, 46, 47}; // 左下角3个槽位
+    private static final MEBusDataAdapter adapter = new MEBusDataAdapter();
 
     public int getNorthSlot() {
         return 12;
@@ -402,7 +380,6 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
     }
 
     @Override
-    @OverridingMethodsMustInvokeSuper
     protected void tick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
         if (data.getBlockMenu().hasViewer()) updateGui(data);
 
@@ -412,11 +389,58 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
 
     @Override
     public int[] getCardSlots() {
-        return CARD_SLOTS;
+        return new int[] {45, 46, 47};
     }
 
     public abstract void onMEBusTick(Block block, SlimefunItem item, SlimefunBlockData data);
 
     @Override
     public void onNetworkTick(Block block, NetworkInfo networkInfo) {}
+
+    @Nullable public MEBusData getData(@Nonnull Location location) {
+        MEBusData data = new MEBusData();
+        SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(location);
+        if (slimefunBlockData == null) return null;
+        SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
+        if (!(slimefunItem instanceof MEBus)) return null;
+        BlockMenu blockMenu = slimefunBlockData.getBlockMenu();
+        if (blockMenu == null) return null;
+
+        data.setDirection(getDirection(blockMenu));
+
+        return data;
+    }
+
+    public void applyData(@Nonnull Location location, @Nullable IBlockData data) {
+        if (!canApplyData(location, data)) return;
+        SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(location);
+        BlockMenu blockMenu = slimefunBlockData.getBlockMenu();
+        MEBusData meBusData = (MEBusData) data;
+
+        setDirection(blockMenu, meBusData.getDirection());
+    }
+
+    public boolean hasData(@Nonnull Location location) {
+        SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(location);
+        if (slimefunBlockData == null) return false;
+        SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
+        if (!(slimefunItem instanceof MEBus)) return false;
+        BlockMenu blockMenu = slimefunBlockData.getBlockMenu();
+        return blockMenu != null;
+    }
+
+    public boolean canApplyData(@Nonnull Location location, @Nullable IBlockData blockData) {
+        SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(location);
+        if (slimefunBlockData == null) return false;
+        SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
+        if (!(slimefunItem instanceof MEBus)) return false;
+        BlockMenu blockMenu = slimefunBlockData.getBlockMenu();
+        if (blockMenu == null) return false;
+        return blockData instanceof MEBusData;
+    }
+
+    @Nonnull
+    public IBlockDataAdapter<?> getAdapter() {
+        return adapter;
+    }
 }

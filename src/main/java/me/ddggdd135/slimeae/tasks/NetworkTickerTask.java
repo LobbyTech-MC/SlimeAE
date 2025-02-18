@@ -11,8 +11,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.autocraft.AutoCraftingSession;
 import me.ddggdd135.slimeae.api.interfaces.IMEObject;
-import me.ddggdd135.slimeae.core.AutoCraftingSession;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 
 public class NetworkTickerTask implements Runnable {

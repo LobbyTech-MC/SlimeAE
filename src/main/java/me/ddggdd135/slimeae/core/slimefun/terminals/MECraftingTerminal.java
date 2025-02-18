@@ -26,9 +26,9 @@ import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBre
 import io.github.thebusybiscuit.slimefun4.libraries.dough.inventory.InvUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
-import me.ddggdd135.slimeae.api.ItemRequest;
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;

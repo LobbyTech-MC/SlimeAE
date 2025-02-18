@@ -3,9 +3,7 @@ package me.ddggdd135.slimeae.core.recipes;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-
-import io.github.thebusybiscuit.slimefun4.core.machines.MachineOperation;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 
 public class CraftingOperation implements MachineOperation {
     private final int ticks;

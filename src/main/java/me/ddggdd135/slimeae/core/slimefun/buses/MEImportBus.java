@@ -35,16 +35,6 @@ public class MEImportBus extends MEBus {
     @Override
     public void onNetworkUpdate(Block block, NetworkInfo networkInfo) {}
 
-    @Override
-    public int[] getInputSlots() {
-        return new int[0];
-    }
-
-    @Override
-    public int[] getOutputSlots() {
-        return new int[0];
-    }
-
     public void onImport(@Nonnull Block block) {
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;

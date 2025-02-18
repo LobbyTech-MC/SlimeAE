@@ -27,9 +27,16 @@ import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBre
 import io.github.thebusybiscuit.slimefun4.libraries.dough.inventory.InvUtils;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import me.ddggdd135.slimeae.api.abstracts.MEBus;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 import me.ddggdd135.slimeae.api.interfaces.IMECraftDevice;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;

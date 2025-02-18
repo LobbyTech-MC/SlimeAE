@@ -1,10 +1,9 @@
-package me.ddggdd135.slimeae.api;
+package me.ddggdd135.slimeae.api.autocraft;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-
 import org.bukkit.inventory.ItemStack;
 
 import me.ddggdd135.slimeae.api.autocraft.CraftType;

@@ -18,7 +18,7 @@ import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.ddggdd135.guguslimefunlib.api.interfaces.InventoryBlock;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;

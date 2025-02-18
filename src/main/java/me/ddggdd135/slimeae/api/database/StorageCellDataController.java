@@ -7,10 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-
-import org.bukkit.inventory.ItemStack;
-
-import me.ddggdd135.slimeae.api.MEStorageCellCache;
+import me.ddggdd135.slimeae.api.items.MEStorageCellCache;
 import me.ddggdd135.slimeae.utils.SerializeUtils;
 
 public class StorageCellDataController extends DatabaseController<MEStorageCellCache> {

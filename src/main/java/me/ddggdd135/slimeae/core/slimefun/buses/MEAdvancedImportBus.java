@@ -17,13 +17,13 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.abstracts.AdvancedMEBus;
+import me.ddggdd135.slimeae.api.abstracts.MEAdvancedBus;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
-public class MEAdvancedImportBus extends AdvancedMEBus {
+public class MEAdvancedImportBus extends MEAdvancedBus {
 
     @Override
     public boolean isSynchronized() {

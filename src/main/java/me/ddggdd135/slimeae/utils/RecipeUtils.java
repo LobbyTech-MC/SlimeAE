@@ -35,8 +35,8 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemStackSnapsho
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.ddggdd135.guguslimefunlib.api.abstracts.AbstractMachineBlock;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
 import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
 import me.lucasgithuber.obsidianexpansion.Items;

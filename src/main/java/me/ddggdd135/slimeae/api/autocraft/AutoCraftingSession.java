@@ -1,4 +1,4 @@
-package me.ddggdd135.slimeae.core;
+package me.ddggdd135.slimeae.api.autocraft;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +26,13 @@ import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
-import me.ddggdd135.slimeae.api.ItemRequest;
-import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.exceptions.NoEnoughMaterialsException;
 import me.ddggdd135.slimeae.api.interfaces.IMECraftDevice;
 import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.api.items.ItemRequest;
+import me.ddggdd135.slimeae.api.items.ItemStorage;
+import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.ddggdd135.slimeae.utils.KeyValuePair;

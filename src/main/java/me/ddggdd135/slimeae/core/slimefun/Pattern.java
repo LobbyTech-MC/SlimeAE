@@ -20,8 +20,8 @@ import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTType;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.iface.ReadWriteNBT;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.iface.ReadableNBT;
-import me.ddggdd135.slimeae.api.CraftingRecipe;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 
 public class Pattern extends SlimefunItem implements DistinctiveItem {

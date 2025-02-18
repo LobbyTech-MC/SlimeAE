@@ -39,12 +39,12 @@ import io.ncbpfluffybear.fluffymachines.items.Barrel;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.ItemRequest;
-import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.abstracts.Card;
 import me.ddggdd135.slimeae.api.interfaces.ICardHolder;
 import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.api.items.ItemRequest;
+import me.ddggdd135.slimeae.api.items.ItemStorage;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.core.slimefun.MEInterface;
 import me.ddggdd135.slimeae.core.slimefun.Pattern;
@@ -738,6 +738,36 @@ public class ItemUtils {
                 SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
                 if (!(slimefunItem instanceof ICardHolder)) return false;
                 ICardHolder.cache.remove(block.getLocation());
+
+                return false;
+            }
+
+            @Override
+            public boolean onClick(Player player, int i, ItemStack itemStack, ClickAction clickAction) {
+                return false;
+            }
+        };
+    }
+
+    @Nonnull
+    public static ChestMenu.MenuClickHandler getDistanceSlotClickHandler() {
+        return new ChestMenu.AdvancedMenuClickHandler() {
+            @Override
+            public boolean onClick(
+                    InventoryClickEvent inventoryClickEvent,
+                    Player player,
+                    int i,
+                    ItemStack cursor,
+                    ClickAction clickAction) {
+                Inventory inventory = inventoryClickEvent.getClickedInventory();
+                ItemStack current = inventory.getItem(i);
+                if (current != null && SlimefunUtils.isItemSimilar(current, MenuItems.DISTANCE, true, false)) {
+                    if (cursor != null && !cursor.getType().isAir()) {
+                        inventory.setItem(i, MenuItems.DISTANCE.asQuantity(cursor.getAmount()));
+                    }
+                } else {
+                    inventory.setItem(i, MenuItems.DISTANCE);
+                }
 
                 return false;
             }

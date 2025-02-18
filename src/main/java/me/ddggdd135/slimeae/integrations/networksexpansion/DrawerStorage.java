@@ -16,9 +16,11 @@ import com.ytdd9527.networksexpansion.implementation.machines.unit.NetworksDrawe
 
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.ItemRequest;
-import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.api.items.ItemRequest;
+import me.ddggdd135.slimeae.api.items.ItemStorage;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 public class DrawerStorage implements IStorage {
     private StorageUnitData data;
