@@ -145,7 +145,7 @@
         <dependency>
             <groupId>com.github.SlimefunGuguProject</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>UNOFFICIAL</version>
+            <version>2024.3.1</version>
             <scope>system</scope>
             <systemPath>${Slimefun4-systemPath}</systemPath>
         </dependency>

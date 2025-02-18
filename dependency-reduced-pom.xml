@@ -4,7 +4,7 @@
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
   <name>SlimeAE</name>
-  <version>25faf8f-Beta</version>
+  <version>62a3d00-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -34,6 +34,14 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <relocations>
+            <relocation>
+              <pattern>org.bstats</pattern>
+              <shadedPattern>me.ddggdd135.slimeae.libs</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
@@ -121,7 +129,7 @@
     <dependency>
       <groupId>com.github.TimetownDev</groupId>
       <artifactId>GuguSlimefunLib</artifactId>
-      <version>45627c6f8e</version>
+      <version>6ba46473de</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -164,20 +172,44 @@
       <scope>system</scope>
       <systemPath>${TranscEndence-systemPath}</systemPath>
     </dependency>
+    <dependency>
+      <groupId>com.github.SlimefunGuguProject</groupId>
+      <artifactId>Galactifun</artifactId>
+      <version>c9005283c8</version>
+      <scope>system</scope>
+      <systemPath>${Galactifun-systemPath}</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.SlimefunGuguProject</groupId>
+      <artifactId>ObsidianExpansion</artifactId>
+      <version>72ba142</version>
+      <scope>system</scope>
+      <systemPath>${ObsidianExpansion-systemPath}</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.SlimefunGuguProject</groupId>
+      <artifactId>ExoticGarden</artifactId>
+      <version>0994db4b6f</version>
+      <scope>system</scope>
+      <systemPath>${ExoticGarden-systemPath}</systemPath>
+    </dependency>
   </dependencies>
   <properties>
+    <ObsidianExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/ObsidianExpansion.jar</ObsidianExpansion-systemPath>
     <git.ref.slug>master</git.ref.slug>
     <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
-    <git.commit.short>25faf8f</git.commit.short>
-    <git.commit>25faf8f171e7f623dcfd7c90e4570032f9786f15</git.commit>
+    <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/Galactifun.jar</Galactifun-systemPath>
+    <git.commit.short>62a3d00</git.commit.short>
+    <git.commit>62a3d006cb131bdbf26c049c8503f2337d15786e</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/ExoticGarden.jar</ExoticGarden-systemPath>
     <java.version>21</java.version>
-    <git.commit.timestamp>1738928281</git.commit.timestamp>
+    <git.commit.timestamp>1739461393</git.commit.timestamp>
     <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
     <git.ref>master</git.ref>
-    <git.commit.timestamp.datetime>2025-02-07T11:38:01Z</git.commit.timestamp.datetime>
+    <git.commit.timestamp.datetime>2025-02-13T15:43:13Z</git.commit.timestamp.datetime>
     <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
     <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
-    <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-391c520-Beta.jar</Slimefun4-systemPath>
+    <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-2a74d13-Beta.jar</Slimefun4-systemPath>
   </properties>
 </project>
