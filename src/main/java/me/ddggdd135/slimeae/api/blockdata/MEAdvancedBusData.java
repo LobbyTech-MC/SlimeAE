@@ -4,11 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.interfaces.IBlockData;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
+
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.IBlockData;
 
 public class MEAdvancedBusData extends MEBusData implements IBlockData {
     private static final NamespacedKey key = new NamespacedKey(SlimeAEPlugin.getInstance(), "MEAdvancedBus");

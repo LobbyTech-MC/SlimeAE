@@ -4,7 +4,7 @@
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
   <name>SlimeAE</name>
-  <version>62a3d00-Beta</version>
+  <version>94edae0-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -91,8 +91,8 @@
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
     </repository>
     <repository>
-      <id>papermc-repo</id>
-      <url>https://repo.papermc.io/repository/maven-public/</url>
+      <id>paper-repo</id>
+      <url>https://papermc.io/repo/repository/maven-public</url>
     </repository>
     <repository>
       <id>sonatype</id>
@@ -147,7 +147,7 @@
     <dependency>
       <groupId>com.github.SlimefunGuguProject</groupId>
       <artifactId>Slimefun4</artifactId>
-      <version>UNOFFICIAL</version>
+      <version>96bba30</version>
       <scope>system</scope>
       <systemPath>${Slimefun4-systemPath}</systemPath>
     </dependency>
@@ -199,17 +199,18 @@
     <git.ref.slug>master</git.ref.slug>
     <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
     <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/Galactifun.jar</Galactifun-systemPath>
-    <git.commit.short>62a3d00</git.commit.short>
-    <git.commit>62a3d006cb131bdbf26c049c8503f2337d15786e</git.commit>
+    <git.commit.short>94edae0</git.commit.short>
+    <git.commit>94edae07f29e8691bc1d12dc47e4324f3e1608a1</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/ExoticGarden.jar</ExoticGarden-systemPath>
-    <java.version>21</java.version>
-    <git.commit.timestamp>1739461393</git.commit.timestamp>
+    <maven.compiler.source>21</maven.compiler.source>
+    <git.commit.timestamp>1740498623</git.commit.timestamp>
     <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
     <git.ref>master</git.ref>
-    <git.commit.timestamp.datetime>2025-02-13T15:43:13Z</git.commit.timestamp.datetime>
+    <maven.compiler.target>21</maven.compiler.target>
+    <git.commit.timestamp.datetime>2025-02-25T15:50:23Z</git.commit.timestamp.datetime>
     <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
     <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
-    <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-2a74d13-Beta.jar</Slimefun4-systemPath>
+    <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-96bba30-Beta.jar</Slimefun4-systemPath>
   </properties>
 </project>

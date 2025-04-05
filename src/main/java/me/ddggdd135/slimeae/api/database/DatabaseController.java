@@ -28,7 +28,7 @@ import me.ddggdd135.slimeae.utils.ReflectionUtils;
 public abstract class DatabaseController<TData> {
     protected BlockDataController blockDataController;
     protected IDataSourceAdapter<?> adapter;
-    protected HikariDataSource ds;
+    protected HikariDataSource hikariDataSource;
     protected final DatabaseThreadFactory threadFactory = new DatabaseThreadFactory();
     protected final Class<TData> clazz;
     protected ExecutorService readExecutor;
@@ -49,7 +49,7 @@ public abstract class DatabaseController<TData> {
     public void init() {
         blockDataController = Slimefun.getDatabaseManager().getBlockDataController();
         adapter = ReflectionUtils.getField(blockDataController, "dataAdapter");
-        ds = ReflectionUtils.getField(adapter, "ds");
+        hikariDataSource = ReflectionUtils.getField(adapter, "ds");
         readExecutor = Executors.newFixedThreadPool(3, threadFactory);
         writeExecutor = Executors.newFixedThreadPool(5, threadFactory);
         callbackExecutor = Executors.newCachedThreadPool(threadFactory);
@@ -81,7 +81,7 @@ public abstract class DatabaseController<TData> {
     }
 
     public List<Map<String, String>> execQuery(String sql) {
-        try (Connection conn = ds.getConnection()) {
+        try (Connection conn = hikariDataSource.getConnection()) {
             return execQuery(conn, sql);
         } catch (SQLException e) {
             logger.log(Level.WARNING, "An exception thrown while executing sql: " + e.getMessage());

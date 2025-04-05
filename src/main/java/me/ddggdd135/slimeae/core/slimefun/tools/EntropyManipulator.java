@@ -1,19 +1,20 @@
 package me.ddggdd135.slimeae.core.slimefun.tools;
 
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.core.attributes.Rechargeable;
-import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
-import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
-import io.github.thebusybiscuit.slimefun4.core.handlers.WeaponUseHandler;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
-import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import org.bukkit.*;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.Tag;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
@@ -24,6 +25,18 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.core.attributes.Rechargeable;
+import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
+import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
+import io.github.thebusybiscuit.slimefun4.core.handlers.WeaponUseHandler;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
 
 public class EntropyManipulator extends SlimefunItem implements Rechargeable, RecipeDisplayItem {
 
@@ -72,7 +85,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
             if (victim instanceof LivingEntity) {
                 LivingEntity entity = (LivingEntity) victim;
                 entity.setFireTicks(FIRE_TICKS);
-                playEffect(entity.getLocation(), Particle.SMOKE_LARGE);
+                playEffect(entity.getLocation(), Particle.LARGE_SMOKE);
                 playSound(entity.getLocation(), Sound.BLOCK_FIRE_AMBIENT);
             }
         };
@@ -173,7 +186,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
         Material result = COOL_TRANSFORMATIONS.get(block.getType());
         if (result != null) {
             block.setType(result);
-            playEffect(block.getLocation(), Particle.VILLAGER_HAPPY);
+            playEffect(block.getLocation(), Particle.HAPPY_VILLAGER);
         } else {
             tryIgniteBlock(block);
         }
@@ -188,7 +201,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
                 coolLava(block);
                 break;
         }
-        playEffect(block.getLocation(), Particle.SNOWBALL);
+        playEffect(block.getLocation(), Particle.ITEM_SNOWBALL);
     }
 
     private void freezeWater(Block block) {
@@ -219,7 +232,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
         World world = location.getWorld();
         if (world == null) return;
 
-        world.spawnParticle(Particle.VILLAGER_HAPPY, location.clone().add(0.5, 0.3, 0.5), 15, 0.3, 0.2, 0.3, 0.15);
+        world.spawnParticle(Particle.HAPPY_VILLAGER, location.clone().add(0.5, 0.3, 0.5), 15, 0.3, 0.2, 0.3, 0.15);
         world.spawnParticle(Particle.COMPOSTER, location.clone().add(0.5, 0.5, 0.5), 8, 0.2, 0.1, 0.2, 0.1);
     }
 
@@ -261,11 +274,11 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
     }
 
     private void spawnSmoke(Location location) {
-        playEffect(location, Particle.SMOKE_NORMAL);
+        playEffect(location, Particle.SMOKE);
     }
 
     private void showAngryVillagerParticles(Location location) {
-        playEffect(location, Particle.VILLAGER_ANGRY);
+        playEffect(location, Particle.ANGRY_VILLAGER);
     }
 
     private boolean isFluid(Material material) {

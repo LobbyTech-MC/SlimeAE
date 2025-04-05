@@ -5,11 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.interfaces.IStorage;
-import me.ddggdd135.slimeae.api.items.ItemRequest;
-import me.ddggdd135.slimeae.api.items.ItemStorage;
-import me.ddggdd135.slimeae.utils.ItemUtils;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,9 +19,9 @@ import io.github.mooy1.infinityexpansion.items.storage.StorageCache;
 import io.github.mooy1.infinityexpansion.items.storage.StorageUnit;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.ItemRequest;
-import me.ddggdd135.slimeae.api.ItemStorage;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.api.items.ItemRequest;
+import me.ddggdd135.slimeae.api.items.ItemStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 
 public class InfinityBarrelStorage implements IStorage {

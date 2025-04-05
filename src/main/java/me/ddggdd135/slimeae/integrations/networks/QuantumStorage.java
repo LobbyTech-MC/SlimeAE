@@ -19,8 +19,6 @@ import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 public class QuantumStorage implements IStorage {
     private QuantumCache quantumCache;

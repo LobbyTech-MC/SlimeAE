@@ -1,25 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+  
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>62a3d00-Beta</version>
+    <version>94edae0-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAE</name>
 
     <properties>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/Galactifun.jar</Galactifun-systemPath>
         <ObsidianExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/ObsidianExpansion.jar</ObsidianExpansion-systemPath>
         <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE/lib/ExoticGarden.jar</ExoticGarden-systemPath>
         <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
         <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
         <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
-        <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-2a74d13-Beta.jar</Slimefun4-systemPath>
-        <java.version>21</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Slimefun-96bba30-Beta.jar</Slimefun4-systemPath>
     </properties>
 
     <build>
@@ -116,8 +118,9 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
         </repository>
         <repository>
-            <id>papermc-repo</id>
-            <url>https://repo.papermc.io/repository/maven-public/</url>
+            <!-- PaperLib -->
+            <id>paper-repo</id>
+            <url>https://papermc.io/repo/repository/maven-public</url>
         </repository>
         <repository>
             <id>sonatype</id>
@@ -145,7 +148,7 @@
         <dependency>
             <groupId>com.github.SlimefunGuguProject</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>UNOFFICIAL</version>
+            <version>96bba30</version>
             <scope>system</scope>
             <systemPath>${Slimefun4-systemPath}</systemPath>
         </dependency>
@@ -224,7 +227,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -1,5 +1,20 @@
 package me.ddggdd135.slimeae.core.slimefun.tools;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
+
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -7,13 +22,6 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Rechargeable;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
-import java.util.List;
-import org.bukkit.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 public class ChargedStaff extends SlimefunItem implements Rechargeable {
 
@@ -106,7 +114,7 @@ public class ChargedStaff extends SlimefunItem implements Rechargeable {
         World world = loc.getWorld();
         if (world == null) return;
 
-        world.spawnParticle(Particle.SPELL_WITCH, loc, 20, 0.2, 0.2, 0.2, 0.3);
+        world.spawnParticle(Particle.WITCH, loc, 20, 0.2, 0.2, 0.2, 0.3);
         world.playSound(loc, Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1.0F, 1.5F);
     }
 
@@ -114,7 +122,7 @@ public class ChargedStaff extends SlimefunItem implements Rechargeable {
         World world = loc.getWorld();
         if (world == null) return;
 
-        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.1);
+        world.spawnParticle(Particle.SMOKE, loc, 10, 0.5, 0.5, 0.5, 0.1);
         world.playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 0.8F, 1.2F);
     }
 

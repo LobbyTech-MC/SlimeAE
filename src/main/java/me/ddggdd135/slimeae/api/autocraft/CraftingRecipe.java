@@ -4,9 +4,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-import org.bukkit.inventory.ItemStack;
 
-import me.ddggdd135.slimeae.api.autocraft.CraftType;
+import org.bukkit.inventory.ItemStack;
 
 public class CraftingRecipe {
     private final CraftType craftType;

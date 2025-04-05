@@ -2,6 +2,7 @@ package me.ddggdd135.slimeae.api.interfaces;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.bukkit.Location;
 
 public interface IDataBlock {

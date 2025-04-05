@@ -12,7 +12,11 @@ import org.bukkit.Location;
 
 import me.ddggdd135.slimeae.api.ConcurrentHashSet;
 import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
-import me.ddggdd135.slimeae.api.interfaces.*;
+import me.ddggdd135.slimeae.api.interfaces.IMEController;
+import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
+import me.ddggdd135.slimeae.api.interfaces.IMEObject;
+import me.ddggdd135.slimeae.api.interfaces.IMEStorageObject;
+import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.StorageCollection;
 import me.ddggdd135.slimeae.integrations.networks.NetworksStorage;
 import me.ddggdd135.slimeae.utils.NetworkUtils;

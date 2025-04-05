@@ -3,10 +3,10 @@ package me.ddggdd135.slimeae.api.interfaces;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.api.items.ItemRequest;
+
 import org.bukkit.inventory.ItemStack;
 
-import me.ddggdd135.slimeae.api.ItemRequest;
+import me.ddggdd135.slimeae.api.items.ItemRequest;
 
 /**
  * 存储接口,定义了物品存储的基本操作

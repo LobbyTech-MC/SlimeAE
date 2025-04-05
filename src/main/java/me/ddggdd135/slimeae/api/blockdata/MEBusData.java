@@ -1,11 +1,14 @@
 package me.ddggdd135.slimeae.api.blockdata;
 
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.interfaces.IBlockData;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
+
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.IBlockData;
 
 public class MEBusData implements IBlockData {
     private static final NamespacedKey key = new NamespacedKey(SlimeAEPlugin.getInstance(), "MEBus");
