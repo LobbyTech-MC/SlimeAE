@@ -106,7 +106,7 @@ public class ChargedStaff extends SlimefunItem implements Rechargeable {
         World world = loc.getWorld();
         if (world == null) return;
 
-        world.spawnParticle(Particle.SPELL_WITCH, loc, 20, 0.2, 0.2, 0.2, 0.3);
+        world.spawnParticle(Particle.WITCH, loc, 20, 0.2, 0.2, 0.2, 0.3);
         world.playSound(loc, Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1.0F, 1.5F);
     }
 
@@ -114,7 +114,7 @@ public class ChargedStaff extends SlimefunItem implements Rechargeable {
         World world = loc.getWorld();
         if (world == null) return;
 
-        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.1);
+        world.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc, 10, 0.5, 0.5, 0.5, 0.1);
         world.playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 0.8F, 1.2F);
     }
 

@@ -72,7 +72,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
             if (victim instanceof LivingEntity) {
                 LivingEntity entity = (LivingEntity) victim;
                 entity.setFireTicks(FIRE_TICKS);
-                playEffect(entity.getLocation(), Particle.SMOKE_LARGE);
+                playEffect(entity.getLocation(), Particle.CAMPFIRE_SIGNAL_SMOKE);
                 playSound(entity.getLocation(), Sound.BLOCK_FIRE_AMBIENT);
             }
         };
@@ -172,7 +172,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
         Material result = COOL_TRANSFORMATIONS.get(block.getType());
         if (result != null) {
             block.setType(result);
-            playEffect(block.getLocation(), Particle.VILLAGER_HAPPY);
+            playEffect(block.getLocation(), Particle.HAPPY_VILLAGER);
         } else {
             tryIgniteBlock(block);
         }
@@ -187,7 +187,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
                 coolLava(block);
                 break;
         }
-        playEffect(block.getLocation(), Particle.SNOWBALL);
+        playEffect(block.getLocation(), Particle.ITEM_SNOWBALL);
     }
 
     private void freezeWater(Block block) {
@@ -218,7 +218,7 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
         World world = location.getWorld();
         if (world == null) return;
 
-        world.spawnParticle(Particle.VILLAGER_HAPPY, location.clone().add(0.5, 0.3, 0.5), 15, 0.3, 0.2, 0.3, 0.15);
+        world.spawnParticle(Particle.HAPPY_VILLAGER, location.clone().add(0.5, 0.3, 0.5), 15, 0.3, 0.2, 0.3, 0.15);
         world.spawnParticle(Particle.COMPOSTER, location.clone().add(0.5, 0.5, 0.5), 8, 0.2, 0.1, 0.2, 0.1);
     }
 
@@ -260,11 +260,11 @@ public class EntropyManipulator extends SlimefunItem implements Rechargeable, Re
     }
 
     private void spawnSmoke(Location location) {
-        playEffect(location, Particle.SMOKE_NORMAL);
+        playEffect(location, Particle.CAMPFIRE_COSY_SMOKE);
     }
 
     private void showAngryVillagerParticles(Location location) {
-        playEffect(location, Particle.VILLAGER_ANGRY);
+        playEffect(location, Particle.HAPPY_VILLAGER);
     }
 
     private boolean isFluid(Material material) {
