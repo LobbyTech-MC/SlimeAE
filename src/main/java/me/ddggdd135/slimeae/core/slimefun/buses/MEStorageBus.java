@@ -18,8 +18,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * ME存储总线类
- * 用于连接外部存储设备到ME网络
+ * 能源传输存储总线类
+ * 用于连接外部存储设备到能源传输网络
  */
 public class MEStorageBus extends MEBus implements IMEStorageObject {
     @Override
@@ -28,7 +28,7 @@ public class MEStorageBus extends MEBus implements IMEStorageObject {
     }
 
     /**
-     * 构造一个新的ME存储总线
+     * 构造一个新的能源传输存储总线
      *
      * @param itemGroup 物品所属的组
      * @param item 物品堆
@@ -80,6 +80,6 @@ public class MEStorageBus extends MEBus implements IMEStorageObject {
 
     @Override
     public void onMEBusTick(Block block, SlimefunItem item, SlimefunBlockData data) {
-        // ME存储总线不需要每tick处理，保持空实现
+        // 能源传输存储总线不需要每tick处理，保持空实现
     }
 }

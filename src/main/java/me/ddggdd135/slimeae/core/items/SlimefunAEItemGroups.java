@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class SlimefunAEItemGroups {
     public static final ItemStack MAIN_ITEM_GROUP_CURSOR =
             new AdvancedCustomItemStack(Material.BLACK_STAINED_GLASS, "{#Spring_Green}能源与应用2");
-    public static final ItemStack INFO_CURSOR = new AdvancedCustomItemStack(Material.BOOK, "&eSlimeAE信息");
+    public static final ItemStack INFO_CURSOR = new AdvancedCustomItemStack(Material.BOOK, "&e粘液科技应用能源信息");
     public static final ItemStack CABLE_CURSOR =
             new AdvancedCustomItemStack(SlimefunItems.ENERGY_CONNECTOR, "{#Vanilla_Ice}线缆");
     public static final ItemStack MACHINE_CURSOR =

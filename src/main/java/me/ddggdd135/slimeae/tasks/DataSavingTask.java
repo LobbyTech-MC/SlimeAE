@@ -40,7 +40,7 @@ public class DataSavingTask implements Runnable {
 
             if (!halted) {
                 SlimeAEPlugin.getStorageCellDataController().saveAllAsync();
-                SlimeAEPlugin.getInstance().getLogger().info("开始保存ME存储元件数据");
+                SlimeAEPlugin.getInstance().getLogger().info("开始保存能源传输存储元件数据");
             }
         } catch (Exception | LinkageError x) {
             SlimeAEPlugin.getInstance()

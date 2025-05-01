@@ -20,7 +20,7 @@ public class HelpCommand extends SubCommand {
     @Override
     @Nonnull
     public String getDescription() {
-        return "获取SlimeAE命令帮助";
+        return "获取粘液科技应用能源命令帮助";
     }
 
     @Override

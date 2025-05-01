@@ -32,11 +32,11 @@ public class MenuItems {
             "_AE_MN_PAGE_NEXT_STACK_", new AdvancedCustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a下一页"));
     public static final SlimefunItemStack INPUT_MODE = new SlimefunItemStack(
             "_AE_MN_INPUT_MODE_",
-            new AdvancedCustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a输入模式", "", "&e左侧存储元件的物品将会输入AE网络"));
+            new AdvancedCustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a输入模式", "", "&e左侧存储元件的物品将会输入粘液应用能源网络"));
 
     public static final SlimefunItemStack OUTPUT_MODE = new SlimefunItemStack(
             "_AE_MN_OUTPUT_MODE_",
-            new AdvancedCustomItemStack(Material.RED_STAINED_GLASS_PANE, "&a输出模式", "", "&eAE网络中的物品将会输出到左侧存储元件"));
+            new AdvancedCustomItemStack(Material.RED_STAINED_GLASS_PANE, "&a输出模式", "", "&e粘液应用能源网络中的物品将会输出到左侧存储元件"));
 
     public static final SlimefunItemStack CHANGE_SORT_STACK = new SlimefunItemStack(
             "_AE_MN_CHANGE_SORT_STACK_", new AdvancedCustomItemStack(Material.BLUE_STAINED_GLASS_PANE, "&e更改排序方式"));
@@ -44,7 +44,7 @@ public class MenuItems {
     public static final SlimefunItemStack FILTER_STACK = new SlimefunItemStack(
             "_AE_MN_FILTER_STACK_", new AdvancedCustomItemStack(Material.NAME_TAG, "&e设置过滤器 (右键点击以清除)"));
     public static final SlimefunItemStack PUSH_BACK = new SlimefunItemStack(
-            "_AE_MN_PUSH_BACK_", new AdvancedCustomItemStack(Material.BARRIER, "&c&l点击将物品返回ME网络"));
+            "_AE_MN_PUSH_BACK_", new AdvancedCustomItemStack(Material.BARRIER, "&c&l点击将物品返回能源传输网络"));
     public static final ItemStack CRAFT_ITEM =
             new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&a合成按钮", "", "&7> 单击合成");
     public static final ItemStack CRAFTING_TABLE;

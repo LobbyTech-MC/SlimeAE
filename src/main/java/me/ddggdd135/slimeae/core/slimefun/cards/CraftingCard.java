@@ -51,7 +51,7 @@ public class CraftingCard extends Card {
             return;
         }
 
-        // ME接口
+        // 能源传输接口
         if (item instanceof MEInterface meInterface) {
             for (int slot : meInterface.getItemSlots()) {
                 int settingSlot = slot - 9;
@@ -76,7 +76,7 @@ public class CraftingCard extends Card {
 
             cooldowns.put(loc, currentTick);
         }
-        // ME输出总线
+        // 能源传输输出总线
         if (item instanceof MEExportBus meExportBus) {
             if (!ISettingSlotHolder.cache.containsKey(block.getLocation()))
                 ISettingSlotHolder.updateCache(block, meExportBus, data);

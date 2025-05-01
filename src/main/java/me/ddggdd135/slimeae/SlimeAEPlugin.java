@@ -92,7 +92,7 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
 
         Bukkit.getConsoleSender().sendMessage("############################################");
         Bukkit.getConsoleSender()
-                .sendMessage(CMIChatColor.translate("               &aSlime&dAE &f- &a粘液&dAE              "));
+                .sendMessage(CMIChatColor.translate("               &a粘液科技&d附属 &f- &a应用&d能源              "));
         Bukkit.getConsoleSender().sendMessage(" 作者: JWJUN233233 测试: Zombie_2333,balugaq");
         Bukkit.getConsoleSender().sendMessage("############################################");
         tryUpdate();
@@ -329,13 +329,13 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         // 重载链式总线配置
         MEChainedBus.reloadConfig();
 
-        // 重载ME清除器配置
+        // 重载能源传输清除器配置
         MECleaner.reloadConfig();
 
-        // 重载ME合成触发器配置
+        // 重载能源传输合成触发器配置
         MECraftingTrigger.reloadConfig();
 
-        // 重载ME标准发信器配置
+        // 重载能源传输标准发信器配置
         MELevelEmitter.reloadConfig();
     }
 }

@@ -27,12 +27,12 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * ME单元类，相当于AE版本的原版大箱子
+ * 能源传输单元类，相当于粘液应用能源版本的原版大箱子
  * 实现了基本的物品存储功能
  */
 public class MEUnit extends SlimefunItem implements IMEStorageObject, InventoryBlock {
     /**
-     * ME单元的所有可用槽位
+     * 能源传输单元的所有可用槽位
      */
     private static final int[] Slots = new int[] {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
@@ -40,7 +40,7 @@ public class MEUnit extends SlimefunItem implements IMEStorageObject, InventoryB
     };
 
     /**
-     * 构造一个新的ME单元
+     * 构造一个新的能源传输单元
      *
      * @param itemGroup 物品所属的组
      * @param item 物品堆

@@ -22,7 +22,7 @@ import me.ddggdd135.slimeae.utils.ItemUtils;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * ME物品存储元件类
+ * 能源传输物品存储元件类
  * 用于存储物品的基本单元
  */
 public class MEItemStorageCell extends SlimefunItem implements NotPlaceable {

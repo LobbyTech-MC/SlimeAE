@@ -19,7 +19,7 @@ public class SavedataCommand extends SubCommand {
     @Override
     @Nonnull
     public String getDescription() {
-        return "保存AE数据";
+        return "保存粘液科技应用能源数据";
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SavedataCommand extends SubCommand {
         }
 
         SlimeAEPlugin.getStorageCellDataController().saveAllAsync();
-        commandSender.sendMessage(CMIChatColor.translate("&e成功保存ME存储元件数据"));
+        commandSender.sendMessage(CMIChatColor.translate("&e成功保存能源传输存储元件数据"));
 
         return false;
     }

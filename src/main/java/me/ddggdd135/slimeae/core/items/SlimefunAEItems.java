@@ -45,27 +45,27 @@ public class SlimefunAEItems {
     // CABLE
     public static final SlimefunItemStack ME_GLASS_CABLE = new SlimefunItemStack(
             "ME_GLASS_CABLE",
-            new AdvancedCustomItemStack(Material.GLASS, "{#Vanilla_Ice}ME玻璃线缆", "", "{#3366ff>}用于连接AE设备{#33ccf3<}"));
+            new AdvancedCustomItemStack(Material.GLASS, "{#Vanilla_Ice}能源传输玻璃线缆", "", "{#3366ff>}用于连接粘液应用能源设备{#33ccf3<}"));
     public static final SlimefunItemStack ME_DENSE_CABLE = new SlimefunItemStack(
             "ME_DENSE_CABLE",
             new AdvancedCustomItemStack(
-                    SlimefunItems.ENERGY_CONNECTOR, "{#Vanilla_Ice}ME致密线缆", "", "&e用于连接AE设备", "&e和ME玻璃线缆相比 仅仅是外观不同"));
+                    SlimefunItems.ENERGY_CONNECTOR, "{#Vanilla_Ice}能源传输致密线缆", "", "&e用于连接粘液应用能源设备", "&e和能源传输玻璃线缆相比 仅仅是外观不同"));
     // MACHINE
     public static final SlimefunItemStack ME_CONTROLLER = new SlimefunItemStack(
             "ME_CONTROLLER",
             new AdvancedCustomItemStack(
-                    Material.BLACK_STAINED_GLASS, "{#Bright_Gray}ME控制器", "", "&e&lAE网络的核心", "&eAE不允许同一个网络中存在多个控制器"));
+                    Material.BLACK_STAINED_GLASS, "{#Bright_Gray}能源传输控制器", "", "&e&l粘液应用能源网络的核心", "&e粘液应用能源不允许同一个网络中存在多个控制器"));
     public static final SlimefunItemStack ME_UNIT = new SlimefunItemStack(
             "ME_UNIT",
             new AdvancedCustomItemStack(
-                    Material.BLACK_STAINED_GLASS, "{#Starship}ME单元", "", "{#Bright_Red}此物品性能极差 仅供测试使用"));
+                    Material.BLACK_STAINED_GLASS, "{#Starship}能源传输单元", "", "{#Bright_Red}此物品性能极差 仅供测试使用"));
     public static final SlimefunItemStack ME_INTERFACE = new SlimefunItemStack(
             "ME_INTERFACE",
             new AdvancedCustomItemStack(
                     Version.getCurrent().isEqualOrHigher(Version.v1_17_R1)
                             ? Material.TARGET
                             : Material.CHISELED_STONE_BRICKS,
-                    "{#Vanilla_Ice}ME接口",
+                    "{#Vanilla_Ice}能源传输接口",
                     "",
                     "{#3366ff>}用它来与货运网络交互{#33ccf3<}",
                     "{#3366ff>}合成设备需要放在它旁边运行{#33ccf3<}",
@@ -76,19 +76,19 @@ public class SlimefunAEItems {
                     Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
                             ? Material.CHISELED_BOOKSHELF
                             : Material.BOOKSHELF,
-                    "&fME驱动器",
+                    "&f能源传输驱动器",
                     "",
-                    "{#3366ff>}用于放置ME存储元件{#33ccf3<}"));
+                    "{#3366ff>}用于放置能源传输存储元件{#33ccf3<}"));
     public static final SlimefunItemStack ME_IO_PORT = new SlimefunItemStack(
             "ME_IO_PORT",
             new AdvancedCustomItemStack(
                     Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
                             ? Material.CHISELED_BOOKSHELF
                             : Material.BOOKSHELF,
-                    "&fME IO端口",
+                    "&f能源传输 输入输出端口",
                     "",
-                    "{#3366ff>}将物品存储元件里的物品输入至ME网络{#33ccf3<}",
-                    "{#3366ff>}或者将ME网络里的物品输出至物品元件{#33ccf3<}"));
+                    "{#3366ff>}将物品存储元件里的物品输入至能源传输网络{#33ccf3<}",
+                    "{#3366ff>}或者将能源传输网络里的物品输出至物品元件{#33ccf3<}"));
     public static final SlimefunItemStack MOLECULAR_ASSEMBLER = new SlimefunItemStack(
             "MOLECULAR_ASSEMBLER",
             new AdvancedCustomItemStack(
@@ -96,8 +96,8 @@ public class SlimefunAEItems {
                     "&f分子装配室",
                     "",
                     "{#3366ff>}在自动合成中充当原版和粘液合成台{#33ccf3<}",
-                    "{#3366ff>}需要放在ME接口旁边 且只能用于AE的自动合成{#33ccf3<}",
-                    "&a每个AE网络中 每个合成任务最多只会使用1024个合成设备"));
+                    "{#3366ff>}需要放在能源传输接口旁边 且只能用于粘液应用能源的自动合成{#33ccf3<}",
+                    "&a每个粘液应用能源网络中 每个合成任务最多只会使用1024个合成设备"));
     public static final SlimefunItemStack LARGE_MOLECULAR_ASSEMBLER = new SlimefunItemStack(
             "LARGE_MOLECULAR_ASSEMBLER",
             new AdvancedCustomItemStack(
@@ -121,21 +121,21 @@ public class SlimefunAEItems {
             "ME_IMPORT_BUS",
             new AdvancedCustomItemStack(
                     Material.LIME_STAINED_GLASS,
-                    "{#Bright_Green}&lME输入总线",
+                    "{#Bright_Green}&l能源传输输入总线",
                     "",
                     "{#3366ff>}抽取指定容器中的物品 不支持原版容器{#33ccf3<}"));
     public static final SlimefunItemStack ME_VANILLA_IMPORT_BUS = new SlimefunItemStack(
             "ME_VANILLA_IMPORT_BUS",
             new AdvancedCustomItemStack(
                     Material.LIME_STAINED_GLASS,
-                    "{#Bright_Green}&lME原版输入总线",
+                    "{#Bright_Green}&l能源传输原版输入总线",
                     "",
                     "{#3366ff>}抽取指定容器中的物品 支持原版容器{#33ccf3<}"));
     public static final SlimefunItemStack ME_ADVANCED_IMPORT_BUS = new SlimefunItemStack(
             "ME_ADVANCED_IMPORT_BUS",
             new AdvancedCustomItemStack(
                             Material.LIME_STAINED_GLASS,
-                            "{#Bright_Green}&lME高级输入总线",
+                            "{#Bright_Green}&l能源传输高级输入总线",
                             "",
                             "{#3366ff>}可选择多方向进行输入{#33ccf3<}",
                             "{#3366ff>}抽取指定容器中的物品 不支持原版容器{#33ccf3<}")
@@ -144,7 +144,7 @@ public class SlimefunAEItems {
             "ME_ADVANCED_VANILLA_IMPORT_BUS",
             new AdvancedCustomItemStack(
                             Material.LIME_STAINED_GLASS,
-                            "{#Bright_Green}&lME高级原版输入总线",
+                            "{#Bright_Green}&l能源传输高级原版输入总线",
                             "",
                             "{#3366ff>}可选择多方向进行输入{#33ccf3<}",
                             "{#3366ff>}抽取指定容器中的物品 支持原版容器{#33ccf3<}")
@@ -153,7 +153,7 @@ public class SlimefunAEItems {
             "ME_CHAINED_IMPORT_BUS",
             new AdvancedCustomItemStack(
                     Material.LIME_STAINED_GLASS,
-                    "{#Bright_Green}&lME链式输入总线",
+                    "{#Bright_Green}&l能源传输链式输入总线",
                     "",
                     "{#3366ff>}工作方向：选择的方向{#33ccf3<}",
                     "{#3366ff>}检测范围：1-64格[可配置]{#33ccf3<}",
@@ -166,21 +166,21 @@ public class SlimefunAEItems {
             "ME_EXPORT_BUS",
             new AdvancedCustomItemStack(
                     Material.RED_STAINED_GLASS,
-                    "{#Bright_Red}&lME输出总线",
+                    "{#Bright_Red}&l能源传输输出总线",
                     "",
                     "{#3366ff>}输出指定的物品到指定的容器中 不支持原版容器{#33ccf3<}"));
     public static final SlimefunItemStack ME_VANILLA_EXPORT_BUS = new SlimefunItemStack(
             "ME_VANILLA_EXPORT_BUS",
             new AdvancedCustomItemStack(
                     Material.RED_STAINED_GLASS,
-                    "{#Bright_Red}&lME原版输出总线",
+                    "{#Bright_Red}&l能源传输原版输出总线",
                     "",
                     "{#3366ff>}输出指定的物品到指定的容器中 支持原版容器{#33ccf3<}"));
     public static final SlimefunItemStack ME_ADVANCED_EXPORT_BUS = new SlimefunItemStack(
             "ME_ADVANCED_EXPORT_BUS",
             new AdvancedCustomItemStack(
                             Material.RED_STAINED_GLASS,
-                            "{#Bright_Red}&lME高级输出总线",
+                            "{#Bright_Red}&l能源传输高级输出总线",
                             "",
                             "{#3366ff>}可选择多方向进行输出{#33ccf3<}",
                             "{#3366ff>}输出指定的物品到指定的容器中 不支持原版容器{#33ccf3<}")
@@ -189,7 +189,7 @@ public class SlimefunAEItems {
             "ME_ADVANCED_VANILLA_EXPORT_BUS",
             new AdvancedCustomItemStack(
                             Material.RED_STAINED_GLASS,
-                            "{#Bright_Red}&lME高级原版输出总线",
+                            "{#Bright_Red}&l能源传输高级原版输出总线",
                             "",
                             "{#3366ff>}可选择多方向进行输出{#33ccf3<}",
                             "{#3366ff>}输出指定的物品到指定的容器中 支持原版容器{#33ccf3<}")
@@ -198,7 +198,7 @@ public class SlimefunAEItems {
             "ME_CHAINED_EXPORT_BUS",
             new AdvancedCustomItemStack(
                     Material.RED_STAINED_GLASS,
-                    "{#Bright_Red}&lME链式输出总线",
+                    "{#Bright_Red}&l能源传输链式输出总线",
                     "",
                     "{#3366ff>}工作方向：选择的方向{#33ccf3<}",
                     "{#3366ff>}检测范围：1-64格[可配置]{#33ccf3<}",
@@ -211,21 +211,21 @@ public class SlimefunAEItems {
             "ME_IE_BUS",
             new AdvancedCustomItemStack(
                     Material.YELLOW_STAINED_GLASS,
-                    "{#Starship}&lME输入输出总线",
+                    "{#Starship}&l能源传输输入输出总线",
                     "",
                     "{#3366ff>}同时抽取和输出物品到指定的容器中 不支持原版容器{#33ccf3<}"));
     public static final SlimefunItemStack ME_VANILLA_IE_BUS = new SlimefunItemStack(
             "ME_VANILLA_IE_BUS",
             new AdvancedCustomItemStack(
                     Material.YELLOW_STAINED_GLASS,
-                    "{#Starship}&lME原版输入输出总线",
+                    "{#Starship}&l能源传输原版输入输出总线",
                     "",
                     "{#3366ff>}同时抽取和输出物品到指定的容器中 支持原版容器{#33ccf3<}"));
     public static final SlimefunItemStack ME_ADVANCED_IE_BUS = new SlimefunItemStack(
             "ME_ADVANCED_IE_BUS",
             new AdvancedCustomItemStack(
                             Material.YELLOW_STAINED_GLASS,
-                            "{#Starship}&lME高级输入输出总线",
+                            "{#Starship}&l能源传输高级输入输出总线",
                             "",
                             "{#3366ff>}可选择多方向进行输入输出{#33ccf3<}",
                             "{#3366ff>}同时抽取和输出物品到指定的容器中 不支持原版容器{#33ccf3<}")
@@ -234,7 +234,7 @@ public class SlimefunAEItems {
             "ME_ADVANCED_VANILLA_IE_BUS",
             new AdvancedCustomItemStack(
                             Material.YELLOW_STAINED_GLASS,
-                            "{#Starship}&lME高级原版输入输出总线",
+                            "{#Starship}&l能源传输高级原版输入输出总线",
                             "",
                             "{#3366ff>}可选择多方向进行输入输出{#33ccf3<}",
                             "{#3366ff>}同时抽取和输出物品到指定的容器中 支持原版容器{#33ccf3<}")
@@ -243,7 +243,7 @@ public class SlimefunAEItems {
             "ME_CHAINED_IE_BUS",
             new AdvancedCustomItemStack(
                     Material.YELLOW_STAINED_GLASS,
-                    "{#Starship}&lME链式输入输出总线",
+                    "{#Starship}&l能源传输链式输入输出总线",
                     "",
                     "{#3366ff>}工作方向：选择的方向{#33ccf3<}",
                     "{#3366ff>}检测范围：1-64格[可配置]{#33ccf3<}",
@@ -256,42 +256,42 @@ public class SlimefunAEItems {
             "ME_STORAGE_BUS",
             new AdvancedCustomItemStack(
                     Material.WHITE_STAINED_GLASS,
-                    "&f&lME存储总线",
+                    "&f&l能源传输存储总线",
                     "",
-                    "{#3366ff>}将方块的存储接入AE网络{#33ccf3<}",
+                    "{#3366ff>}将方块的存储接入粘液应用能源网络{#33ccf3<}",
                     "&e支持蓬松桶和无尽存储单元",
                     "&e支持网络量子存储和网络抽屉",
                     "&e不支持原版容器"));
     public static final SlimefunItemStack ME_LEVEL_EMITTER = new SlimefunItemStack(
             "ME_LEVEL_EMITTER",
             new AdvancedCustomItemStack(
-                    Material.TARGET, "&f&lME标准发信器", "", "{#3366ff>}当AE网络中 设定物品大于设定的数量 发出红石信号{#33ccf3<}"));
+                    Material.TARGET, "&f&l能源传输标准发信器", "", "{#3366ff>}当粘液应用能源网络中 设定物品大于设定的数量 发出红石信号{#33ccf3<}"));
     public static final SlimefunItemStack ME_TERMINAL = new SlimefunItemStack(
             "ME_TERMINAL",
-            new AdvancedCustomItemStack(Material.SHROOMLIGHT, "&fME终端", "", "{#3366ff>}管理AE网络中的物品{#33ccf3<}"));
+            new AdvancedCustomItemStack(Material.SHROOMLIGHT, "&f能源传输终端", "", "{#3366ff>}管理粘液应用能源网络中的物品{#33ccf3<}"));
     public static final SlimefunItemStack ME_CRAFTING_TERMINAL = new SlimefunItemStack(
-            "ME_CRAFTING_TERMINAL", new AdvancedCustomItemStack(Material.CRAFTING_TABLE, "&fME合成终端"));
+            "ME_CRAFTING_TERMINAL", new AdvancedCustomItemStack(Material.CRAFTING_TABLE, "&f能源传输合成终端"));
     public static final SlimefunItemStack ME_CRAFT_PLANNING_TERMINAL = new SlimefunItemStack(
-            "ME_CRAFT_PLANNING_TERMINAL", new AdvancedCustomItemStack(Material.SEA_LANTERN, "&fME合成计划终端"));
+            "ME_CRAFT_PLANNING_TERMINAL", new AdvancedCustomItemStack(Material.SEA_LANTERN, "&f能源传输合成计划终端"));
     public static final SlimefunItemStack ME_PATTERN_TERMINAL = new SlimefunItemStack(
             "ME_PATTERN_TERMINAL",
-            new AdvancedCustomItemStack(Material.LOOM, "&fME样板终端", "", "{#3366ff>}可以制作编码样板{#33ccf3<}"));
+            new AdvancedCustomItemStack(Material.LOOM, "&f能源传输样板终端", "", "{#3366ff>}可以制作编码样板{#33ccf3<}"));
     public static final SlimefunItemStack ME_SECURITY_TERMINAL = new SlimefunItemStack(
             "ME_SECURITY_TERMINAL",
-            new AdvancedCustomItemStack(Material.ENDER_CHEST, "&fME安全终端", "", "{#3366ff>}用于连接无线终端{#33ccf3<}"));
+            new AdvancedCustomItemStack(Material.ENDER_CHEST, "&f能源传输安全终端", "", "{#3366ff>}用于连接无线终端{#33ccf3<}"));
     public static final SlimefunItemStack ME_CLEANER = new SlimefunItemStack(
             "ME_CLEANER",
-            new AdvancedCustomItemStack(Material.OBSERVER, "&fME清除器", "", "{#3366ff>}用于清除ME存储元件中多余的物品{#33ccf3<}"));
+            new AdvancedCustomItemStack(Material.OBSERVER, "&f能源传输清除器", "", "{#3366ff>}用于清除能源传输存储元件中多余的物品{#33ccf3<}"));
     public static final SlimefunItemStack ME_CRAFTING_TRIGGER = new SlimefunItemStack(
             "ME_CRAFTING_TRIGGER",
             new AdvancedCustomItemStack(
-                    Material.CRAFTING_TABLE, "&fME合成触发器", "", "{#3366ff>}当AE中物品缺少时, 下发自动合成任务{#33ccf3<}"));
+                    Material.CRAFTING_TABLE, "&f能源传输合成触发器", "", "{#3366ff>}当粘液应用能源中物品缺少时, 下发自动合成任务{#33ccf3<}"));
     public static final SlimefunItemStack ENERGY_ACCEPTOR = new SlimefunItemStack(
             "ME_ENERGY_ACCEPTOR",
             new AdvancedCustomItemStack(Material.WHITE_STAINED_GLASS, "&f能源接收器", "", "&c现在它还没用 敬请期待"));
     public static final SlimefunItemStack NETWORKS_EXPANSION_SWITCH = new SlimefunItemStack(
             "NETWORKS_EXPANSION_SWITCH",
-            new AdvancedCustomItemStack(Material.MAGENTA_GLAZED_TERRACOTTA, "&a网络交换机", "", "&c用它将AE网络和网络拓展连接"));
+            new AdvancedCustomItemStack(Material.MAGENTA_GLAZED_TERRACOTTA, "&a网络交换机", "", "&c用它将粘液应用能源网络和网络拓展连接"));
     public static final SlimefunItemStack PATTERN_WORKBENCH = new SlimefunItemStack(
             "PATTERN_WORKBENCH",
             new AdvancedCustomItemStack(
@@ -362,91 +362,91 @@ public class SlimefunAEItems {
                             Version.getCurrent().isEqualOrHigher(Version.v1_20_R1)
                                     ? Material.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE
                                     : Material.SHULKER_SHELL,
-                            "{#Bright_Gray}ME存储外壳")
+                            "{#Bright_Gray}能源传输存储外壳")
                     .addFlags(ItemFlag.values()));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_1K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_1K", new AdvancedCustomItemStack(Material.SLIME_BALL, "{#3366ff}1k-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_1K", new AdvancedCustomItemStack(Material.SLIME_BALL, "{#3366ff}1k-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_4K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_4K", new AdvancedCustomItemStack(Material.FIREWORK_STAR, "{#3388fb}4k-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_4K", new AdvancedCustomItemStack(Material.FIREWORK_STAR, "{#3388fb}4k-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_16K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_16K", new AdvancedCustomItemStack(Material.FIRE_CHARGE, "{#33aaf7}16k-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_16K", new AdvancedCustomItemStack(Material.FIRE_CHARGE, "{#33aaf7}16k-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_64K = new SlimefunItemStack(
             "ME_ITEM_STORAGE_COMPONENT_64K",
-            new AdvancedCustomItemStack(Material.POPPED_CHORUS_FRUIT, "{#33ccf3}64k-ME存储组件"));
+            new AdvancedCustomItemStack(Material.POPPED_CHORUS_FRUIT, "{#33ccf3}64k-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_256K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_256K", new AdvancedCustomItemStack(Material.GRAY_DYE, "{#33aaf7}256k-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_256K", new AdvancedCustomItemStack(Material.GRAY_DYE, "{#33aaf7}256k-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_1M = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_1M", new AdvancedCustomItemStack(Material.ENDER_PEARL, "{#3388fb}1m-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_1M", new AdvancedCustomItemStack(Material.ENDER_PEARL, "{#3388fb}1m-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_4M = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_4M", new AdvancedCustomItemStack(Material.ENDER_EYE, "{#3366ff}4m-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_4M", new AdvancedCustomItemStack(Material.ENDER_EYE, "{#3366ff}4m-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_16M = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_16M", new AdvancedCustomItemStack(Material.GUNPOWDER, "{#3388fb}16m-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_16M", new AdvancedCustomItemStack(Material.GUNPOWDER, "{#3388fb}16m-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_64M = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_64M", new AdvancedCustomItemStack(Material.BLAZE_POWDER, "{#3366ff}64m-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_64M", new AdvancedCustomItemStack(Material.BLAZE_POWDER, "{#3366ff}64m-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_256M = new SlimefunItemStack(
             "ME_ITEM_STORAGE_COMPONENT_256M",
-            new AdvancedCustomItemStack(Material.NETHER_STAR, "{#33aaf7}256m-ME存储组件"));
+            new AdvancedCustomItemStack(Material.NETHER_STAR, "{#33aaf7}256m-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_1G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_1G", new AdvancedCustomItemStack(Material.FIRE_CHARGE, "{#33aaf7}1g-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_1G", new AdvancedCustomItemStack(Material.FIRE_CHARGE, "{#33aaf7}1g-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_4G = new SlimefunItemStack(
             "ME_ITEM_STORAGE_COMPONENT_4G",
-            new AdvancedCustomItemStack(Material.POPPED_CHORUS_FRUIT, "{#33ccf3}4g-ME存储组件"));
+            new AdvancedCustomItemStack(Material.POPPED_CHORUS_FRUIT, "{#33ccf3}4g-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_16G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_16G", new AdvancedCustomItemStack(Material.GRAY_DYE, "{#33aaf7}16g-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_16G", new AdvancedCustomItemStack(Material.GRAY_DYE, "{#33aaf7}16g-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_64G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_64G", new AdvancedCustomItemStack(Material.ENDER_PEARL, "{#3388fb}64g-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_64G", new AdvancedCustomItemStack(Material.ENDER_PEARL, "{#3388fb}64g-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_256G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_256G", new AdvancedCustomItemStack(Material.ENDER_EYE, "{#3366ff}256g-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_256G", new AdvancedCustomItemStack(Material.ENDER_EYE, "{#3366ff}256g-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_1T = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_1T", new AdvancedCustomItemStack(Material.GUNPOWDER, "{#3388fb}1t-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_1T", new AdvancedCustomItemStack(Material.GUNPOWDER, "{#3388fb}1t-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_4T = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_4T", new AdvancedCustomItemStack(Material.BLAZE_POWDER, "{#3366ff}4t-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_4T", new AdvancedCustomItemStack(Material.BLAZE_POWDER, "{#3366ff}4t-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_16T = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_16T", new AdvancedCustomItemStack(Material.NETHER_STAR, "{#33aaf7}16T-ME存储组件"));
+            "ME_ITEM_STORAGE_COMPONENT_16T", new AdvancedCustomItemStack(Material.NETHER_STAR, "{#33aaf7}16T-能源传输存储组件"));
 
     // CELL
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_1K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_1K", new AdvancedCustomItemStack(Material.MUSIC_DISC_13, "{#3366ff}1k-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_1K", new AdvancedCustomItemStack(Material.MUSIC_DISC_13, "{#3366ff}1k-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_4K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_4K", new AdvancedCustomItemStack(Material.MUSIC_DISC_CAT, "{#3388fb}4k-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_4K", new AdvancedCustomItemStack(Material.MUSIC_DISC_CAT, "{#3388fb}4k-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_16K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_16K", new AdvancedCustomItemStack(Material.MUSIC_DISC_BLOCKS, "{#33aaf7}16k-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_16K", new AdvancedCustomItemStack(Material.MUSIC_DISC_BLOCKS, "{#33aaf7}16k-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_64K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_64K", new AdvancedCustomItemStack(Material.MUSIC_DISC_CHIRP, "{#33ccf3}64k-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_64K", new AdvancedCustomItemStack(Material.MUSIC_DISC_CHIRP, "{#33ccf3}64k-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_256K = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_256K", new AdvancedCustomItemStack(Material.MUSIC_DISC_FAR, "{#33aaf7}256k-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_256K", new AdvancedCustomItemStack(Material.MUSIC_DISC_FAR, "{#33aaf7}256k-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_1M = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_1M", new AdvancedCustomItemStack(Material.MUSIC_DISC_MALL, "{#3388fb}1m-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_1M", new AdvancedCustomItemStack(Material.MUSIC_DISC_MALL, "{#3388fb}1m-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_4M = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_4M", new AdvancedCustomItemStack(Material.MUSIC_DISC_RELIC, "{#3366ff}4m-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_4M", new AdvancedCustomItemStack(Material.MUSIC_DISC_RELIC, "{#3366ff}4m-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_16M = new SlimefunItemStack(
             "ME_ITEM_STORAGE_CELL_16M",
-            new AdvancedCustomItemStack(Material.MUSIC_DISC_OTHERSIDE, "{#3388fb}16m-ME存储元件"));
+            new AdvancedCustomItemStack(Material.MUSIC_DISC_OTHERSIDE, "{#3388fb}16m-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_64M = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_64M", new AdvancedCustomItemStack(Material.MUSIC_DISC_13, "{#3366ff}64m-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_64M", new AdvancedCustomItemStack(Material.MUSIC_DISC_13, "{#3366ff}64m-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_256M = new SlimefunItemStack(
             "ME_ITEM_STORAGE_CELL_256M",
-            new AdvancedCustomItemStack(Material.MUSIC_DISC_PIGSTEP, "{#33aaf7}256m-ME存储元件"));
+            new AdvancedCustomItemStack(Material.MUSIC_DISC_PIGSTEP, "{#33aaf7}256m-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_1G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_1G", new AdvancedCustomItemStack(Material.MUSIC_DISC_BLOCKS, "{#33aaf7}1g-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_1G", new AdvancedCustomItemStack(Material.MUSIC_DISC_BLOCKS, "{#33aaf7}1g-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_4G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_4G", new AdvancedCustomItemStack(Material.MUSIC_DISC_CHIRP, "{#33ccf3}4g-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_4G", new AdvancedCustomItemStack(Material.MUSIC_DISC_CHIRP, "{#33ccf3}4g-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_16G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_16G", new AdvancedCustomItemStack(Material.MUSIC_DISC_FAR, "{#33aaf7}16g-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_16G", new AdvancedCustomItemStack(Material.MUSIC_DISC_FAR, "{#33aaf7}16g-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_64G = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_CELL_64G", new AdvancedCustomItemStack(Material.MUSIC_DISC_MALL, "{#3388fb}64g-ME存储元件"));
+            "ME_ITEM_STORAGE_CELL_64G", new AdvancedCustomItemStack(Material.MUSIC_DISC_MALL, "{#3388fb}64g-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_256G = new SlimefunItemStack(
             "ME_ITEM_STORAGE_CELL_256G",
-            new AdvancedCustomItemStack(Material.MUSIC_DISC_RELIC, "{#3366ff}256g-ME存储元件"));
+            new AdvancedCustomItemStack(Material.MUSIC_DISC_RELIC, "{#3366ff}256g-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_1T = new SlimefunItemStack(
             "ME_ITEM_STORAGE_CELL_1T",
-            new AdvancedCustomItemStack(Material.MUSIC_DISC_OTHERSIDE, "{#3388fb}1t-ME存储元件"));
+            new AdvancedCustomItemStack(Material.MUSIC_DISC_OTHERSIDE, "{#3388fb}1t-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_4T = new SlimefunItemStack(
             "ME_ITEM_STORAGE_CELL_4T",
-            new AdvancedCustomItemStack(Material.MUSIC_DISC_OTHERSIDE, "{#3366ff}4t-ME存储元件"));
+            new AdvancedCustomItemStack(Material.MUSIC_DISC_OTHERSIDE, "{#3366ff}4t-能源传输存储元件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_16T = new SlimefunItemStack(
             "ME_ITEM_STORAGE_CELL_16T",
-            new AdvancedCustomItemStack(Material.MUSIC_DISC_PIGSTEP, "{#33aaf7}16t-ME存储元件"));
+            new AdvancedCustomItemStack(Material.MUSIC_DISC_PIGSTEP, "{#33aaf7}16t-能源传输存储元件"));
     public static final SlimefunItemStack ME_CREATIVE_ITEM_STORAGE_CELL = new SlimefunItemStack(
             "ME_CREATIVE_ITEM_STORAGE_CELL",
             new AdvancedCustomItemStack(
@@ -507,7 +507,7 @@ public class SlimefunAEItems {
     public static final SlimefunItemStack BLANK_PATTERN = new SlimefunItemStack(
             "BLANK_PATTERN",
             new AdvancedCustomItemStack(
-                    Material.PAPER, "{#33ccf3}空白样板", "", "{#3366ff>}在ME样板终端中用它制造编码样板 用于自动合成{#33ccf3<}"));
+                    Material.PAPER, "{#33ccf3}空白样板", "", "{#3366ff>}在能源传输样板终端中用它制造编码样板 用于自动合成{#33ccf3<}"));
     public static final SlimefunItemStack ENCODED_PATTERN = new SlimefunItemStack(
             "ENCODED_PATTERN",
             new AdvancedCustomItemStack(
@@ -517,28 +517,28 @@ public class SlimefunAEItems {
     // TOOLS
     public static final SlimefunItemStack MEMORY_CARD = new SlimefunItemStack(
             "MEMORY_CARD",
-            new AdvancedCustomItemStack(Material.PAPER, "&e内存卡", "", "&e复制ME设备的设置", "", "&eShift右键 复制设置", "&e右键 应用设置"));
+            new AdvancedCustomItemStack(Material.PAPER, "&e内存卡", "", "&e复制能源传输设备的设置", "", "&eShift右键 复制设置", "&e右键 应用设置"));
     public static final SlimefunItemStack CARD_REPLICATOR = new SlimefunItemStack(
             "CARD_REPLICATOR",
             new AdvancedCustomItemStack(
-                    Material.PAPER, "&e升级卡复制器", "", "&e复制ME设备的升级卡设置", "", "&eShift右键 复制设置", "&e右键 应用设置"));
+                    Material.PAPER, "&e升级卡复制器", "", "&e复制能源传输设备的升级卡设置", "", "&eShift右键 复制设置", "&e右键 应用设置"));
     public static final SlimefunItemStack WIRELESS_TERMINAL = new SlimefunItemStack(
             "WIRELESS_TERMINAL",
-            new AdvancedCustomItemStack(Material.ITEM_FRAME, "{#Sky_Blue}无线终端", "", "&e便捷的访问AE网络", "&e需要使用ME安全终端进行绑定"));
+            new AdvancedCustomItemStack(Material.ITEM_FRAME, "{#Sky_Blue}无线终端", "", "&e便捷的访问粘液应用能源网络", "&e需要使用能源传输安全终端进行绑定"));
     public static final SlimefunItemStack CERTUS_QUARTZ_WRENCH = new SlimefunItemStack(
             "CERTUS_QUARTZ_WRENCH",
-            new AdvancedCustomItemStack(Material.DIAMOND_HOE, "{#Zumthor}赛特斯石英扳手", "", "&e右键可将大部分AE设备拆卸为掉落物形式"));
+            new AdvancedCustomItemStack(Material.DIAMOND_HOE, "{#Zumthor}赛特斯石英扳手", "", "&e右键可将大部分粘液应用能源设备拆卸为掉落物形式"));
     public static final SlimefunItemStack QUARTZ_WRENCH = new SlimefunItemStack(
             "QUARTZ_WRENCH",
-            new AdvancedCustomItemStack(Material.IRON_HOE, "&f下界石英扳手", "", "&e手持扳手右键可将大部分AE设备拆卸为掉落物形式"));
+            new AdvancedCustomItemStack(Material.IRON_HOE, "&f下界石英扳手", "", "&e手持扳手右键可将大部分粘液应用能源设备拆卸为掉落物形式"));
     public static final SlimefunItemStack NETWORK_TOOL = new SlimefunItemStack(
             "NETWORK_TOOL",
             new AdvancedCustomItemStack(
                     Material.NETHERITE_HOE,
                     "{#Fuchsia_Pink}网络工具",
                     "",
-                    "&e右键可查看整个AE网络的各个网络元件",
-                    "&eShift右键可将大部分AE设备拆卸为掉落物形式"));
+                    "&e右键可查看整个粘液应用能源网络的各个网络元件",
+                    "&eShift右键可将大部分粘液应用能源设备拆卸为掉落物形式"));
     public static final SlimefunItemStack AE_TERMINAL_TOPPER = new SlimefunItemStack(
             "AE_TERMINAL_TOPPER",
             new AdvancedCustomItemStack(Material.ENDER_EYE, "&e置顶器", "", "&2&l用于在终端中置顶物品", "&6用法: 在终端中拿起此物品，在显示物品上点击"));

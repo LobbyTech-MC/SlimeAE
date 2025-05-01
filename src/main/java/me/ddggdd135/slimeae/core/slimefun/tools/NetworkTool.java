@@ -42,7 +42,7 @@ public class NetworkTool extends SlimefunItem {
 
             NetworkInfo networkInfo = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
             if (networkInfo == null) {
-                e.getPlayer().sendMessage(CMIChatColor.translate("&e你确定你对着的方块在AE网络中？"));
+                e.getPlayer().sendMessage(CMIChatColor.translate("&e你确定你对着的方块在粘液应用能源网络中？"));
                 return;
             }
 
@@ -63,7 +63,7 @@ public class NetworkTool extends SlimefunItem {
                     .toList());
             Collections.reverse(sorted);
 
-            AEMenu menu = new AEMenu("&eAE网络信息");
+            AEMenu menu = new AEMenu("&e粘液应用能源网络信息");
             int maxSize = 54;
             menu.setSize(maxSize);
             List<Map.Entry<SlimefunItem, Integer>> amount1 = sorted;

@@ -169,7 +169,7 @@ public class MECraftingTrigger extends TickingBlock implements IMEObject, Invent
                 Material.LIME_STAINED_GLASS_PANE,
                 "&c已设置数量" + getAmount(block.getLocation()),
                 "",
-                "&eAE网络中 设定物品不会低于这个数量");
+                "&e粘液应用能源网络中 设定物品不会低于这个数量");
         blockMenu.replaceExistingItem(getInfoSlot(), info);
     }
 
