@@ -54,20 +54,6 @@ public class AutoCraftingTask implements IDisposable {
     private final ItemStorage storage;
 
     public AutoCraftingTask(@Nonnull NetworkInfo info, @Nonnull CraftingRecipe recipe, long count) {
-        //        ItemStorage storage = new ItemStorage();
-        //        storage.addItem(
-        //                ItemUtils.createItems(new AdvancedCustomItemStack(SlimefunAEItems.CRYSTAL_CERTUS_QUARTZ),
-        // 5000000));
-        //        storage.addItem(ItemUtils.createItems(new AdvancedCustomItemStack(SlimefunAEItems.LOGIC_PROCESSOR),
-        // 5000000));
-        //        storage.addItem(
-        //                ItemUtils.createItems(new AdvancedCustomItemStack(SlimefunAEItems.CALCULATION_PROCESSOR),
-        // 5000000));
-        //        storage.addItem(ItemUtils.createItems(new ItemStack(Material.IRON_INGOT), 64));
-        //        storage.addItem(ItemUtils.createItems(new ItemStack(Material.REDSTONE), 5000000));
-        //        storage.addItem(ItemUtils.createItems(new ItemStack(Material.GLASS), 5000000));
-        //        List<Pair<CraftingRecipe, Integer>> pairList =
-        //                match(getRecipe(new ItemStack(SlimefunAEItems.ME_ITEM_STORAGE_CELL_16M)), 1, storage);
         this.info = info;
         this.recipe = recipe;
         this.count = count;
@@ -75,19 +61,24 @@ public class AutoCraftingTask implements IDisposable {
         menu.addMenuCloseHandler(player -> dispose());
         craftingSteps = match(recipe, count, new ItemStorage(info.getStorage()));
         this.storage = new ItemStorage();
-        for (CraftStep step : craftingSteps) {
+
+        for (int i = 0; i < craftingSteps.size(); i++) {
+            CraftStep step = craftingSteps.get(i);
+
             for (Map.Entry<ItemKey, Long> entry :
                     ItemUtils.getAmounts(step.getRecipe().getInput()).keyEntrySet()) {
                 storage.addItem(entry.getKey(), entry.getValue() * step.getAmount());
             }
-        }
-        for (CraftStep step : craftingSteps) {
+
+            if (i == craftingSteps.size() - 1) continue;
+
             for (Map.Entry<ItemKey, Long> entry :
                     ItemUtils.getAmounts(step.getRecipe().getOutput()).keyEntrySet()) {
                 storage.takeItem(new ItemRequest(entry.getKey(), entry.getValue() * step.getAmount()));
             }
         }
-        info.getStorage().takeItem(ItemUtils.createRequests(storage.getStorage()));
+
+        info.getStorage().takeItem(ItemUtils.createRequests(storage.copyStorage()));
     }
 
     @Nonnull
@@ -120,13 +111,13 @@ public class AutoCraftingTask implements IDisposable {
                 ItemStorage missing = new ItemStorage();
                 ItemHashMap<Long> in = ItemUtils.getAmounts(recipe.getInput());
                 for (ItemStack template : in.keySet()) {
-                    long amount = storage.getStorage().getOrDefault(template, 0L);
+                    long amount = storage.getStorageUnsafe().getOrDefault(template, 0L);
                     long need = in.get(template) * count;
                     if (amount < need) {
-                        missing.addItem(ItemUtils.createItems(template, need - amount));
+                        missing.addItem(new ItemKey(template), need - amount);
                     }
                 }
-                throw new NoEnoughMaterialsException(missing.getStorage());
+                throw new NoEnoughMaterialsException(missing.getStorageUnsafe());
             }
 
             List<CraftStep> result = new ArrayList<>();
@@ -135,7 +126,7 @@ public class AutoCraftingTask implements IDisposable {
 
             // 遍历所需材料
             for (ItemKey key : in.sourceKeySet()) {
-                long amount = storage.getStorage().getOrDefault(key, 0L);
+                long amount = storage.getStorageUnsafe().getOrDefault(key, 0L);
                 long need = in.getKey(key) * count;
 
                 if (amount >= need) {
@@ -149,7 +140,7 @@ public class AutoCraftingTask implements IDisposable {
                     // 尝试合成缺少的材料
                     CraftingRecipe craftingRecipe = getRecipe(key.getItemStack());
                     if (craftingRecipe == null) {
-                        missing.addItem(ItemUtils.createItems(key.getItemStack(), remainingNeed));
+                        missing.addItem(new ItemKey(key.getItemStack()), remainingNeed);
                         continue;
                     }
 
@@ -166,15 +157,15 @@ public class AutoCraftingTask implements IDisposable {
                         // 合并子合成缺少的材料
                         for (Map.Entry<ItemStack, Long> entry :
                                 e.getMissingMaterials().entrySet()) {
-                            missing.addItem(ItemUtils.createItems(entry.getKey(), entry.getValue()));
+                            missing.addItem(new ItemKey(entry.getKey()), entry.getValue());
                         }
                     }
                 }
             }
 
             // 如果有缺少的材料就抛出异常
-            if (!missing.getStorage().isEmpty()) {
-                throw new NoEnoughMaterialsException(missing.getStorage());
+            if (!missing.getStorageUnsafe().isEmpty()) {
+                throw new NoEnoughMaterialsException(missing.getStorageUnsafe());
             }
 
             result.add(new CraftStep(recipe, count));
@@ -440,7 +431,7 @@ public class AutoCraftingTask implements IDisposable {
         Bukkit.getPluginManager().callEvent(e);
 
         info.getAutoCraftingSessions().remove(this);
-        info.getTempStorage().addItem(storage.getStorage(), true);
+        info.getTempStorage().addItem(storage.getStorageUnsafe(), true);
 
         Bukkit.getScheduler()
                 .runTask(SlimeAEPlugin.getInstance(), () -> menu.getInventory().close());

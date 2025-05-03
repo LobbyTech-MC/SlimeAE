@@ -1,11 +1,15 @@
 package me.ddggdd135.slimeae.api.interfaces;
 
+import java.util.Map;
 import javax.annotation.Nonnull;
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.guguslimefunlib.items.ItemStackCache;
+import me.ddggdd135.slimeae.api.annotation.Unsafe;
+import me.ddggdd135.slimeae.api.items.ItemInfo;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
+import me.ddggdd135.slimeae.utils.ItemUtils;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -41,6 +45,21 @@ public interface IStorage {
      */
     default void pushItem(@Nonnull ItemStack[] itemStacks) {
         for (ItemStack itemStack : itemStacks) pushItem(itemStack);
+    }
+
+    default void pushItem(@Nonnull ItemInfo itemInfo) {
+        ItemStack[] itemStacks = ItemUtils.createItems(itemInfo.getItemKey().getItemStack(), itemInfo.getAmount());
+        pushItem(itemStacks);
+        itemStacks = ItemUtils.trimItems(itemStacks);
+        itemInfo.setAmount(ItemUtils.getAmounts(itemStacks).getOrDefault(itemInfo.getItemKey(), 0L));
+    }
+
+    default void pushItem(@Nonnull ItemHashMap<Long> storage) {
+        for (Map.Entry<ItemKey, Long> entry : storage.keyEntrySet()) {
+            ItemInfo itemInfo = new ItemInfo(entry.getKey(), entry.getValue());
+            pushItem(itemInfo);
+            entry.setValue(itemInfo.getAmount());
+        }
     }
 
     /**
@@ -82,7 +101,13 @@ public interface IStorage {
      * @return 物品到数量的映射
      */
     @Nonnull
-    ItemHashMap<Long> getStorage();
+    @Unsafe
+    ItemHashMap<Long> getStorageUnsafe();
+
+    @Nonnull
+    default ItemHashMap<Long> copyStorage() {
+        return new ItemHashMap<>(getStorageUnsafe());
+    }
 
     /**
      * 获取物品的存储等级

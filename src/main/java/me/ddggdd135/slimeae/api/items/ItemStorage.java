@@ -27,7 +27,7 @@ public class ItemStorage implements IStorage {
     }
 
     public ItemStorage(@Nonnull IStorage storage) {
-        this(storage.getStorage());
+        this(storage.getStorageUnsafe());
     }
 
     public ItemStorage(@Nonnull ItemHashMap<Long> items) {
@@ -45,6 +45,18 @@ public class ItemStorage implements IStorage {
         amount += itemStack.getAmount();
         storage.putKey(itemKey, amount);
         itemStack.setAmount(0);
+        trim(itemKey);
+    }
+
+    public void pushItem(@Nonnull ItemInfo itemInfo) {
+        if (isReadonly) return;
+
+        ItemKey itemKey = itemInfo.getItemKey();
+
+        long amount = storage.getOrDefault(itemKey, 0L);
+        amount += itemInfo.getAmount();
+        storage.putKey(itemKey, amount);
+        itemInfo.setAmount(0);
         trim(itemKey);
     }
 
@@ -118,8 +130,8 @@ public class ItemStorage implements IStorage {
 
     @Override
     @Nonnull
-    public ItemHashMap<Long> getStorage() {
-        return new ItemHashMap<>(storage);
+    public ItemHashMap<Long> getStorageUnsafe() {
+        return storage;
     }
 
     @Nonnull

@@ -12,6 +12,7 @@ import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.guguslimefunlib.items.ItemStackCache;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.api.items.ItemInfo;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import org.bukkit.block.Block;
@@ -61,6 +62,28 @@ public class QuantumStorage implements IStorage {
     }
 
     @Override
+    public void pushItem(@Nonnull ItemInfo itemInfo) {
+        ItemKey itemKey = itemInfo.getItemKey();
+
+        if (!isReadOnly && quantumCache != null && quantumCache.getAmount() > 0) {
+            int stored = (int) quantumCache.getAmount();
+            int size = quantumCache.getLimit();
+            if (stored >= size && !quantumCache.isVoidExcess()) return;
+            ItemStack storedItem = quantumCache.getItemStack();
+            if (SlimefunUtils.isItemSimilar(itemKey.getItemStack(), storedItem, true, false)) {
+                int toAdd = (int) Math.min(size - stored, itemInfo.getAmount());
+                stored += toAdd;
+                itemInfo.setAmount(itemInfo.getAmount() - toAdd);
+            }
+            if (!(stored > size)) {
+                quantumCache.setAmount(stored);
+                // 下面这一行吃性能
+                // NetworkQuantumStorage.syncBlock(block.getLocation(), quantumCache);
+            }
+        }
+    }
+
+    @Override
     public boolean contains(@Nonnull ItemRequest[] requests) {
         if (quantumCache == null || quantumCache.getAmount() <= 0) return false;
         int stored = (int) (quantumCache.getAmount() - 1);
@@ -98,7 +121,7 @@ public class QuantumStorage implements IStorage {
 
     @Override
     @Nonnull
-    public ItemHashMap<Long> getStorage() {
+    public ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> storage = new ItemHashMap<>();
         if (quantumCache == null || quantumCache.getAmount() <= 0) return storage;
         storage.put(quantumCache.getItemStack().asOne(), quantumCache.getAmount() - 1);
