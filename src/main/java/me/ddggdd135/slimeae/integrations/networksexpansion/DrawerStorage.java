@@ -48,7 +48,7 @@ public class DrawerStorage implements IStorage {
         if (!isReadOnly && data != null) {
             Map.Entry<ItemStack, Integer> entry =
                     new AbstractMap.SimpleEntry<>(itemInfo.getItemKey().getItemStack(), (int) itemInfo.getAmount());
-            data.depositItemStack(entry, NetworksDrawer.isLocked(block.getLocation()));
+            data.depositItemStack(entry.getKey(), NetworksDrawer.isLocked(block.getLocation()));
             itemInfo.setAmount(entry.getValue());
         }
     }
