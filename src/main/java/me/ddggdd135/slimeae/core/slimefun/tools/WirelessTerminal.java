@@ -29,7 +29,7 @@ public class WirelessTerminal extends SlimefunItem {
             e.cancel();
             Location location = getBindBlock(e.getItem());
             if (location == null) {
-                e.getPlayer().sendMessage(CMIChatColor.translate("&e使用ME安全终端将它绑定到粘液应用能源网络"));
+                e.getPlayer().sendMessage(CMIChatColor.translate("&e使用能源传输安全终端将它绑定到粘液应用能源网络"));
                 return;
             }
             SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(location);

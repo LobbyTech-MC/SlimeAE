@@ -159,7 +159,7 @@ public class MELevelEmitter extends TickingBlock implements IMEObject, Inventory
                 Material.LIME_STAINED_GLASS_PANE,
                 "&c已设置数量" + getAmount(block.getLocation()),
                 "",
-                "&eAE网络中 设定物品大于这个数量 将发出强度为15的红石信号");
+                "&e在应用能源网络中 设定物品大于这个数量 将发出强度为15的红石信号");
         blockMenu.replaceExistingItem(getInfoSlot(), info);
     }
 
