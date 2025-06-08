@@ -33,7 +33,7 @@ import me.ddggdd135.slimeae.api.items.CreativeItemMap;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
-import me.ddggdd135.slimeae.core.items.SlimefunAEItems;
+import me.ddggdd135.slimeae.core.items.SlimeAEItems;
 import me.ddggdd135.slimeae.core.managers.PinnedManager;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -318,20 +318,34 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
 
         menu.replaceExistingItem(getFilter(), MenuItems.FILTER_STACK);
         menu.addMenuClickHandler(getFilter(), (player, i, cursor, clickAction) -> {
+            if (clickAction.isShiftClicked()) {
+                String filter = getFilter(block);
+                if (filter.isEmpty()) {
+                    player.sendMessage(CMIChatColor.translate("&c&l你还没有设置过滤器"));
+                    player.closeInventory();
+                    return false;
+                }
+
+                player.chat("/sf search " + filter);
+                return false;
+            }
+
             if (clickAction.isRightClicked()) {
                 setFilter(block, "");
-            } else {
-                player.closeInventory();
-                player.sendMessage(ChatColor.YELLOW + "请输入你想要过滤的物品名称(显示名)或类型");
-                ChatUtils.awaitInput(player, filter -> {
-                    if (filter.isBlank()) {
-                        return;
-                    }
-                    setFilter(block, filter.toLowerCase(Locale.ROOT));
-                    player.sendMessage(ChatColor.GREEN + "已启用过滤器");
-                    menu.open(player);
-                });
+                return false;
             }
+
+            player.closeInventory();
+            player.sendMessage(ChatColor.YELLOW + "请输入你想要过滤的物品名称(显示名)或类型");
+            ChatUtils.awaitInput(player, filter -> {
+                if (filter.isBlank()) {
+                    return;
+                }
+                setFilter(block, filter.toLowerCase(Locale.ROOT));
+                player.sendMessage(ChatColor.GREEN + "已启用过滤器");
+                menu.open(player);
+            });
+
             return false;
         });
 
@@ -356,7 +370,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
                         ItemStack template = ItemUtils.getDisplayItem(itemStack);
                         template.setAmount(template.getMaxStackSize());
 
-                        if (SlimefunUtils.isItemSimilar(cursor, SlimefunAEItems.AE_TERMINAL_TOPPER, true, false)) {
+                        if (SlimefunUtils.isItemSimilar(cursor, SlimeAEItems.AE_TERMINAL_TOPPER, true, false)) {
                             PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
                             List<ItemStack> pinned = pinnedManager.getPinnedItems(player);
                             if (pinned == null) pinned = new ArrayList<>();
@@ -398,6 +412,26 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
                 }
             });
         }
+
+        if (fastInsert()) {
+            menu.addPlayerInventoryClickHandler((p, s, itemStack, a) -> {
+                if (!a.isShiftClicked() || a.isRightClicked()) {
+                    return true;
+                }
+
+                // Shift+Left-click
+                NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
+                if (info == null) {
+                    return false;
+                }
+
+                if (itemStack != null && !itemStack.getType().isAir()) {
+                    info.getStorage().pushItem(itemStack);
+                }
+
+                return false;
+            });
+        }
     }
 
     @Override
@@ -436,5 +470,9 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         }
         Optional<SlimefunItem> sfItem = SlimefunItem.getOptionalByItem(item);
         return sfItem.map(s -> !slimefunItems.contains(s)).orElse(true);
+    }
+
+    public boolean fastInsert() {
+        return true;
     }
 }

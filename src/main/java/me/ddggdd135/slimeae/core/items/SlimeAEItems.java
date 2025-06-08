@@ -23,7 +23,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-public class SlimefunAEItems {
+public class SlimeAEItems {
     // INFO
     public static final SlimefunItemStack INFO = new SlimefunItemStack(
             "AE_INFO",
@@ -283,6 +283,14 @@ public class SlimefunAEItems {
     public static final SlimefunItemStack ME_SECURITY_TERMINAL = new SlimefunItemStack(
             "ME_SECURITY_TERMINAL",
             new AdvancedCustomItemStack(Material.ENDER_CHEST, "&f能源传输安全终端", "", "{#3366ff>}用于连接无线终端{#33ccf3<}"));
+    public static final SlimefunItemStack ME_CONVERSATION_MONITOR = new SlimefunItemStack(
+            "ME_CONVERSATION_MONITOR",
+            new AdvancedCustomItemStack(
+                    Material.GLASS,
+                    "&e能源传输交换监控器",
+                    "",
+                    "{#3366ff>}可以直接存取其显示的物品{#33ccf3<}",
+                    "{#3366ff>}锁定设定后 左键取出物品 右键放回物品{#33ccf3<}"));
     public static final SlimefunItemStack ME_CLEANER = new SlimefunItemStack(
             "ME_CLEANER",
             new AdvancedCustomItemStack(Material.OBSERVER, "&f能源传输清除器", "", "{#3366ff>}用于清除能源传输存储元件中多余的物品{#33ccf3<}"));
@@ -406,8 +414,7 @@ public class SlimefunAEItems {
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_4T = new SlimefunItemStack(
             "ME_ITEM_STORAGE_COMPONENT_4T", new AdvancedCustomItemStack(Material.BLAZE_POWDER, "{#3366ff}4t-能源传输存储组件"));
     public static final SlimefunItemStack ME_ITEM_STORAGE_COMPONENT_16T = new SlimefunItemStack(
-            "ME_ITEM_STORAGE_COMPONENT_16T", new AdvancedCustomItemStack(Material.NETHER_STAR, "{#33aaf7}16T-能源传输存储组件"));
-
+            "ME_ITEM_STORAGE_COMPONENT_16T", new AdvancedCustomItemStack(Material.NETHER_STAR, "{#33aaf7}16t-能源传输存储组件"));
     // CELL
     public static final SlimefunItemStack ME_ITEM_STORAGE_CELL_1K = new SlimefunItemStack(
             "ME_ITEM_STORAGE_CELL_1K", new AdvancedCustomItemStack(Material.MUSIC_DISC_13, "{#3366ff}1k-能源传输存储元件"));
@@ -584,15 +591,15 @@ public class SlimefunAEItems {
     public static void onSetup(SlimeAEPlugin plugin) {
         // Infos
 
-        new SlimefunItem(SlimefunAEItemGroups.INFO, INFO, RecipeType.NULL, new ItemStack[0]).register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.INFO, CONTRIBUTOR1, RecipeType.NULL, new ItemStack[0]).register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.INFO, DEBUGGER1, RecipeType.NULL, new ItemStack[0]).register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.INFO, DEBUGGER2, RecipeType.NULL, new ItemStack[0]).register(plugin);
+        new SlimefunItem(SlimeAEItemGroups.INFO, INFO, RecipeType.NULL, new ItemStack[0]).register(plugin);
+        new SlimefunItem(SlimeAEItemGroups.INFO, CONTRIBUTOR1, RecipeType.NULL, new ItemStack[0]).register(plugin);
+        new SlimefunItem(SlimeAEItemGroups.INFO, DEBUGGER1, RecipeType.NULL, new ItemStack[0]).register(plugin);
+        new SlimefunItem(SlimeAEItemGroups.INFO, DEBUGGER2, RecipeType.NULL, new ItemStack[0]).register(plugin);
         // Cables
 
         ItemUtils.setRecipeOutput(
                         new MEObject(
-                                SlimefunAEItemGroups.CABLE,
+                                SlimeAEItemGroups.CABLE,
                                 ME_GLASS_CABLE,
                                 RecipeType.ENHANCED_CRAFTING_TABLE,
                                 new ItemStack[] {new ItemStack(Material.GLASS), CRYSTAL_FLUIX, CRYSTAL_FLUIX}),
@@ -600,7 +607,7 @@ public class SlimefunAEItems {
                 .register(plugin);
         ItemUtils.setRecipeOutput(
                         new MEObject(
-                                SlimefunAEItemGroups.CABLE,
+                                SlimeAEItemGroups.CABLE,
                                 ME_DENSE_CABLE,
                                 RecipeType.ENHANCED_CRAFTING_TABLE,
                                 new ItemStack[] {SlimefunItems.ENERGY_CONNECTOR, CRYSTAL_CERTUS_QUARTZ, CRYSTAL_FLUIX}),
@@ -608,37 +615,29 @@ public class SlimefunAEItems {
                 .register(plugin);
         // Machines
 
-        new MEController(
-                        SlimefunAEItemGroups.MACHINE,
-                        ME_CONTROLLER,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
-                            SKY_STONE_DUST, CRYSTAL_FLUIX, SKY_STONE_DUST,
-                            CRYSTAL_FLUIX, ENGINEERING_PROCESSOR, CRYSTAL_FLUIX,
-                            SKY_STONE_DUST, CRYSTAL_FLUIX, SKY_STONE_DUST
-                        })
+        new MEController(SlimeAEItemGroups.MACHINE, ME_CONTROLLER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    SKY_STONE_DUST, CRYSTAL_FLUIX, SKY_STONE_DUST,
+                    CRYSTAL_FLUIX, ENGINEERING_PROCESSOR, CRYSTAL_FLUIX,
+                    SKY_STONE_DUST, CRYSTAL_FLUIX, SKY_STONE_DUST
+                })
                 .register(plugin);
-        new MEUnit(SlimefunAEItemGroups.MACHINE, ME_UNIT, RecipeType.NULL, new ItemStack[] {
+        new MEUnit(SlimeAEItemGroups.MACHINE, ME_UNIT, RecipeType.NULL, new ItemStack[] {
                     null, null, null, new AdvancedCustomItemStack(Material.BARRIER, "&c&l调试物品")
                 })
                 .register(plugin);
-        new MEInterface(
-                        SlimefunAEItemGroups.MACHINE,
-                        ME_INTERFACE,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
-                            new ItemStack(Material.IRON_INGOT),
-                            new ItemStack(Material.GLASS),
-                            new ItemStack(Material.IRON_INGOT),
-                            ANNIHILATION_CORE,
-                            null,
-                            FORMATION_CORE,
-                            new ItemStack(Material.IRON_INGOT),
-                            new ItemStack(Material.GLASS),
-                            new ItemStack(Material.IRON_INGOT)
-                        })
+        new MEInterface(SlimeAEItemGroups.MACHINE, ME_INTERFACE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    new ItemStack(Material.IRON_INGOT),
+                    new ItemStack(Material.GLASS),
+                    new ItemStack(Material.IRON_INGOT),
+                    ANNIHILATION_CORE,
+                    null,
+                    FORMATION_CORE,
+                    new ItemStack(Material.IRON_INGOT),
+                    new ItemStack(Material.GLASS),
+                    new ItemStack(Material.IRON_INGOT)
+                })
                 .register(plugin);
-        new MEDrive(SlimefunAEItemGroups.MACHINE, ME_DRIVE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MEDrive(SlimeAEItemGroups.MACHINE, ME_DRIVE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     new ItemStack(Material.IRON_INGOT),
                     ENGINEERING_PROCESSOR,
                     new ItemStack(Material.IRON_INGOT),
@@ -651,7 +650,7 @@ public class SlimefunAEItems {
                 })
                 .register(plugin);
         new MECellWorkbench(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_CELL_WORKBENCH,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -666,7 +665,7 @@ public class SlimefunAEItems {
                             new ItemStack(Material.IRON_INGOT)
                         })
                 .register(plugin);
-        new MEIOPort(SlimefunAEItemGroups.MACHINE, ME_IO_PORT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MEIOPort(SlimeAEItemGroups.MACHINE, ME_IO_PORT, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     new ItemStack(Material.GLASS),
                     new ItemStack(Material.GLASS),
                     new ItemStack(Material.GLASS),
@@ -679,7 +678,7 @@ public class SlimefunAEItems {
                 })
                 .register(plugin);
         new MolecularAssembler(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         MOLECULAR_ASSEMBLER,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -695,7 +694,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new LargeMolecularAssembler(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         LARGE_MOLECULAR_ASSEMBLER,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -711,7 +710,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new CookingAllocator(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         COOKING_ALLOCATOR,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -726,14 +725,13 @@ public class SlimefunAEItems {
                             new ItemStack(Material.IRON_INGOT)
                         })
                 .register(plugin);
-        new SlimefunItem(
-                        SlimefunAEItemGroups.MACHINE, ENERGY_CELL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
-                            CRYSTAL_CERTUS_QUARTZ, FLUIX_DUST, CRYSTAL_CERTUS_QUARTZ,
-                            FLUIX_DUST, new ItemStack(Material.GLASS), FLUIX_DUST,
-                            CRYSTAL_CERTUS_QUARTZ, FLUIX_DUST, CRYSTAL_CERTUS_QUARTZ
-                        })
+        new SlimefunItem(SlimeAEItemGroups.MACHINE, ENERGY_CELL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    CRYSTAL_CERTUS_QUARTZ, FLUIX_DUST, CRYSTAL_CERTUS_QUARTZ,
+                    FLUIX_DUST, new ItemStack(Material.GLASS), FLUIX_DUST,
+                    CRYSTAL_CERTUS_QUARTZ, FLUIX_DUST, CRYSTAL_CERTUS_QUARTZ
+                })
                 .register(plugin);
-        new Inscriber(SlimefunAEItemGroups.MACHINE, INSCRIBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new Inscriber(SlimeAEItemGroups.MACHINE, INSCRIBER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     new ItemStack(Material.IRON_INGOT),
                     new ItemStack(Material.STICKY_PISTON),
                     new ItemStack(Material.IRON_INGOT),
@@ -745,27 +743,23 @@ public class SlimefunAEItems {
                     new ItemStack(Material.IRON_INGOT)
                 })
                 .register(plugin);
-        new Charger(SlimefunAEItemGroups.MACHINE, CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new Charger(SlimeAEItemGroups.MACHINE, CHARGER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     new ItemStack(Material.IRON_INGOT), SlimefunItems.FERROSILICON, new ItemStack(Material.IRON_INGOT),
                     new ItemStack(Material.IRON_INGOT), null, null,
                     new ItemStack(Material.IRON_INGOT), SlimefunItems.FERROSILICON, new ItemStack(Material.IRON_INGOT)
                 })
                 .register(plugin);
-        new MEImportBus(
-                        SlimefunAEItemGroups.MACHINE,
-                        ME_IMPORT_BUS,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
-                            null,
-                            ANNIHILATION_CORE,
-                            null,
-                            new ItemStack(Material.IRON_INGOT),
-                            new ItemStack(Material.STICKY_PISTON),
-                            new ItemStack(Material.IRON_INGOT)
-                        })
+        new MEImportBus(SlimeAEItemGroups.MACHINE, ME_IMPORT_BUS, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    null,
+                    ANNIHILATION_CORE,
+                    null,
+                    new ItemStack(Material.IRON_INGOT),
+                    new ItemStack(Material.STICKY_PISTON),
+                    new ItemStack(Material.IRON_INGOT)
+                })
                 .register(plugin);
         new MEVanillaImportBus(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_VANILLA_IMPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -778,7 +772,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEAdvancedImportBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_ADVANCED_IMPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -794,7 +788,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEAdvancedVanillaImportBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_ADVANCED_VANILLA_IMPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -807,7 +801,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEChainedImportBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_CHAINED_IMPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -816,20 +810,16 @@ public class SlimefunAEItems {
                             ME_IMPORT_BUS, LOGIC_PROCESSOR, ME_IMPORT_BUS
                         })
                 .register(plugin);
-        new MEExportBus(
-                        SlimefunAEItemGroups.MACHINE,
-                        ME_EXPORT_BUS,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
-                            new ItemStack(Material.IRON_INGOT),
-                            FORMATION_CORE,
-                            new ItemStack(Material.IRON_INGOT),
-                            null,
-                            new ItemStack(Material.STICKY_PISTON)
-                        })
+        new MEExportBus(SlimeAEItemGroups.MACHINE, ME_EXPORT_BUS, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    new ItemStack(Material.IRON_INGOT),
+                    FORMATION_CORE,
+                    new ItemStack(Material.IRON_INGOT),
+                    null,
+                    new ItemStack(Material.STICKY_PISTON)
+                })
                 .register(plugin);
         new MEVanillaExportBus(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_VANILLA_EXPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -845,7 +835,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEAdvancedExportBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_ADVANCED_EXPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -861,7 +851,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEAdvancedVanillaExportBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_ADVANCED_VANILLA_EXPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -876,7 +866,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEChainedExportBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_CHAINED_EXPORT_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -885,18 +875,18 @@ public class SlimefunAEItems {
                             ME_EXPORT_BUS, LOGIC_PROCESSOR, ME_EXPORT_BUS
                         })
                 .register(plugin);
-        new MEIEBus(SlimefunAEItemGroups.MACHINE, ME_IE_BUS, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MEIEBus(SlimeAEItemGroups.MACHINE, ME_IE_BUS, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     ME_IMPORT_BUS, LOGIC_PROCESSOR, ME_EXPORT_BUS
                 })
                 .register(plugin);
         new MEVanillaIEBus(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_VANILLA_IE_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_VANILLA_IMPORT_BUS, LOGIC_PROCESSOR, ME_VANILLA_EXPORT_BUS})
                 .register(plugin);
         new MEAdvancedIEBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_ADVANCED_IE_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -906,7 +896,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEAdvancedVanillaIEBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_ADVANCED_VANILLA_IE_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -916,7 +906,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEChainedIEBus(
-                        SlimefunAEItemGroups.ADVANCED_MACHINE,
+                        SlimeAEItemGroups.ADVANCED_MACHINE,
                         ME_CHAINED_IE_BUS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -926,43 +916,40 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new MEStorageBus(
-                        SlimefunAEItemGroups.MACHINE,
-                        ME_STORAGE_BUS,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
+                        SlimeAEItemGroups.MACHINE, ME_STORAGE_BUS, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                             ME_INTERFACE, new ItemStack(Material.STICKY_PISTON), new ItemStack(Material.PISTON)
                         })
                 .register(plugin);
         new MELevelEmitter(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_LEVEL_EMITTER,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_INTERFACE, REDSTONE_CARD, CALCULATION_PROCESSOR})
                 .register(plugin);
-        new METerminal(SlimefunAEItemGroups.MACHINE, ME_TERMINAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new METerminal(SlimeAEItemGroups.MACHINE, ME_TERMINAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     QUARTZ_GLASS, FORMATION_CORE, ANNIHILATION_CORE, LOGIC_PROCESSOR
                 })
                 .register(plugin);
         new MECraftingTerminal(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_CRAFTING_TERMINAL,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_TERMINAL, new ItemStack(Material.CRAFTING_TABLE), CALCULATION_PROCESSOR})
                 .register(plugin);
         new MECraftPlanningTerminal(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_CRAFT_PLANNING_TERMINAL,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_CRAFTING_TERMINAL, BLANK_PATTERN, CALCULATION_PROCESSOR})
                 .register(plugin);
         new MEPatternTerminal(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_PATTERN_TERMINAL,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_CRAFTING_TERMINAL, ENGINEERING_PROCESSOR})
                 .register(plugin);
         new MESecurityTerminal(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_SECURITY_TERMINAL,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -977,7 +964,13 @@ public class SlimefunAEItems {
                             new ItemStack(Material.IRON_INGOT)
                         })
                 .register(plugin);
-        new MECleaner(SlimefunAEItemGroups.MACHINE, ME_CLEANER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MEConversionMonitor(
+                        SlimeAEItemGroups.MACHINE,
+                        ME_CONVERSATION_MONITOR,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {FORMATION_CORE, ME_TERMINAL, ANNIHILATION_CORE})
+                .register(plugin);
+        new MECleaner(SlimeAEItemGroups.MACHINE, ME_CLEANER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     null,
                     ME_INTERFACE,
                     null,
@@ -989,7 +982,7 @@ public class SlimefunAEItems {
                 })
                 .register(plugin);
         new MECraftingTrigger(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ME_CRAFTING_TRIGGER,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1005,7 +998,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         ENERGY_ACCEPTOR,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1017,7 +1010,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new CraftingMonitor(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         CRAFTING_MONITOR,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1031,7 +1024,7 @@ public class SlimefunAEItems {
                 .register(plugin);
         if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded())
             new NetworksExpansionSwitch(
-                            SlimefunAEItemGroups.MACHINE,
+                            SlimeAEItemGroups.MACHINE,
                             NETWORKS_EXPANSION_SWITCH,
                             RecipeType.ENHANCED_CRAFTING_TABLE,
                             new ItemStack[] {
@@ -1047,7 +1040,7 @@ public class SlimefunAEItems {
                             })
                     .register(plugin);
         new PatternWorkbench(
-                        SlimefunAEItemGroups.MACHINE,
+                        SlimeAEItemGroups.MACHINE,
                         PATTERN_WORKBENCH,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_PATTERN_TERMINAL, ENGINEERING_PROCESSOR, new ItemStack(Material.CHEST)})
@@ -1055,7 +1048,7 @@ public class SlimefunAEItems {
         // Materials
 
         SlimefunItem crystal_certus_quartz = new SlimefunItem(
-                SlimefunAEItemGroups.MATERIAL,
+                SlimeAEItemGroups.MATERIAL,
                 CRYSTAL_CERTUS_QUARTZ,
                 SlimefunAERecipeTypes.BLOCK_DESTROY,
                 new ItemStack[] {null, null, null, null, CERTUS_QUARTZ_ORE});
@@ -1064,99 +1057,90 @@ public class SlimefunAEItems {
         CrystalCertusQuartz crystalCertusQuartz = new CrystalCertusQuartz(plugin, CRYSTAL_CERTUS_QUARTZ);
         crystalCertusQuartz.register();
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         CHARGED_CRYSTAL_CERTUS_QUARTZ,
                         SlimefunAERecipeTypes.CHARGER,
                         new ItemStack[] {CRYSTAL_CERTUS_QUARTZ})
                 .register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.MATERIAL, CRYSTAL_FLUIX, SlimefunAERecipeTypes.CHARGER, new ItemStack[] {
+        new SlimefunItem(SlimeAEItemGroups.MATERIAL, CRYSTAL_FLUIX, SlimefunAERecipeTypes.CHARGER, new ItemStack[] {
                     CHARGED_CRYSTAL_CERTUS_QUARTZ
                 })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         CERTUS_QUARTZ_ORE,
                         SlimefunAERecipeTypes.WORLD_GENERATING,
                         new ItemStack[0])
                 .register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.MATERIAL, CERTUS_QUARTZ_DUST, RecipeType.ORE_CRUSHER, new ItemStack[] {
+        new SlimefunItem(SlimeAEItemGroups.MATERIAL, CERTUS_QUARTZ_DUST, RecipeType.ORE_CRUSHER, new ItemStack[] {
                     CRYSTAL_CERTUS_QUARTZ
                 })
                 .register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.MATERIAL, FLUIX_DUST, RecipeType.ORE_CRUSHER, new ItemStack[] {
-                    CRYSTAL_FLUIX
-                })
+        new SlimefunItem(
+                        SlimeAEItemGroups.MATERIAL, FLUIX_DUST, RecipeType.ORE_CRUSHER, new ItemStack[] {CRYSTAL_FLUIX})
                 .register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.MATERIAL, QUARTZ_DUST, RecipeType.ORE_CRUSHER, new ItemStack[] {
+        new SlimefunItem(SlimeAEItemGroups.MATERIAL, QUARTZ_DUST, RecipeType.ORE_CRUSHER, new ItemStack[] {
                     new ItemStack(Material.QUARTZ)
                 })
                 .register(plugin);
-        new SlimefunItem(SlimefunAEItemGroups.MATERIAL, SKY_STONE_DUST, SlimefunAERecipeTypes.CHARGER, new ItemStack[] {
+        new SlimefunItem(SlimeAEItemGroups.MATERIAL, SKY_STONE_DUST, SlimefunAERecipeTypes.CHARGER, new ItemStack[] {
                     FLUIX_DUST
                 })
                 .register(plugin);
-        new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
-                        FLUIX_PEARL,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
-                            FLUIX_DUST,
-                            CRYSTAL_FLUIX,
-                            FLUIX_DUST,
-                            CRYSTAL_FLUIX,
-                            new ItemStack(Material.ENDER_PEARL),
-                            CRYSTAL_FLUIX,
-                            FLUIX_DUST,
-                            CRYSTAL_FLUIX,
-                            FLUIX_DUST
-                        })
+        new SlimefunItem(SlimeAEItemGroups.MATERIAL, FLUIX_PEARL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    FLUIX_DUST,
+                    CRYSTAL_FLUIX,
+                    FLUIX_DUST,
+                    CRYSTAL_FLUIX,
+                    new ItemStack(Material.ENDER_PEARL),
+                    CRYSTAL_FLUIX,
+                    FLUIX_DUST,
+                    CRYSTAL_FLUIX,
+                    FLUIX_DUST
+                })
+                .register(plugin);
+        new SlimefunItem(SlimeAEItemGroups.MATERIAL, PRINTED_SILICON, SlimefunAERecipeTypes.INSCRIBER, new ItemStack[] {
+                    SlimefunItems.SILICON, new ItemStack(Material.IRON_INGOT)
+                })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
-                        PRINTED_SILICON,
-                        SlimefunAERecipeTypes.INSCRIBER,
-                        new ItemStack[] {SlimefunItems.SILICON, new ItemStack(Material.IRON_INGOT)})
-                .register(plugin);
-        new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         PRINTED_LOGIC_CIRCUIT,
                         SlimefunAERecipeTypes.INSCRIBER,
                         new ItemStack[] {PRINTED_SILICON, new ItemStack(Material.GOLD_INGOT)})
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         PRINTED_CALCULATION_CIRCUIT,
                         SlimefunAERecipeTypes.INSCRIBER,
                         new ItemStack[] {PRINTED_SILICON, CRYSTAL_CERTUS_QUARTZ})
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         PRINTED_ENGINEERING_CIRCUIT,
                         SlimefunAERecipeTypes.INSCRIBER,
                         new ItemStack[] {PRINTED_SILICON, new ItemStack(Material.DIAMOND)})
                 .register(plugin);
-        new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
-                        LOGIC_PROCESSOR,
-                        SlimefunAERecipeTypes.INSCRIBER,
-                        new ItemStack[] {PRINTED_LOGIC_CIRCUIT, new ItemStack(Material.REDSTONE), PRINTED_SILICON})
+        new SlimefunItem(SlimeAEItemGroups.MATERIAL, LOGIC_PROCESSOR, SlimefunAERecipeTypes.INSCRIBER, new ItemStack[] {
+                    PRINTED_LOGIC_CIRCUIT, new ItemStack(Material.REDSTONE), PRINTED_SILICON
+                })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         CALCULATION_PROCESSOR,
                         SlimefunAERecipeTypes.INSCRIBER,
                         new ItemStack[] {PRINTED_CALCULATION_CIRCUIT, new ItemStack(Material.REDSTONE), PRINTED_SILICON
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ENGINEERING_PROCESSOR,
                         SlimefunAERecipeTypes.INSCRIBER,
                         new ItemStack[] {PRINTED_ENGINEERING_CIRCUIT, new ItemStack(Material.REDSTONE), PRINTED_SILICON
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         WIRELESS_RECEIVER,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1171,7 +1155,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_STORAGE_HOUSING,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1183,7 +1167,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_1K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1199,7 +1183,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_4K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1215,7 +1199,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_16K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1231,7 +1215,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_64K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1247,7 +1231,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_256K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1263,7 +1247,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_1M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1279,7 +1263,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_4M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1295,7 +1279,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_16M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1311,7 +1295,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_64M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1327,7 +1311,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_256M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1343,7 +1327,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_1G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1359,7 +1343,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_4G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1375,7 +1359,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_16G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1391,7 +1375,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_64G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1407,7 +1391,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_256G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1423,7 +1407,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_1T,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1439,7 +1423,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_4T,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1455,7 +1439,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ME_ITEM_STORAGE_COMPONENT_16T,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1471,19 +1455,19 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         FORMATION_CORE,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {CRYSTAL_CERTUS_QUARTZ, FLUIX_DUST, LOGIC_PROCESSOR})
                 .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ANNIHILATION_CORE,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {new ItemStack(Material.QUARTZ), FLUIX_DUST, LOGIC_PROCESSOR})
                 .register(plugin);
         new Card(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         BASIC_CARD,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1496,10 +1480,10 @@ public class SlimefunAEItems {
                             new ItemStack(Material.GOLD_INGOT),
                             new ItemStack(Material.IRON_INGOT),
                         },
-                        new SlimefunItemStack(SlimefunAEItems.BASIC_CARD, 2))
+                        new SlimefunItemStack(SlimeAEItems.BASIC_CARD, 2))
                 .register(plugin);
         new Card(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ADVANCED_CARD,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1512,25 +1496,23 @@ public class SlimefunAEItems {
                             new ItemStack(Material.GOLD_INGOT),
                             new ItemStack(Material.IRON_INGOT),
                         },
-                        new SlimefunItemStack(SlimefunAEItems.ADVANCED_CARD, 2))
+                        new SlimefunItemStack(SlimeAEItems.ADVANCED_CARD, 2))
                 .register(plugin);
         new AccelerationCard(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         ACCELERATION_CARD,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ADVANCED_CARD, CRYSTAL_FLUIX})
                 .register(plugin);
         new CraftingCard(
-                        SlimefunAEItemGroups.MATERIAL,
-                        CRAFTING_CARD,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {BASIC_CARD, new ItemStack(Material.CRAFTING_TABLE)})
+                        SlimeAEItemGroups.MATERIAL, CRAFTING_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                            BASIC_CARD, new ItemStack(Material.CRAFTING_TABLE)
+                        })
                 .register(plugin);
         new RedstoneCard(
-                        SlimefunAEItemGroups.MATERIAL,
-                        REDSTONE_CARD,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {BASIC_CARD, new ItemStack(Material.REDSTONE_TORCH)})
+                        SlimeAEItemGroups.MATERIAL, REDSTONE_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                            BASIC_CARD, new ItemStack(Material.REDSTONE_TORCH)
+                        })
                 .register(plugin);
         //        new SlimefunItem(
         //                        SlimefunAEItemGroups.MATERIAL,
@@ -1540,7 +1522,7 @@ public class SlimefunAEItems {
         // null, null})
         //                .register(plugin);
         new SlimefunItem(
-                        SlimefunAEItemGroups.MATERIAL,
+                        SlimeAEItemGroups.MATERIAL,
                         QUARTZ_GLASS,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1554,9 +1536,9 @@ public class SlimefunAEItems {
                             new ItemStack(Material.GLASS),
                             QUARTZ_DUST
                         },
-                        new SlimefunItemStack(SlimefunAEItems.QUARTZ_GLASS, 4))
+                        new SlimefunItemStack(SlimeAEItems.QUARTZ_GLASS, 4))
                 .register(plugin);
-        new Pattern(SlimefunAEItemGroups.MATERIAL, BLANK_PATTERN, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new Pattern(SlimeAEItemGroups.MATERIAL, BLANK_PATTERN, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     QUARTZ_GLASS,
                     new ItemStack(Material.GLOWSTONE_DUST),
                     QUARTZ_GLASS,
@@ -1568,141 +1550,141 @@ public class SlimefunAEItems {
                     new ItemStack(Material.IRON_INGOT)
                 })
                 .register(plugin);
-        new Pattern(SlimefunAEItemGroups.MATERIAL, ENCODED_PATTERN, RecipeType.NULL, new ItemStack[0]).register(plugin);
+        new Pattern(SlimeAEItemGroups.MATERIAL, ENCODED_PATTERN, RecipeType.NULL, new ItemStack[0]).register(plugin);
         // Cells
 
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_1K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_1K},
                         1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_4K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_4K},
                         4 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_16K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_16K},
                         16 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_64K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_64K},
                         64 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_256K,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_256K},
                         256 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_1M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_1M},
                         1024 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_4M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_4M},
                         4 * 1024 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_16M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_16M},
                         16 * 1024 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_64M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_64M},
                         64 * 1024 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_256M,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_256M},
                         256 * 1024 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_1G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_1G},
                         1024 * 1024 * 1024)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_4G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_4G},
                         4L * 1024L * 1024L * 1024L)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_16G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_16G},
                         16L * 1024L * 1024L * 1024L)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_64G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_64G},
                         64L * 1024L * 1024L * 1024L)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_256G,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_256G},
                         256L * 1024L * 1024L * 1024L)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_1T,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_1T},
                         1024L * 1024L * 1024L * 1024L)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_4T,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_4T},
                         4L * 1024L * 1024L * 1024L * 1024L)
                 .register(plugin);
         new MEItemStorageCell(
-                        SlimefunAEItemGroups.CELL,
+                        SlimeAEItemGroups.CELL,
                         ME_ITEM_STORAGE_CELL_16T,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_16T},
                         16L * 1024L * 1024L * 1024L * 1024L)
                 .register(plugin);
         new MECreativeItemStorageCell(
-                        SlimefunAEItemGroups.CELL, ME_CREATIVE_ITEM_STORAGE_CELL, RecipeType.NULL, new ItemStack[0])
+                        SlimeAEItemGroups.CELL, ME_CREATIVE_ITEM_STORAGE_CELL, RecipeType.NULL, new ItemStack[0])
                 .register(plugin);
         // TOOLS
 
-        new MemoryCard(SlimefunAEItemGroups.TOOL, MEMORY_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new MemoryCard(SlimeAEItemGroups.TOOL, MEMORY_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     LOGIC_PROCESSOR,
                     new ItemStack(Material.IRON_INGOT),
                     new ItemStack(Material.IRON_INGOT),
@@ -1712,10 +1694,7 @@ public class SlimefunAEItems {
                 })
                 .register(plugin);
         new CardReplicator(
-                        SlimefunAEItemGroups.TOOL,
-                        CARD_REPLICATOR,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
+                        SlimeAEItemGroups.TOOL, CARD_REPLICATOR, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                             LOGIC_PROCESSOR,
                             new ItemStack(Material.IRON_INGOT),
                             new ItemStack(Material.IRON_INGOT),
@@ -1725,10 +1704,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new WirelessTerminal(
-                        SlimefunAEItemGroups.TOOL,
-                        WIRELESS_TERMINAL,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
+                        SlimeAEItemGroups.TOOL, WIRELESS_TERMINAL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                             WIRELESS_RECEIVER,
                             null,
                             null,
@@ -1738,23 +1714,19 @@ public class SlimefunAEItems {
                             SlimefunItems.CARBONADO_EDGED_CAPACITOR
                         })
                 .register(plugin);
-        new Wrench(
-                        SlimefunAEItemGroups.TOOL,
-                        CERTUS_QUARTZ_WRENCH,
-                        RecipeType.ENHANCED_CRAFTING_TABLE,
-                        new ItemStack[] {
-                            CRYSTAL_CERTUS_QUARTZ,
-                            null,
-                            CRYSTAL_CERTUS_QUARTZ,
-                            null,
-                            CRYSTAL_CERTUS_QUARTZ,
-                            null,
-                            CRYSTAL_CERTUS_QUARTZ,
-                            null,
-                            CRYSTAL_CERTUS_QUARTZ
-                        })
+        new Wrench(SlimeAEItemGroups.TOOL, CERTUS_QUARTZ_WRENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+                    CRYSTAL_CERTUS_QUARTZ,
+                    null,
+                    CRYSTAL_CERTUS_QUARTZ,
+                    null,
+                    CRYSTAL_CERTUS_QUARTZ,
+                    null,
+                    CRYSTAL_CERTUS_QUARTZ,
+                    null,
+                    CRYSTAL_CERTUS_QUARTZ
+                })
                 .register(plugin);
-        new Wrench(SlimefunAEItemGroups.TOOL, QUARTZ_WRENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new Wrench(SlimeAEItemGroups.TOOL, QUARTZ_WRENCH, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     new ItemStack(Material.QUARTZ),
                     null,
                     new ItemStack(Material.QUARTZ),
@@ -1766,7 +1738,7 @@ public class SlimefunAEItems {
                     new ItemStack(Material.QUARTZ)
                 })
                 .register(plugin);
-        new NetworkTool(SlimefunAEItemGroups.TOOL, NETWORK_TOOL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new NetworkTool(SlimeAEItemGroups.TOOL, NETWORK_TOOL, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     CERTUS_QUARTZ_WRENCH, QUARTZ_GLASS, null, CALCULATION_PROCESSOR, new ItemStack(Material.CHEST)
                 })
                 .register(plugin);
@@ -1775,7 +1747,7 @@ public class SlimefunAEItems {
                 },
                 NETWORK_TOOL);
         new SlimefunItem(
-                        SlimefunAEItemGroups.TOOL,
+                        SlimeAEItemGroups.TOOL,
                         AE_TERMINAL_TOPPER,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1791,7 +1763,7 @@ public class SlimefunAEItems {
                         })
                 .register(plugin);
         new EntropyManipulator(
-                        SlimefunAEItemGroups.TOOL,
+                        SlimeAEItemGroups.TOOL,
                         ENTROPY_MANIPULATOR,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {
@@ -1806,7 +1778,7 @@ public class SlimefunAEItems {
                             new ItemStack(Material.IRON_INGOT)
                         })
                 .register(plugin);
-        new ChargedStaff(SlimefunAEItemGroups.TOOL, CHARGED_STAFF, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
+        new ChargedStaff(SlimeAEItemGroups.TOOL, CHARGED_STAFF, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     CHARGED_CRYSTAL_CERTUS_QUARTZ,
                     ENERGY_CELL,
                     null,
