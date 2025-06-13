@@ -41,10 +41,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import net.guizhanss.minecraft.guizhanlib.gugu.minecraft.helpers.inventory.ItemStackHelper;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Container;
-import org.bukkit.block.Furnace;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.FurnaceInventory;
@@ -499,14 +496,13 @@ public class ItemUtils {
     @Nonnull
     private static ItemStack[] getVanillaItemStacks(Block block) {
         Container container = (Container) PaperLib.getBlockState(block, false).getState();
-        ItemStack[] items = new ItemStack[0];
+        ItemStack[] items = container.getInventory().getContents();
+
         if (container instanceof Furnace furnace) {
             FurnaceInventory furnaceInventory = furnace.getInventory();
             items = new ItemStack[] {furnaceInventory.getResult()};
-        } else if (container instanceof Chest chest) {
-            Inventory inventory = chest.getBlockInventory();
-            items = inventory.getContents();
         }
+
         return items;
     }
 
@@ -742,7 +738,9 @@ public class ItemUtils {
         return item;
     }
 
-    public static String getItemName(ItemStack itemStack) {
+    public static String getItemName(@Nullable ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType().isAir()) return "";
+
         String displayName = itemStack.getItemMeta().getDisplayName();
         if (!displayName.isEmpty()) return displayName;
         SlimefunItem slimefunItem = SlimefunItem.getByItem(itemStack);
@@ -797,5 +795,29 @@ public class ItemUtils {
         result.setType(material);
 
         return result;
+    }
+
+    public static boolean matchesAll(@Nonnull ItemStack[] left, @Nonnull ItemStack[] right, boolean checkAmount) {
+        for (int i = 0; i < Math.max(left.length, right.length); i++) {
+            ItemStack x = new ItemStack(Material.AIR);
+            ItemStack y = new ItemStack(Material.AIR);
+            if (left.length > i) {
+                x = left[i];
+                if (x == null) x = new ItemStack(Material.AIR);
+            }
+            if (right.length > i) {
+                y = right[i];
+                if (y == null) y = new ItemStack(Material.AIR);
+            }
+
+            if (x.getType().isAir()) x.setAmount(0);
+            if (y.getType().isAir()) y.setAmount(0);
+
+            if (!SlimefunUtils.isItemSimilar(x, y, true, checkAmount)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
