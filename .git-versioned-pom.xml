@@ -6,7 +6,7 @@
 
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>dc9763d-Beta</version>
+    <version>dce5a61-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAEPlugin</name>
@@ -170,7 +170,7 @@
         <dependency>
             <groupId>com.github.TimetownDev</groupId>
             <artifactId>GuguSlimefunLib</artifactId>
-            <version>8ffcaefb9a</version>
+            <version>afeac968aa</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
