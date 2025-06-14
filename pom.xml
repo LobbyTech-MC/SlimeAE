@@ -12,6 +12,7 @@
     <name>SlimeAEPlugin</name>
 
     <properties>
+        <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
         <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
         <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
         <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\ExoticGarden.jar</ExoticGarden-systemPath>
@@ -170,8 +171,9 @@
         <dependency>
             <groupId>com.github.TimetownDev</groupId>
             <artifactId>GuguSlimefunLib</artifactId>
-            <version>afeac968aa</version>
-            <scope>provided</scope>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${GuguSlimefunLib-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>net.guizhanss</groupId>

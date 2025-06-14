@@ -4,7 +4,7 @@
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
   <name>SlimeAEPlugin</name>
-  <version>dce5a61-Beta</version>
+  <version>8cecbbe-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -133,12 +133,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.TimetownDev</groupId>
-      <artifactId>GuguSlimefunLib</artifactId>
-      <version>afeac968aa</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>net.guizhanss</groupId>
       <artifactId>GuizhanLibPlugin</artifactId>
       <version>2.3.0</version>
@@ -156,6 +150,13 @@
       <version>035fe56381</version>
       <scope>system</scope>
       <systemPath>${FluffyMachines-systemPath}</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.TimetownDev</groupId>
+      <artifactId>GuguSlimefunLib</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${GuguSlimefunLib-systemPath}</systemPath>
     </dependency>
     <dependency>
       <groupId>com.ytdd9527</groupId>
@@ -198,15 +199,16 @@
     <git.ref.slug>master</git.ref.slug>
     <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
     <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Galactifun.jar</Galactifun-systemPath>
-    <git.commit.short>dce5a61</git.commit.short>
-    <git.commit>dce5a61a5ed39d6696199549266f18e79897bd23</git.commit>
+    <git.commit.short>8cecbbe</git.commit.short>
+    <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
+    <git.commit>8cecbbe504ce38ab750abe7e47854626a80d208e</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\ExoticGarden.jar</ExoticGarden-systemPath>
     <java.version>21</java.version>
-    <git.commit.timestamp>1749828478</git.commit.timestamp>
+    <git.commit.timestamp>1749830708</git.commit.timestamp>
     <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
     <git.ref>master</git.ref>
-    <git.commit.timestamp.datetime>2025-06-13T15:27:58Z</git.commit.timestamp.datetime>
+    <git.commit.timestamp.datetime>2025-06-13T16:05:08Z</git.commit.timestamp.datetime>
     <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
     <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
   </properties>
