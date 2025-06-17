@@ -12,6 +12,8 @@
     <name>SlimeAEPlugin</name>
 
     <properties>
+        <JustEnoughGuide-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\JustEnoughGuide.jar</JustEnoughGuide-systemPath>
+        <InfinityExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\InfinityExpansion.jar</InfinityExpansion-systemPath>
         <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
         <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
         <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
@@ -158,8 +160,9 @@
         <dependency>
             <groupId>com.github.JWJUN233233</groupId>
             <artifactId>InfinityExpansion</artifactId>
-            <version>9fb38dfd1e</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${InfinityExpansion-systemPath}</systemPath>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.SlimefunGuguProject</groupId>
@@ -198,8 +201,9 @@
         <dependency>
             <groupId>com.github.balugaq</groupId>
             <artifactId>JustEnoughGuide</artifactId>
-            <version>3840a709aa</version>
-            <scope>provided</scope>
+            <version>88</version>
+            <scope>system</scope>
+            <systemPath>${JustEnoughGuide-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.SlimefunGuguProject</groupId>
