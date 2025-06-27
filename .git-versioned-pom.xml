@@ -6,12 +6,13 @@
 
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>dd09db2-Beta</version>
+    <version>82fa02f-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAEPlugin</name>
 
     <properties>
+        <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\JustEnoughGuide\lib\Slimefun.jar</Slimefun4-systemPath>
         <JustEnoughGuide-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\JustEnoughGuide.jar</JustEnoughGuide-systemPath>
         <InfinityExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\InfinityExpansion.jar</InfinityExpansion-systemPath>
         <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
@@ -149,12 +150,13 @@
             <groupId>com.github.SlimefunGuguProject</groupId>
             <artifactId>Slimefun4</artifactId>
             <version>2025.1</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${Slimefun4-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.Zrips</groupId>
             <artifactId>CMILib</artifactId>
-            <version>1.4.7.4</version>
+            <version>1.5.4.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

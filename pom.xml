@@ -12,6 +12,7 @@
     <name>SlimeAEPlugin</name>
 
     <properties>
+        <Slimefun4-systemPath>C:\Users\11877\Documents\GitHub\JustEnoughGuide\lib\Slimefun.jar</Slimefun4-systemPath>
         <JustEnoughGuide-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\JustEnoughGuide.jar</JustEnoughGuide-systemPath>
         <InfinityExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\InfinityExpansion.jar</InfinityExpansion-systemPath>
         <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
@@ -149,7 +150,8 @@
             <groupId>com.github.SlimefunGuguProject</groupId>
             <artifactId>Slimefun4</artifactId>
             <version>2025.1</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${Slimefun4-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.Zrips</groupId>
