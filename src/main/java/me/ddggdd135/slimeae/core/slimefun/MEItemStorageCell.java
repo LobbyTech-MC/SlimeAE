@@ -10,7 +10,10 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.NotPlaceable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.stream.Stream;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import me.ddggdd135.guguslimefunlib.GuguSlimefunLib;
@@ -79,9 +82,9 @@ public class MEItemStorageCell extends SlimefunItem implements NotPlaceable {
         lores.add(
                 CMIChatColor.translate("&e已存储 " + meStorageCellCache.getStored() + "/" + meStorageCellCache.getSize()));
         lores.add("");
-        List<Map.Entry<ItemStack, Long>> storages = meStorageCellCache.getStorageUnsafe().entrySet().stream()
-                .sorted(ALPHABETICAL_SORT)
-                .toList();
+        Stream <Entry<ItemStack, Long>> sorted = meStorageCellCache.getStorageUnsafe().entrySet().stream().sorted(ALPHABETICAL_SORT);
+        //long count = sorted.count();
+        List<Entry<ItemStack, Long>> storages = sorted.toList();
         int lines = 0;
         for (Map.Entry<ItemStack, Long> entry : storages) {
             if (lines >= 8) {
