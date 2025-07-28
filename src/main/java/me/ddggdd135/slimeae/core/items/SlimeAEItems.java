@@ -12,6 +12,9 @@ import me.ddggdd135.slimeae.api.abstracts.Card;
 import me.ddggdd135.slimeae.api.abstracts.MEObject;
 import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
 import me.ddggdd135.slimeae.core.slimefun.*;
+import me.ddggdd135.slimeae.core.slimefun.assembler.AdvancedMolecularAssembler;
+import me.ddggdd135.slimeae.core.slimefun.assembler.LargeMolecularAssembler;
+import me.ddggdd135.slimeae.core.slimefun.assembler.MolecularAssembler;
 import me.ddggdd135.slimeae.core.slimefun.buses.*;
 import me.ddggdd135.slimeae.core.slimefun.cards.AccelerationCard;
 import me.ddggdd135.slimeae.core.slimefun.cards.CraftingCard;
@@ -69,7 +72,16 @@ public class SlimeAEItems {
                     "",
                     "{#3366ff>}用它来与货运网络交互{#33ccf3<}",
                     "{#3366ff>}合成设备需要放在它旁边运行{#33ccf3<}",
-                    "{#3366ff>}在里面放入蓝图 就可以在合成计划终端中自动合成{#33ccf3<}"));
+                    "{#3366ff>}在里面放入样板 就可以在合成计划终端中自动合成{#33ccf3<}"));
+    public static final SlimefunItemStack ME_PATTERN_INTERFACE = new SlimefunItemStack(
+            "ME_PATTERN_INTERFACE",
+            new AdvancedCustomItemStack(
+                    Version.getCurrent().isEqualOrHigher(Version.v1_17_R1)
+                            ? Material.TARGET
+                            : Material.CHISELED_STONE_BRICKS,
+                    "{#Vanilla_Ice}ME样板接口",
+                    "",
+                    "{#3366ff>}只能在里面放入样板{#33ccf3<}"));
     public static final SlimefunItemStack ME_DRIVE = new SlimefunItemStack(
             "ME_DRIVE",
             new AdvancedCustomItemStack(
@@ -100,8 +112,22 @@ public class SlimeAEItems {
                     "&f分子装配室",
                     "",
                     "{#3366ff>}在自动合成中充当原版和粘液合成台{#33ccf3<}",
-                    "{#3366ff>}需要放在能源传输接口旁边 且只能用于粘液应用能源的自动合成{#33ccf3<}",
-                    "&a每个粘液应用能源网络中 每个合成任务最多只会使用1024个合成设备"));
+                    "{#3366ff>}需要放在ME接口旁边 且只能用于AE的自动合成{#33ccf3<}",
+                    "&a每个AE网络中 每个合成任务最多只会使用1024个合成设备"));
+    public static final SlimefunItemStack ADVANCED_MOLECULAR_ASSEMBLER_1 = new SlimefunItemStack(
+            "ADVANCED_MOLECULAR_ASSEMBLER_1",
+            new AdvancedCustomItemStack(
+                    Version.getCurrent().isEqualOrHigher(Version.v1_17_R1) ? Material.TINTED_GLASS : Material.GLASS,
+                    "&c高级分子装配室 - Ⅰ",
+                    "",
+                    "{#3366ff>}放满加速卡的分子装配室{#33ccf3<}"));
+    public static final SlimefunItemStack ADVANCED_MOLECULAR_ASSEMBLER_2 = new SlimefunItemStack(
+            "ADVANCED_MOLECULAR_ASSEMBLER_2",
+            new AdvancedCustomItemStack(
+                    Version.getCurrent().isEqualOrHigher(Version.v1_17_R1) ? Material.TINTED_GLASS : Material.GLASS,
+                    "&c高级分子装配室 - Ⅱ",
+                    "",
+                    "{#3366ff>}套娃分子装配室{#33ccf3<}"));
     public static final SlimefunItemStack LARGE_MOLECULAR_ASSEMBLER = new SlimefunItemStack(
             "LARGE_MOLECULAR_ASSEMBLER",
             new AdvancedCustomItemStack(
@@ -659,6 +685,22 @@ public class SlimeAEItems {
                     new ItemStack(Material.IRON_INGOT)
                 })
                 .register(plugin);
+        new MEPatternInterface(
+                        SlimeAEItemGroups.MACHINE,
+                        ME_PATTERN_INTERFACE,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            new ItemStack(Material.IRON_INGOT),
+                            new ItemStack(Material.GLASS),
+                            new ItemStack(Material.IRON_INGOT),
+                            ANNIHILATION_CORE,
+                            ME_INTERFACE,
+                            FORMATION_CORE,
+                            new ItemStack(Material.IRON_INGOT),
+                            new ItemStack(Material.GLASS),
+                            new ItemStack(Material.IRON_INGOT)
+                        })
+                .register(plugin);
         new MEDrive(SlimeAEItemGroups.MACHINE, ME_DRIVE, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {
                     new ItemStack(Material.IRON_INGOT),
                     ENGINEERING_PROCESSOR,
@@ -714,6 +756,36 @@ public class SlimeAEItems {
                             new ItemStack(Material.GLASS),
                             new ItemStack(Material.IRON_INGOT)
                         })
+                .register(plugin);
+        new AdvancedMolecularAssembler(
+                        SlimeAEItemGroups.MACHINE,
+                        ADVANCED_MOLECULAR_ASSEMBLER_1,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            MOLECULAR_ASSEMBLER,
+                            ME_PATTERN_INTERFACE,
+                            ACCELERATION_CARD,
+                            ACCELERATION_CARD,
+                            ACCELERATION_CARD
+                        },
+                        4)
+                .register(plugin);
+        new AdvancedMolecularAssembler(
+                        SlimeAEItemGroups.MACHINE,
+                        ADVANCED_MOLECULAR_ASSEMBLER_2,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            ADVANCED_MOLECULAR_ASSEMBLER_1,
+                            ADVANCED_MOLECULAR_ASSEMBLER_1,
+                            ADVANCED_MOLECULAR_ASSEMBLER_1,
+                            ADVANCED_MOLECULAR_ASSEMBLER_1,
+                            ME_PATTERN_INTERFACE,
+                            ADVANCED_MOLECULAR_ASSEMBLER_1,
+                            ADVANCED_MOLECULAR_ASSEMBLER_1,
+                            ADVANCED_MOLECULAR_ASSEMBLER_1,
+                            ADVANCED_MOLECULAR_ASSEMBLER_1
+                        },
+                        32)
                 .register(plugin);
         new LargeMolecularAssembler(
                         SlimeAEItemGroups.MACHINE,

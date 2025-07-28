@@ -51,7 +51,8 @@ public class AutoCraftingTask implements IDisposable {
     private final AEMenu menu = new AEMenu("&e合成任务");
     private boolean isCancelling = false;
     private final Set<CraftingRecipe> craftingPath = new HashSet<>();
-    private final ItemStorage storage;
+    private ItemStorage storage;
+    private int failTimes;
 
     public AutoCraftingTask(@Nonnull NetworkInfo info, @Nonnull CraftingRecipe recipe, long count) {
         this.info = info;
@@ -59,10 +60,10 @@ public class AutoCraftingTask implements IDisposable {
         this.count = count;
         menu.setSize(54);
         menu.addMenuCloseHandler(player -> dispose());
-        info.getStorage().setLock(true);
         craftingSteps = match(recipe, count, new ItemStorage(info.getStorage()));
         this.storage = new ItemStorage();
 
+        // 所有材料都能拿到
         for (CraftStep step : craftingSteps) {
             for (Map.Entry<ItemKey, Long> entry :
                     step.getRecipe().getInputAmounts().keyEntrySet()) {
@@ -70,19 +71,7 @@ public class AutoCraftingTask implements IDisposable {
             }
         }
 
-        for (int i = 0; i < craftingSteps.size(); i++) {
-            CraftStep step = craftingSteps.get(i);
-
-            if (i == craftingSteps.size() - 1) continue;
-
-            for (Map.Entry<ItemKey, Long> entry :
-                    step.getRecipe().getOutputAmounts().keyEntrySet()) {
-                storage.takeItem(new ItemRequest(entry.getKey(), entry.getValue() * step.getAmount()));
-            }
-        }
-
-        info.getStorage().takeItem(ItemUtils.createRequests(storage.copyStorage()), true);
-        info.getStorage().setLock(false);
+        storage = info.getStorage().takeItem(ItemUtils.createRequests(storage.copyStorage()));
     }
 
     @Nonnull
@@ -295,16 +284,29 @@ public class AutoCraftingTask implements IDisposable {
         }
 
         ItemRequest[] requests = ItemUtils.createRequests(neededItems);
-        if (storage.contains(requests) && doCraft) {
-            storage.takeItem(requests);
-            virtualRunning += (int) actualAmount;
-            next.decreaseAmount(actualAmount);
+        if (storage.contains(requests)) {
+            if (doCraft) {
+                failTimes = 0;
+                storage.takeItem(requests);
+                virtualRunning += (int) actualAmount;
+                next.decreaseAmount(actualAmount);
 
-            if (virtualRunning == actualAmount) {
-                menu.getContents();
-                if (!menu.getInventory().getViewers().isEmpty()) refreshGUI(54);
+                if (virtualRunning == actualAmount) {
+                    menu.getContents();
+                    if (!menu.getInventory().getViewers().isEmpty()) refreshGUI(54);
 
-                return;
+                    return;
+                }
+            }
+        } else {
+            failTimes++;
+        }
+
+        if (failTimes >= 32) {
+            dispose();
+            try {
+                new AutoCraftingTask(info, recipe, count).start();
+            } catch (Exception ignored) {
             }
         }
 
