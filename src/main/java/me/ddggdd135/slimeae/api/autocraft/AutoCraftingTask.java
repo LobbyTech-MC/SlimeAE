@@ -89,8 +89,11 @@ public class AutoCraftingTask implements IDisposable {
 
         storage = info.getStorage().takeItem(ItemUtils.createRequests(storage.copyStorage()));
 
+        /*
         String TitleInfo = craftingSteps == newSteps ? "&2(新版算法)" : "&7(旧版算法)";
         menu = new AEMenu("&e合成任务" + TitleInfo);
+        */
+        menu = new AEMenu("&e合成任务");
         menu.setSize(54);
         menu.addMenuCloseHandler(player -> dispose());
     }
