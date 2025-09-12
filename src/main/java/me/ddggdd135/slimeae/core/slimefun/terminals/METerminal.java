@@ -50,7 +50,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class METerminal extends TickingBlock implements IMEObject, InventoryBlock, IItemFilterFindableWithGuide {
     public static final Comparator<Map.Entry<ItemStack, Long>> ALPHABETICAL_SORT = Comparator.comparing(
             itemStackIntegerEntry -> CMIChatColor.stripColor(ItemUtils.getItemName(itemStackIntegerEntry.getKey())),
@@ -105,6 +108,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     protected void tick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;
@@ -121,6 +125,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         addItemHandler(onBlockBreak());
     }
 
+    @Async
     protected BlockBreakHandler onBlockBreak() {
         return new SimpleBlockBreakHandler() {
 
@@ -135,12 +140,14 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         };
     }
 
+    @Async
     public int getPage(Block block) {
         String value = StorageCacheUtils.getData(block.getLocation(), PAGE_KEY);
         if (value == null || Integer.parseInt(value) < 0) return 0;
         return Integer.parseInt(value);
     }
 
+    @Async
     public void setPage(Block block, int value) {
         if (value < 0) {
             StorageCacheUtils.setData(block.getLocation(), PAGE_KEY, "0");
@@ -149,12 +156,14 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         StorageCacheUtils.setData(block.getLocation(), PAGE_KEY, String.valueOf(value));
     }
 
+    @Async
     public Comparator<Map.Entry<ItemStack, Long>> getSort(Block block) {
         String value = StorageCacheUtils.getData(block.getLocation(), SORT_KEY);
         if (value == null) return ALPHABETICAL_SORT;
         return int2Sort(Integer.parseInt(value));
     }
 
+    @Async
     public void setSort(Block block, int value) {
         if (value < 0 || value > 2) {
             StorageCacheUtils.setData(block.getLocation(), SORT_KEY, "0");
@@ -164,6 +173,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
     }
 
     @Nonnull
+    @Async
     public String getFilter(@Nonnull Block block) {
         String filter = StorageCacheUtils.getData(block.getLocation(), FILTER_KEY);
         if (filter == null) {
@@ -174,10 +184,12 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         return filter;
     }
 
+    @Async
     public void setFilter(@Nonnull Block block, @Nonnull String filter) {
         StorageCacheUtils.setData(block.getLocation(), FILTER_KEY, filter);
     }
 
+    @Async
     public void updateGui(@Nonnull Block block) {
     	Bukkit.getScheduler().runTaskAsynchronously(SlimeAEPlugin.getInstance(), () -> {
     		BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
@@ -271,6 +283,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         
     }
 
+    @Async
     private ChestMenu.AdvancedMenuClickHandler handleGuiClick(Block block, BlockMenu menu, ItemStack display) {
         return new ChestMenu.AdvancedMenuClickHandler() {
             @Override
@@ -347,6 +360,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     public void init(@Nonnull BlockMenuPreset preset) {
         for (int slot : getBorderSlots()) {
             preset.addItem(slot, ChestMenuUtils.getBackground());
@@ -357,6 +371,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block block) {
         menu.replaceExistingItem(getPageNext(), MenuItems.PAGE_NEXT_STACK);
         menu.addMenuClickHandler(getPageNext(), (player, i, cursor, clickAction) -> {
@@ -453,6 +468,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         return ALPHABETICAL_SORT;
     }
 
+    @Async
     protected boolean doFilterNoJEG(Map.Entry<ItemStack, Long> x, String filter) {
         String itemType = x.getKey().getType().toString().toLowerCase(Locale.ROOT);
         if (itemType.startsWith(filter)) {
@@ -464,6 +480,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         return !cleanName.contains(filter);
     }
 
+    @Async
     protected boolean doFilterWithJEG(Map.Entry<ItemStack, Long> x, List<SlimefunItem> slimefunItems, String filter) {
         ItemStack item = x.getKey();
         if (item.getType().isItem() && SlimefunItem.getOptionalByItem(item).isEmpty()) {

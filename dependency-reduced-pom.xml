@@ -4,7 +4,7 @@
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
   <name>SlimeAEPlugin</name>
-  <version>38dad77-Beta</version>
+  <version>bba66b7-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -201,18 +201,18 @@
     <git.ref.slug>master</git.ref.slug>
     <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
     <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Galactifun.jar</Galactifun-systemPath>
-    <git.commit.short>38dad77</git.commit.short>
+    <git.commit.short>bba66b7</git.commit.short>
     <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
-    <git.commit>38dad778e712516160e6630ea604b64663495525</git.commit>
+    <git.commit>bba66b7f2bf6f3c6e11c4f675e087359e3c28940</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\ExoticGarden.jar</ExoticGarden-systemPath>
     <InfinityExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\InfinityExpansion.jar</InfinityExpansion-systemPath>
     <java.version>21</java.version>
-    <git.commit.timestamp>1757517225</git.commit.timestamp>
+    <git.commit.timestamp>1757519627</git.commit.timestamp>
     <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
     <JustEnoughGuide-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\JustEnoughGuide.jar</JustEnoughGuide-systemPath>
     <git.ref>master</git.ref>
-    <git.commit.timestamp.datetime>2025-09-10T15:13:45Z</git.commit.timestamp.datetime>
+    <git.commit.timestamp.datetime>2025-09-10T15:53:47Z</git.commit.timestamp.datetime>
     <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
     <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
   </properties>
