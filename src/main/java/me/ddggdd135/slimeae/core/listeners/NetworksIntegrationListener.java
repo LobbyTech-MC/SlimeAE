@@ -16,9 +16,13 @@ import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworksIntegrationListener implements Listener {
     @EventHandler
+    @Async
     public void onNetworkRootReady(NetworkRootReadyEvent e) {
         //        NetworkRoot root = e.getRoot();
         //        for (Location location : root.getMonitors()) {
@@ -39,6 +43,7 @@ public class NetworksIntegrationListener implements Listener {
     }
 
     @EventHandler
+    @Async
     public void onNetworkRootLocateStorage(NetworkRootLocateStorageEvent e) {
         if (!NetworksExpansionSwitch.isAllowAE2Networks()) return;
         if (!(e.getStorageType() == StorageType.BARREL)) {

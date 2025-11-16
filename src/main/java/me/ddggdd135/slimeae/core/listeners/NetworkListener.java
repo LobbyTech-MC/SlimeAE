@@ -18,9 +18,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworkListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @Async
     public void onSlimefunBlockPlace(SlimefunBlockPlaceEvent e) {
         SlimeAEPlugin.getNetworkData()
                 .AllNetworkBlocks
@@ -72,6 +76,7 @@ public class NetworkListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @Async
     public void onBlockBreak(BlockBreakEvent e) {
         SlimeAEPlugin.getNetworkData().AllNetworkBlocks.remove(e.getBlock().getLocation());
         SlimeAEPlugin.getNetworkData().AllControllers.remove(e.getBlock().getLocation());

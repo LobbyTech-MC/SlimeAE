@@ -1,13 +1,16 @@
 package me.ddggdd135.slimeae.tasks;
 
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitScheduler;
+
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.enums.AETaskType;
 import me.ddggdd135.slimeae.api.events.AEPostTaskEvent;
 import me.ddggdd135.slimeae.api.events.AEPreTaskEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public class DataSavingTask implements Runnable {
     private int tickRate;

@@ -23,7 +23,10 @@ import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.integrations.networks.QuantumStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworkTickerTask implements Runnable {
     public Object2IntOpenHashMap<Location> errorTimes = new Object2IntOpenHashMap<>();
     private int tickRate;
@@ -39,6 +42,7 @@ public class NetworkTickerTask implements Runnable {
     }
 
     @Override
+    @Async
     public void run() {
         long startTime = System.currentTimeMillis();
 
@@ -50,6 +54,7 @@ public class NetworkTickerTask implements Runnable {
         Bukkit.getScheduler().runTaskLaterAsynchronously(SlimeAEPlugin.getInstance(), this, nextDelay);
     }
 
+    @Async
     public void run0() {
         if (paused) {
             return;

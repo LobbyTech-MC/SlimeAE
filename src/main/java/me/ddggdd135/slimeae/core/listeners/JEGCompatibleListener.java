@@ -14,27 +14,34 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class JEGCompatibleListener implements Listener {
     public static final Map<UUID, GuideHistory> GUIDE_HISTORY = new ConcurrentHashMap<>();
     public static final Map<UUID, BiConsumer<GuideEvents.ItemButtonClickEvent, PlayerProfile>> PROFILE_CALLBACKS =
             new ConcurrentHashMap<>();
 
+    @Async
     public static void addCallback(
             @Nonnull UUID uuid, @Nonnull BiConsumer<GuideEvents.ItemButtonClickEvent, PlayerProfile> callback) {
         PROFILE_CALLBACKS.put(uuid, callback);
     }
 
+    @Async
     public static void removeCallback(@Nonnull UUID uuid) {
         PROFILE_CALLBACKS.remove(uuid);
     }
 
     @Nonnull
+    @Async
     public static PlayerProfile getPlayerProfile(OfflinePlayer player) {
         // Shouldn't be null;
         return PlayerProfile.find(player).orElseThrow(() -> new RuntimeException("PlayerProfile not found"));
     }
 
+    @Async
     public static void tagGuideOpen(Player player) {
         if (!PROFILE_CALLBACKS.containsKey(player.getUniqueId())) {
             return;
@@ -46,6 +53,7 @@ public class JEGCompatibleListener implements Listener {
     }
 
     @EventHandler
+    @Async
     public void onJEGItemClick(GuideEvents.ItemButtonClickEvent event) {
         var player = event.getPlayer();
         if (!PROFILE_CALLBACKS.containsKey(player.getUniqueId())) {
@@ -58,6 +66,7 @@ public class JEGCompatibleListener implements Listener {
         PROFILE_CALLBACKS.remove(player.getUniqueId());
     }
 
+    @Async
     private static void saveOriginGuideHistory(PlayerProfile profile) {
         GuideHistory oldHistory = profile.getGuideHistory();
         GuideHistory newHistory = new GuideHistory(profile);
@@ -69,6 +78,7 @@ public class JEGCompatibleListener implements Listener {
         GUIDE_HISTORY.put(profile.getUUID(), newHistory);
     }
 
+    @Async
     private void rollbackGuideHistory(PlayerProfile profile) {
         var originHistory = GUIDE_HISTORY.get(profile.getUUID());
         if (originHistory == null) {
@@ -78,6 +88,7 @@ public class JEGCompatibleListener implements Listener {
         ReflectionUtil.setValue(profile, "guideHistory", originHistory);
     }
 
+    @Async
     private static void clearGuideHistory(PlayerProfile profile) {
         ReflectionUtil.setValue(profile, "guideHistory", new GuideHistory(profile));
     }

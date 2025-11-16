@@ -16,7 +16,10 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class MEIEBus extends MEExportBus {
     public MEIEBus(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(itemGroup, item, recipeType, recipe);
@@ -24,6 +27,7 @@ public class MEIEBus extends MEExportBus {
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     public void onMEBusTick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
         super.onMEBusTick(block, item, data);
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());

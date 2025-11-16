@@ -459,8 +459,10 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
     }
 
     @Override
+    @Async
     public void onNetworkTick(Block block, NetworkInfo networkInfo) {}
 
+    @Async
     public static Comparator<Map.Entry<ItemStack, Long>> int2Sort(int id) {
         if (id == 0) return ALPHABETICAL_SORT;
         if (id == 1) return NUMERICAL_SORT;
@@ -498,10 +500,12 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         return sfItem.map(s -> !slimefunItems.contains(s)).orElse(true);
     }
 
+    @Async
     public boolean fastInsert() {
         return true;
     }
 
+    @Async
     public int getJEGFindingButtonSlot() {
         return 17;
     }

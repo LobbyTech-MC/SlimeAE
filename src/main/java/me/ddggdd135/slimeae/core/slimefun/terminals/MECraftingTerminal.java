@@ -35,7 +35,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class MECraftingTerminal extends METerminal implements IRecipeCompletableWithGuide {
     public MECraftingTerminal(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(itemGroup, item, recipeType, recipe);
@@ -90,6 +93,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     public void init(@Nonnull BlockMenuPreset preset) {
         super.init(preset);
         preset.addItem(getReturnItemSlot(), MenuItems.PUSH_BACK);
@@ -167,6 +171,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     protected void tick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
         super.tick(block, item, data);
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
@@ -174,6 +179,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
         if (blockMenu.hasViewer()) updateCraftingGui(block);
     }
 
+    @Async
     public void updateCraftingGui(@Nonnull Block block) {
         BlockMenu inv = StorageCacheUtils.getMenu(block.getLocation());
         if (inv == null) return;
@@ -185,6 +191,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
         inv.replaceExistingItem(getCraftOutputSlot(), ItemUtils.createDisplayItem(matched, matched.getAmount(), false));
     }
 
+    @Async
     public void doCraft(@Nonnull Block block) {
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;
@@ -211,6 +218,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
         }
     }
 
+    @Async
     @Nullable public ItemStack matchItem(@Nonnull Block block) {
         CraftingRecipe recipe = matchRecipe(block);
 
@@ -218,6 +226,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
         return recipe.getOutput()[0].clone();
     }
 
+    @Async
     public CraftingRecipe matchRecipe(@Nonnull Block block) {
         BlockMenu inv = StorageCacheUtils.getMenu(block.getLocation());
         if (inv == null) return null;
@@ -233,6 +242,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
     }
 
     @Override
+    @Async
     protected BlockBreakHandler onBlockBreak() {
         return new SimpleBlockBreakHandler() {
 

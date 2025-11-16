@@ -12,7 +12,10 @@ import me.ddggdd135.slimeae.api.events.AEPreTaskEvent;
 import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import org.bukkit.Bukkit;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworkTimeConsumingTask implements Runnable {
     private int tickRate;
     private boolean halted = false;
@@ -25,6 +28,7 @@ public class NetworkTimeConsumingTask implements Runnable {
     }
 
     @Override
+    @Async
     public void run() {
         long startTime = System.currentTimeMillis();
 
@@ -36,6 +40,7 @@ public class NetworkTimeConsumingTask implements Runnable {
         Bukkit.getScheduler().runTaskLaterAsynchronously(SlimeAEPlugin.getInstance(), this, nextDelay);
     }
 
+    @Async
     public void run0() {
         if (paused) {
             return;

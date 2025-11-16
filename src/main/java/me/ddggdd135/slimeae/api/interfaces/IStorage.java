@@ -11,22 +11,27 @@ import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 存储接口,定义了物品存储的基本操作
  */
+@EnableAsync
 public interface IStorage {
 
     /**
      * 将物品推送到存储中
      * @param itemStackCache 要存储的物品
      */
+	@Async
     void pushItem(@Nonnull ItemStackCache itemStackCache);
 
     /**
      *
      * @param itemStacks 要存储的物品
      */
+	@Async
     default void pushItem(@Nonnull ItemStackCache[] itemStacks) {
         for (ItemStackCache itemStack : itemStacks) pushItem(itemStack);
     }
@@ -35,6 +40,7 @@ public interface IStorage {
      * 将物品推送到存储中
      * @param itemStack 要存储的物品
      */
+	@Async
     default void pushItem(@Nonnull ItemStack itemStack) {
         pushItem(new ItemStackCache(itemStack));
     }
@@ -43,10 +49,12 @@ public interface IStorage {
      *
      * @param itemStacks 要存储的物品
      */
+	@Async
     default void pushItem(@Nonnull ItemStack[] itemStacks) {
         for (ItemStack itemStack : itemStacks) pushItem(itemStack);
     }
 
+	@Async
     default void pushItem(@Nonnull ItemInfo itemInfo) {
         ItemStack[] itemStacks = ItemUtils.createItems(itemInfo.getItemKey().getItemStack(), itemInfo.getAmount());
         pushItem(itemStacks);
@@ -54,6 +62,7 @@ public interface IStorage {
         itemInfo.setAmount(ItemUtils.getAmounts(itemStacks).getOrDefault(itemInfo.getItemKey(), 0L));
     }
 
+	@Async
     default void pushItem(@Nonnull ItemHashMap<Long> storage) {
         for (Map.Entry<ItemKey, Long> entry : storage.keyEntrySet()) {
             ItemInfo itemInfo = new ItemInfo(entry.getKey(), entry.getValue());
@@ -67,6 +76,7 @@ public interface IStorage {
      * @param requests 物品请求数组
      * @return 是否包含所有请求的物品
      */
+	@Async
     boolean contains(@Nonnull ItemRequest[] requests);
 
     /**
@@ -74,6 +84,7 @@ public interface IStorage {
      * @param request 物品请求
      * @return 是否包含请求的物品
      */
+	@Async
     default boolean contains(@Nonnull ItemRequest request) {
         return contains(new ItemRequest[] {request});
     }
@@ -84,6 +95,7 @@ public interface IStorage {
      * @return 成功提取的物品数组
      */
     @Nonnull
+    @Async
     ItemStorage takeItem(@Nonnull ItemRequest[] requests);
 
     /**
@@ -92,6 +104,7 @@ public interface IStorage {
      * @return 成功提取的物品数组
      */
     @Nonnull
+    @Async
     default ItemStorage takeItem(@Nonnull ItemRequest request) {
         return takeItem(new ItemRequest[] {request});
     }
@@ -102,9 +115,11 @@ public interface IStorage {
      */
     @Nonnull
     @Unsafe
+    @Async
     ItemHashMap<Long> getStorageUnsafe();
 
     @Nonnull
+    @Async
     default ItemHashMap<Long> copyStorage() {
         return new ItemHashMap<>(getStorageUnsafe());
     }
@@ -114,6 +129,7 @@ public interface IStorage {
      * @param key 要检查的物品
      * @return 物品的存储等级
      */
+    @Async
     default int getTier(@Nonnull ItemKey key) {
         return 0;
     }

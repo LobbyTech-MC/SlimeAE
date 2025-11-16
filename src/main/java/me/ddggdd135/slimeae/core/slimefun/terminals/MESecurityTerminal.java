@@ -21,7 +21,10 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class MESecurityTerminal extends METerminal {
     public MESecurityTerminal(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(itemGroup, item, recipeType, recipe);
@@ -77,6 +80,7 @@ public class MESecurityTerminal extends METerminal {
     }
 
     @Override
+    @Async
     public void init(@NotNull BlockMenuPreset preset) {
         super.init(preset);
         preset.addItem(
@@ -87,6 +91,7 @@ public class MESecurityTerminal extends METerminal {
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     protected void tick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
         super.tick(block, item, data);
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
@@ -117,6 +122,7 @@ public class MESecurityTerminal extends METerminal {
     }
 
     @Override
+    @Async
     protected BlockBreakHandler onBlockBreak() {
         return new SimpleBlockBreakHandler() {
 
@@ -133,6 +139,7 @@ public class MESecurityTerminal extends METerminal {
     }
 
     @Override
+    @Async
     public boolean fastInsert() {
         return super.fastInsert();
     }

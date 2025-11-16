@@ -14,7 +14,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class BlockListener implements Listener {
     private static void doDrop(Location location, ItemStack itemStack) {
         Random random = new Random();
@@ -27,6 +30,7 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @Async
     public void onBlockBreak(BlockBreakEvent e) {
         for (SlimefunItem slimefunItem : Slimefun.getRegistry().getEnabledSlimefunItems()) {
             if (slimefunItem.getRecipeType() == SlimefunAERecipeTypes.BLOCK_DESTROY) {
@@ -50,6 +54,7 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler
+    @Async
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
             SlimefunItem sfItem =

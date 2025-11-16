@@ -29,7 +29,10 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class MEPatternTerminal extends METerminal implements IRecipeCompletableWithGuide {
     public MEPatternTerminal(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(itemGroup, item, recipeType, recipe);
@@ -100,6 +103,7 @@ public class MEPatternTerminal extends METerminal implements IRecipeCompletableW
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     public void init(@Nonnull BlockMenuPreset preset) {
         super.init(preset);
         preset.addItem(getReturnItemSlot(), MenuItems.PUSH_BACK);
@@ -140,6 +144,7 @@ public class MEPatternTerminal extends METerminal implements IRecipeCompletableW
         addJEGRecipeButton(blockMenu, getJEGRecipeButtonSlot());
     }
 
+    @Async
     private void makePattern(Block block) {
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;
@@ -196,6 +201,7 @@ public class MEPatternTerminal extends METerminal implements IRecipeCompletableW
     }
 
     @Override
+    @Async
     protected BlockBreakHandler onBlockBreak() {
         return new SimpleBlockBreakHandler() {
 
@@ -215,11 +221,13 @@ public class MEPatternTerminal extends METerminal implements IRecipeCompletableW
     }
 
     @Override
+    @Async
     public boolean fastInsert() {
         return super.fastInsert();
     }
 
     @Override
+    @Async
     public int[] getIngredientSlots() {
         return getCraftSlots();
     }

@@ -29,7 +29,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class MECraftPlanningTerminal extends METerminal {
 
     public MECraftPlanningTerminal(
@@ -38,6 +41,7 @@ public class MECraftPlanningTerminal extends METerminal {
     }
 
     @Override
+    @Async
     public void updateGui(@Nonnull Block block) {
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;
@@ -70,6 +74,7 @@ public class MECraftPlanningTerminal extends METerminal {
         displayPage(blockMenu, recipeEntries, page, info, block);
     }
 
+    @Async
     private void displayPage(BlockMenu menu, List<RecipeEntry> entries, int page, NetworkInfo info, Block block) {
         int slotPerPage = getDisplaySlots().length;
         int start = page * slotPerPage;
@@ -89,6 +94,7 @@ public class MECraftPlanningTerminal extends METerminal {
         }
     }
 
+    @Async
     private void setupDisplayItem(BlockMenu menu, int slot, RecipeEntry entry, NetworkInfo info, Block block) {
         ItemStack itemStack = entry.getItemStack().getKey();
         if (itemStack == null || itemStack.getType().isAir()) return;
@@ -109,6 +115,7 @@ public class MECraftPlanningTerminal extends METerminal {
         });
     }
 
+    @Async
     private static void setRecipeLore(CraftingRecipe recipe, List<String> lore) {
         Map<String, Integer> materialCount = new HashMap<>();
         for (ItemStack stack : recipe.getInput()) {
@@ -122,6 +129,7 @@ public class MECraftPlanningTerminal extends METerminal {
         }
     }
 
+    @Async
     private void handleItemClick(Player player, RecipeEntry recipeEntry, NetworkInfo info, Block block) {
         if (SlimefunUtils.isItemSimilar(player.getItemOnCursor(), SlimeAEItems.AE_TERMINAL_TOPPER, true, false)) {
             ItemStack template = recipeEntry.getItemStack().getKey().asOne();
@@ -199,6 +207,7 @@ public class MECraftPlanningTerminal extends METerminal {
         });
     }
 
+    @Async
     private int fuckPage(Block block, int totalSize) {
         int page = getPage(block);
         if (page > Math.ceil((double) totalSize / getDisplaySlots().length) - 1) {
@@ -209,6 +218,7 @@ public class MECraftPlanningTerminal extends METerminal {
         return page;
     }
 
+    @Async
     private void applyPinnedItems(Player player, List<RecipeEntry> entries) {
         List<ItemStack> pinnedItems = SlimeAEPlugin.getPinnedManager().getPinnedItems(player);
         if (pinnedItems == null || pinnedItems.isEmpty()) return;
@@ -236,6 +246,7 @@ public class MECraftPlanningTerminal extends METerminal {
         entries.addAll(0, pinnedEntries);
     }
 
+    @Async
     private void filterRecipeEntries(ArrayList<RecipeEntry> entries, Player player, String filter) {
         if (filter.isEmpty()) return;
         if (SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded()) {
@@ -248,6 +259,7 @@ public class MECraftPlanningTerminal extends METerminal {
         }
     }
 
+    @Async
     private ArrayList<RecipeEntry> createRecipeEntries(Set<CraftingRecipe> recipes) {
         ArrayList<RecipeEntry> entries = new ArrayList<>();
         for (CraftingRecipe recipe : recipes) {
@@ -260,6 +272,7 @@ public class MECraftPlanningTerminal extends METerminal {
     /**
      * 一个用映射配方和 DisplayItem 的类
      */
+    @Async
     private static class RecipeEntry {
         private final AbstractMap.SimpleEntry<ItemStack, Long> itemStack;
         private final CraftingRecipe recipe;
@@ -290,6 +303,7 @@ public class MECraftPlanningTerminal extends METerminal {
     }
 
     @Override
+    @Async
     public boolean fastInsert() {
         return super.fastInsert();
     }
