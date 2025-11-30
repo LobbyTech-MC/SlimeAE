@@ -112,6 +112,7 @@ public class MEPatternTerminal extends METerminal implements IRecipeCompletableW
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     public void newInstance(@Nonnull BlockMenu blockMenu, @Nonnull Block block) {
         super.newInstance(blockMenu, block);
         blockMenu.addMenuClickHandler(getReturnItemSlot(), (player, i, itemStack, clickAction) -> {

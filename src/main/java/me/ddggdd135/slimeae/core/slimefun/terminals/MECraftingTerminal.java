@@ -101,6 +101,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     public void newInstance(@Nonnull BlockMenu blockMenu, @Nonnull Block block) {
         super.newInstance(blockMenu, block);
         blockMenu.replaceExistingItem(getCraftOutputSlot(), MenuItems.EMPTY);

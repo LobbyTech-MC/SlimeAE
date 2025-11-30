@@ -16,7 +16,10 @@ import me.ddggdd135.slimeae.integrations.networks.NetworksStorage;
 import me.ddggdd135.slimeae.utils.NetworkUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworkData {
     public final Set<NetworkInfo> AllNetworkData = new HashSet<>();
     public final Map<Location, IMEObject> AllNetworkBlocks = new ConcurrentHashMap<>();
@@ -35,6 +38,7 @@ public class NetworkData {
         return re;
     }
 
+    @Async
     public NetworkInfo refreshNetwork(Location controller) {
         if (!AllControllers.containsKey(controller)) return null;
         NetworkInfo info = getNetworkInfo(controller);
@@ -50,6 +54,7 @@ public class NetworkData {
         return info;
     }
 
+    @Async
     public boolean updateChildren(@Nonnull NetworkInfo info) {
         Location controller = info.getController();
 
@@ -71,6 +76,7 @@ public class NetworkData {
         return true;
     }
 
+    @Async
     public boolean updateStorage(@Nonnull NetworkInfo info) {
         StorageCollection storageNoNetworks = new StorageCollection();
         NetworksStorage networksStorage = null;
@@ -95,6 +101,7 @@ public class NetworkData {
         return true;
     }
 
+    @Async
     public boolean updateAutoCraft(@Nonnull NetworkInfo info) {
         Set<Location> newCraftingHolders = new ConcurrentHashSet<>();
         Map<Location, Set<CraftingRecipe>> newRecipeMap = new ConcurrentHashMap<>();

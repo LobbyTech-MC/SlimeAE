@@ -26,7 +26,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworkInfo implements IDisposable {
     private final Location controller;
     private Set<Location> children = new ConcurrentHashSet<>();
@@ -52,6 +55,7 @@ public class NetworkInfo implements IDisposable {
     }
 
     // 重载配置
+    @Async
     public static void reloadConfig() {
         maxCraftingSessions = SlimeAEPlugin.getInstance().getConfig().getInt("auto-crafting.max-tasks", 32);
         maxCraftingAmount = SlimeAEPlugin.getInstance().getConfig().getInt("auto-crafting.max-amount", 32768);
@@ -104,6 +108,7 @@ public class NetworkInfo implements IDisposable {
     }
 
     @Override
+    @Async
     public void dispose() {
         NetworkData networkData = SlimeAEPlugin.getNetworkData();
         networkData.AllNetworkData.remove(this);
@@ -186,6 +191,7 @@ public class NetworkInfo implements IDisposable {
         autoCraftingMenu.open(player);
     }
 
+    @Async
     public void updateAutoCraftingMenu() {
         for (ItemStack content : autoCraftingMenu.getContents()) {
             if (content == null) continue;
@@ -236,6 +242,7 @@ public class NetworkInfo implements IDisposable {
         return tempStorage;
     }
 
+    @Async
     public void updateTempStorage() {
         Set<ItemKey> toPush = new HashSet<>(tempStorage.getStorageUnsafe().sourceKeySet());
         for (ItemKey key : toPush) {
