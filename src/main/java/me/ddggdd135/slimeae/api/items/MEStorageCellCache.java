@@ -19,7 +19,10 @@ import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.ddggdd135.slimeae.utils.ShulkerBoxUtils;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class MEStorageCellCache implements IStorage {
     private static final Map<UUID, MEStorageCellCache> cache = new ConcurrentHashMap<>();
     private final MEStorageCellStorageData storageData;
@@ -39,10 +42,12 @@ public class MEStorageCellCache implements IStorage {
     }
 
     @Nonnull
+    @Async
     public MEStorageCellStorageData getStorageData() {
         return storageData;
     }
 
+    @Async
     @Nullable public static MEStorageCellCache getMEStorageCellCache(@Nonnull ItemStack itemStack) {
         if (!MEItemStorageCell.isCurrentServer(itemStack)) {
             return null;
@@ -66,18 +71,22 @@ public class MEStorageCellCache implements IStorage {
         return new MEStorageCellCache(itemStack);
     }
 
+    @Async
     @Nullable public static MEStorageCellCache getMEStorageCellCache(@Nonnull UUID uuid) {
         return cache.getOrDefault(uuid, null);
     }
 
+    @Async
     public long getSize() {
         return storageData.getSize();
     }
 
+    @Async
     public long getStored() {
         return storageData.getStored();
     }
 
+    @Async
     private void trim(@Nonnull ItemKey key) {
         ItemHashMap<Long> storages = storageData.getStorage();
 
@@ -88,6 +97,7 @@ public class MEStorageCellCache implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         ItemStack itemStack = itemStackCache.getItemStack();
         ItemKey key = itemStackCache.getItemKey();
@@ -118,6 +128,7 @@ public class MEStorageCellCache implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemInfo itemInfo) {
         ItemKey key = itemInfo.getItemKey();
         ItemHashMap<Long> storages = storageData.getStorage();
@@ -149,6 +160,7 @@ public class MEStorageCellCache implements IStorage {
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         ItemHashMap<Long> storages = storageData.getStorage();
 
@@ -163,6 +175,7 @@ public class MEStorageCellCache implements IStorage {
 
     @Nonnull
     @Override
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         ItemHashMap<Long> storages = storageData.getStorage();
         long stored = storageData.getStored();
@@ -196,11 +209,13 @@ public class MEStorageCellCache implements IStorage {
 
     @Nonnull
     @Unsafe
+    @Async
     public ItemHashMap<Long> getStorageUnsafe() {
         return storageData.getStorage();
     }
 
     @Override
+    @Async
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -209,26 +224,31 @@ public class MEStorageCellCache implements IStorage {
     }
 
     @Override
+    @Async
     public int hashCode() {
         return Objects.hash(storageData);
     }
 
     @Override
+    @Async
     public int getTier(@Nonnull ItemKey key) {
         if (storageData.getStorage().containsKey(key)) return 1000;
 
         return 0;
     }
 
+    @Async
     public UUID getUuid() {
         return storageData.getUuid();
     }
 
+    @Async
     public void setStored(long stored) {
         storageData.setStored(stored);
     }
 
     @Nonnull
+    @Async
     public MEStorageCellFilterData getFilterData() {
         return filterData;
     }

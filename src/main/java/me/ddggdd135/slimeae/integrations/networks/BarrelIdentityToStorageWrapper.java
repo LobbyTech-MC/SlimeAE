@@ -11,8 +11,11 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @Deprecated
+@EnableAsync
 public class BarrelIdentityToStorageWrapper implements IStorage {
     private final BarrelIdentity barrelIdentity;
 
@@ -21,11 +24,13 @@ public class BarrelIdentityToStorageWrapper implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         barrelIdentity.depositItemStack(itemStackCache.getItemStack());
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         int amount = (int) barrelIdentity.getAmount();
         for (ItemRequest request : requests) {
@@ -40,6 +45,7 @@ public class BarrelIdentityToStorageWrapper implements IStorage {
 
     @Override
     @Nonnull
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         ItemStorage storage = new ItemStorage();
 
@@ -64,6 +70,7 @@ public class BarrelIdentityToStorageWrapper implements IStorage {
 
     @Override
     @Nonnull
+    @Async
     public ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> map = new ItemHashMap<>();
         ItemStack itemStack = barrelIdentity.getItemStack();
@@ -75,6 +82,7 @@ public class BarrelIdentityToStorageWrapper implements IStorage {
     }
 
     @Override
+    @Async
     public int getTier(@Nonnull ItemKey itemStack) {
         if (SlimefunUtils.isItemSimilar(itemStack.getItemStack(), barrelIdentity.getItemStack(), true, false))
             return 2000;
@@ -83,6 +91,7 @@ public class BarrelIdentityToStorageWrapper implements IStorage {
     }
 
     @Override
+    @Async
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -91,6 +100,7 @@ public class BarrelIdentityToStorageWrapper implements IStorage {
     }
 
     @Override
+    @Async
     public int hashCode() {
         return Objects.hash(barrelIdentity);
     }

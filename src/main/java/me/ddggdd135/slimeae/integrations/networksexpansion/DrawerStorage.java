@@ -17,7 +17,10 @@ import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class DrawerStorage implements IStorage {
     private StorageUnitData data;
     private boolean isReadOnly;
@@ -34,11 +37,13 @@ public class DrawerStorage implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         if (!isReadOnly && data != null) data.depositItemStack(itemStackCache.getItemStack(), true);
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemInfo itemInfo) {
         if (!isReadOnly && data != null) {
             Map.Entry<ItemStack, Integer> entry =
@@ -49,6 +54,7 @@ public class DrawerStorage implements IStorage {
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         if (data == null) return false;
         List<ItemContainer> items = data.getStoredItems();
@@ -69,6 +75,7 @@ public class DrawerStorage implements IStorage {
 
     @Nonnull
     @Override
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         if (data == null) return new ItemStorage();
 
@@ -95,6 +102,7 @@ public class DrawerStorage implements IStorage {
 
     @Override
     @Nonnull
+    @Async
     public ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> storage = new ItemHashMap<>();
         if (data == null) return storage;
@@ -106,6 +114,7 @@ public class DrawerStorage implements IStorage {
     }
 
     @Override
+    @Async
     public int getTier(@Nonnull ItemKey itemStack) {
         if (data == null) return -1;
 
@@ -120,6 +129,7 @@ public class DrawerStorage implements IStorage {
     }
 
     @Override
+    @Async
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DrawerStorage that)) return false;
@@ -127,6 +137,7 @@ public class DrawerStorage implements IStorage {
     }
 
     @Override
+    @Async
     public int hashCode() {
         if (data == null) return 0;
         return data.getId();

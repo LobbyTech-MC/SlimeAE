@@ -19,7 +19,10 @@ import me.ddggdd135.slimeae.api.items.ItemStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class FluffyBarrelStorage implements IStorage {
     private Barrel barrel;
     private BlockMenu blockMenu;
@@ -43,6 +46,7 @@ public class FluffyBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         ItemStack itemStack = itemStackCache.getItemStack();
 
@@ -61,6 +65,7 @@ public class FluffyBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         if (blockMenu == null || barrel == null || barrel.getStored(block) <= 0) return false;
         int stored = barrel.getStored(block) - 1;
@@ -76,6 +81,7 @@ public class FluffyBarrelStorage implements IStorage {
 
     @Nonnull
     @Override
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         if (blockMenu == null || barrel == null || barrel.getStored(block) <= 0) return new ItemStorage();
         int stored = barrel.getStored(block) - 1;
@@ -95,6 +101,7 @@ public class FluffyBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public @Nonnull ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> storage = new ItemHashMap<>();
         if (blockMenu == null || barrel == null || barrel.getStored(block) <= 0) return storage;
@@ -103,6 +110,7 @@ public class FluffyBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public int getTier(@Nonnull ItemKey itemStack) {
         try {
             if (blockMenu == null || barrel == null || barrel.getStored(block) <= 0) return -1;
@@ -119,6 +127,7 @@ public class FluffyBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof FluffyBarrelStorage that)) return false;
@@ -126,6 +135,7 @@ public class FluffyBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public int hashCode() {
         return block.getLocation().hashCode();
     }

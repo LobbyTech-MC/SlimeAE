@@ -7,6 +7,7 @@ import me.ddggdd135.guguslimefunlib.items.ItemStackCache;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
 
 public class ItemStorage implements IStorage {
     @Nonnull
@@ -35,6 +36,7 @@ public class ItemStorage implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         if (isReadonly) return;
 
@@ -48,6 +50,7 @@ public class ItemStorage implements IStorage {
         trim(itemKey);
     }
 
+    @Async
     public void pushItem(@Nonnull ItemInfo itemInfo) {
         if (isReadonly) return;
 
@@ -60,10 +63,12 @@ public class ItemStorage implements IStorage {
         trim(itemKey);
     }
 
+    @Async
     public void addItem(@Nonnull ItemStack[] itemStacks) {
         addItem(itemStacks, false);
     }
 
+    @Async
     public void addItem(@Nonnull ItemStack[] itemStacks, boolean force) {
         if (isReadonly && !force) return;
         for (ItemStack itemStack : itemStacks) {
@@ -76,19 +81,23 @@ public class ItemStorage implements IStorage {
         }
     }
 
+    @Async
     public void addItem(@Nonnull ItemHashMap<Long> storage) {
         addItem(storage, false);
     }
 
+    @Async
     public void addItem(@Nonnull ItemHashMap<Long> storage, boolean force) {
         if (isReadonly && !force) return;
         this.storage = ItemUtils.addItems(this.storage, storage);
     }
 
+    @Async
     public void addItem(@Nonnull ItemKey itemStack, long amount) {
         addItem(itemStack, amount, false);
     }
 
+    @Async
     public void addItem(@Nonnull ItemKey itemStack, long amount, boolean force) {
         if (isReadonly && !force) return;
         long a = storage.getOrDefault(itemStack, 0L);
@@ -96,22 +105,26 @@ public class ItemStorage implements IStorage {
         storage.putKey(itemStack, a);
     }
 
+    @Async
     public void addItem(@Nonnull ItemStack itemStack) {
         addItem(itemStack, false);
     }
 
+    @Async
     public void addItem(@Nonnull ItemStack itemStack, boolean force) {
         if (isReadonly && !force) return;
         addItem(new ItemStack[] {itemStack});
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         return ItemUtils.contains(storage, requests);
     }
 
     @Override
     @Nonnull
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         ItemStorage itemStacks = new ItemStorage();
         for (ItemRequest request : requests) {
@@ -130,20 +143,24 @@ public class ItemStorage implements IStorage {
 
     @Override
     @Nonnull
+    @Async
     public ItemHashMap<Long> getStorageUnsafe() {
         return storage;
     }
 
     @Nonnull
+    @Async
     public ItemStack[] toItemStacks() {
         ItemUtils.trim(storage);
         return ItemUtils.createItems(storage);
     }
 
+    @Async
     public void setReadonly(boolean readonly) {
         isReadonly = readonly;
     }
 
+    @Async
     public boolean isReadonly() {
         return isReadonly;
     }

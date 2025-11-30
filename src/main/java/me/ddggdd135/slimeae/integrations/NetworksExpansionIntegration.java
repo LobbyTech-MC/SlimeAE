@@ -9,12 +9,16 @@ import java.util.function.Function;
 import me.ddggdd135.slimeae.api.interfaces.Integration;
 import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
 import org.bukkit.Bukkit;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworksExpansionIntegration implements Integration {
     private boolean cache = false;
     private boolean isCached = false;
 
     @Override
+    @Async
     public boolean isLoaded() {
         if (!isCached) {
             if (Bukkit.getPluginManager().isPluginEnabled("Networks")) {
@@ -30,6 +34,7 @@ public class NetworksExpansionIntegration implements Integration {
         return cache;
     }
 
+    @Async
     public <T> T doBannedTask(NetworkRoot root, Function<NetworkRoot, T> action) {
         Set<BarrelIdentity> inputBaned = new HashSet<>();
         Set<BarrelIdentity> outputBaned = new HashSet<>();
@@ -56,6 +61,7 @@ public class NetworksExpansionIntegration implements Integration {
         return result;
     }
 
+    @Async
     public void doBannedTask(NetworkRoot root, Consumer<NetworkRoot> action) {
         Set<BarrelIdentity> inputBaned = new HashSet<>();
         Set<BarrelIdentity> outputBaned = new HashSet<>();

@@ -49,11 +49,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 物品操作工具类
  * 提供了一系列处理物品堆、存储和显示的实用方法
  */
+@EnableAsync
 public class ItemUtils {
     public static final String DISPLAY_ITEM_KEY = "display_item";
     /**
@@ -64,6 +67,7 @@ public class ItemUtils {
      * @return 物品堆数组，每个物品堆不超过最大堆叠数
      */
     @Nonnull
+    @Async
     public static ItemStack[] createItems(@Nonnull ItemStack template, long amount) {
         ItemStack[] itemStacks =
                 new ItemStack[(int) Math.max(1, Math.ceil(amount / (double) template.getMaxStackSize()))];
@@ -86,6 +90,7 @@ public class ItemUtils {
      * @return 物品堆数组
      */
     @Nonnull
+    @Async
     public static ItemStack[] createItems(@Nonnull ItemHashMap<Long> storage) {
         int len = 0;
         for (Map.Entry<ItemStack, Long> i : storage.entrySet()) {
@@ -121,6 +126,7 @@ public class ItemUtils {
      * @return 物品堆数组
      */
     @Nonnull
+    @Async
     public static ItemStack[] createItems(@Nonnull ItemRequest[] requests) {
         List<ItemStack> itemStacks = new ArrayList<>();
         for (ItemRequest request : requests) {
@@ -136,6 +142,7 @@ public class ItemUtils {
      * @return 处理后的物品堆数组
      */
     @Nonnull
+    @Async
     public static ItemStack[] trimItems(@Nonnull ItemStack[] itemStacks) {
         List<ItemStack> itemStackList = new ArrayList<>(itemStacks.length);
         for (ItemStack itemStack : itemStacks) {
@@ -154,6 +161,7 @@ public class ItemUtils {
      * @param requests 物品请求数组
      * @return 是否包含所有请求的物品
      */
+    @Async
     public static boolean contains(@Nonnull ItemHashMap<Long> storage, @Nonnull ItemRequest[] requests) {
         for (ItemRequest request : requests) {
             if (storage.getOrDefault(request.getKey(), 0L) < request.getAmount()) return false;
@@ -169,6 +177,7 @@ public class ItemUtils {
      * @param request 物品请求
      * @return 是否包含请求的物品
      */
+    @Async
     public static boolean contains(@Nonnull ItemHashMap<Long> storage, @Nonnull ItemRequest request) {
         return storage.containsKey(request.getKey()) && storage.getKey(request.getKey()) >= request.getAmount();
     }
@@ -180,6 +189,7 @@ public class ItemUtils {
      * @return 物品请求数组
      */
     @Nonnull
+    @Async
     public static ItemRequest[] createRequests(@Nonnull ItemHashMap<Long> itemStacks) {
         List<ItemRequest> requests = new ArrayList<>();
         for (ItemKey key : itemStacks.sourceKeySet()) {
@@ -195,6 +205,7 @@ public class ItemUtils {
      * @return 物品到数量的映射
      */
     @Nonnull
+    @Async
     public static ItemHashMap<Long> getAmounts(@Nonnull ItemStack[] itemStacks) {
         ItemHashMap<Long> storage = new ItemHashMap<>();
         for (ItemStack itemStack : itemStacks) {
@@ -210,6 +221,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     public static ItemHashMap<Long> getAmounts(@Nonnull ItemRequest[] requests) {
         ItemHashMap<Long> storage = new ItemHashMap<>();
         for (ItemRequest request : requests) {
@@ -231,6 +243,7 @@ public class ItemUtils {
      * @return 更新后的存储映射
      */
     @Nonnull
+    @Async
     public static ItemHashMap<Long> takeItems(@Nonnull ItemHashMap<Long> source, @Nonnull ItemHashMap<Long> toTake) {
         ItemHashMap<Long> storage = new ItemHashMap<>(source);
         for (Map.Entry<ItemKey, Long> data : toTake.keyEntrySet()) {
@@ -252,6 +265,7 @@ public class ItemUtils {
      * @return 更新后的存储映射
      */
     @Nonnull
+    @Async
     public static ItemHashMap<Long> addItems(@Nonnull ItemHashMap<Long> source, @Nonnull ItemHashMap<Long> toAdd) {
         ItemHashMap<Long> storage = new ItemHashMap<>(source);
         for (Map.Entry<ItemKey, Long> data : toAdd.keyEntrySet()) {
@@ -270,6 +284,7 @@ public class ItemUtils {
      *
      * @param storage 要清理的存储映射
      */
+    @Async
     public static void trim(@Nonnull ItemHashMap<Long> storage) {
         for (Iterator<Map.Entry<ItemKey, Long>> it = storage.keyEntrySet().iterator(); it.hasNext(); ) {
             Map.Entry<ItemKey, Long> data = it.next();
@@ -281,6 +296,7 @@ public class ItemUtils {
         }
     }
 
+    @Async
     public static boolean contains(BlockMenu inv, int[] slots, ItemStack[] itemStacks) {
         ItemHashMap<Long> toTake = getAmounts(itemStacks);
 
@@ -292,6 +308,7 @@ public class ItemUtils {
         return true;
     }
 
+    @Async
     public static boolean contains(Inventory inv, int[] slots, ItemStack[] itemStacks) {
         ItemHashMap<Long> toTake = getAmounts(itemStacks);
 
@@ -303,6 +320,7 @@ public class ItemUtils {
         return true;
     }
 
+    @Async
     public static int getItemAmount(BlockMenu blockMenu, int[] slots, ItemStack itemStack) {
         int founded = 0;
         for (int slot : slots) {
@@ -315,6 +333,7 @@ public class ItemUtils {
         return founded;
     }
 
+    @Async
     public static int getItemAmount(Inventory inv, int[] slots, ItemStack itemStack) {
         int founded = 0;
         for (int slot : slots) {
@@ -327,14 +346,17 @@ public class ItemUtils {
         return founded;
     }
 
+    @Async
     @Nullable public static IStorage getStorage(@Nonnull Block block) {
         return getStorage(block, true);
     }
 
+    @Async
     @Nullable public static IStorage getStorage(@Nonnull Block block, boolean checkNetwork) {
         return getStorage(block, checkNetwork, true);
     }
 
+    @Async
     @Nullable public static IStorage getStorage(@Nonnull Block block, boolean checkNetwork, boolean isReadOnly) {
         return getStorage(block, checkNetwork, isReadOnly, false);
     }
@@ -348,6 +370,7 @@ public class ItemUtils {
      * @param allowVanilla 是否允许原版容器
      * @return 存储接口，如果无法获取则返回null
      */
+    @Async
     @Nullable public static IStorage getStorage(
             @Nonnull Block block, boolean checkNetwork, boolean isReadOnly, boolean allowVanilla) {
         SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(block.getLocation());
@@ -458,14 +481,17 @@ public class ItemUtils {
         return null;
     }
 
+    @Async
     @Nullable public static ItemStack getItemStack(@Nonnull Block block) {
         return getItemStack(block, true);
     }
 
+    @Async
     @Nullable public static ItemStack getItemStack(@Nonnull Block block, boolean checkNetwork) {
         return getItemStack(block, checkNetwork, false);
     }
 
+    @Async
     @Nullable public static ItemStack getItemStack(@Nonnull Block block, boolean checkNetwork, boolean allowVanilla) {
         SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(block.getLocation());
         if (checkNetwork
@@ -493,6 +519,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     private static ItemStack[] getVanillaItemStacks(Block block) {
         Container container = (Container) PaperLib.getBlockState(block, false).getState();
         ItemStack[] items = container.getInventory().getContents();
@@ -505,6 +532,7 @@ public class ItemUtils {
         return items;
     }
 
+    @Async
     public static void setSettingItem(@Nonnull Inventory inv, int slot, @Nonnull ItemStack itemStack) {
         ItemStack item = itemStack.clone();
         ItemMeta meta = item.getItemMeta();
@@ -513,6 +541,7 @@ public class ItemUtils {
         inv.setItem(slot, item);
     }
 
+    @Async
     @Nullable public static ItemStack getSettingItem(@Nonnull Inventory inv, int slot) {
         ItemStack itemStack = inv.getItem(slot);
         if (itemStack == null || itemStack.getType().isAir()) return null;
@@ -524,6 +553,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     public static ChestMenu.MenuClickHandler getSettingSlotClickHandler(@Nonnull Block block) {
         return new ChestMenu.AdvancedMenuClickHandler() {
             @Override
@@ -563,6 +593,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     public static ChestMenu.MenuClickHandler getPatternSlotClickHandler() {
         return new ChestMenu.AdvancedMenuClickHandler() {
             @Override
@@ -602,6 +633,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     public static ChestMenu.MenuClickHandler getCardSlotClickHandler(@Nonnull Block block) {
         return new ChestMenu.AdvancedMenuClickHandler() {
             @Override
@@ -644,6 +676,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     public static ChestMenu.MenuClickHandler getDistanceSlotClickHandler() {
         return new ChestMenu.AdvancedMenuClickHandler() {
             @Override
@@ -673,6 +706,7 @@ public class ItemUtils {
         };
     }
 
+    @Async
     public static ItemStack createDisplayItem(@Nonnull ItemStack itemStack, long amount) {
         return createDisplayItem(itemStack, amount, true);
     }
@@ -686,6 +720,7 @@ public class ItemUtils {
      * @return 用于显示的物品堆
      */
     @Nonnull
+    @Async
     public static ItemStack createDisplayItem(@Nonnull ItemStack itemStack, long amount, boolean addLore) {
         return createDisplayItem(itemStack, amount, addLore, false);
     }
@@ -700,6 +735,7 @@ public class ItemUtils {
      * @return 用于显示的物品堆
      */
     @Nonnull
+    @Async
     public static ItemStack createDisplayItem(
             @Nonnull ItemStack itemStack, long amount, boolean addLore, boolean addPinnedLore) {
         ItemStack result = itemStack.clone();
@@ -722,11 +758,13 @@ public class ItemUtils {
         return result;
     }
 
+    @Async
     public static <T extends SlimefunItem> T setRecipeOutput(@Nonnull T item, @Nonnull ItemStack output) {
         item.setRecipeOutput(output);
         return item;
     }
 
+    @Async
     public static String getItemName(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().isAir()) return "";
 
@@ -740,6 +778,7 @@ public class ItemUtils {
         }
     }
 
+    @Async
     public static ItemStack[] takeItems(Inventory inventory, int[] slots, ItemRequest[] requests) {
         ItemStack[] items = Arrays.stream(slots).mapToObj(inventory::getItem).toArray(ItemStack[]::new);
         ItemHashMap<Long> amounts = ItemUtils.getAmounts(requests);
@@ -768,6 +807,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     public static ItemStack[] removeAll(@Nonnull ItemStack[] itemStacks, @Nonnull ItemHashSet toRemove) {
         List<ItemStack> result = new ArrayList<>(itemStacks.length);
         for (ItemStack itemStack : itemStacks) {
@@ -779,6 +819,7 @@ public class ItemUtils {
     }
 
     @Nonnull
+    @Async
     public static ItemStack withType(@Nonnull ItemStack itemStack, Material material) {
         ItemStack result = itemStack.clone();
         result.setType(material);
@@ -786,6 +827,7 @@ public class ItemUtils {
         return result;
     }
 
+    @Async
     public static boolean matchesAll(@Nonnull ItemStack[] left, @Nonnull ItemStack[] right, boolean checkAmount) {
         for (int i = 0; i < Math.max(left.length, right.length); i++) {
             ItemStack x = new ItemStack(Material.AIR);

@@ -21,7 +21,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class InfinityBarrelStorage implements IStorage {
     private StorageCache cache;
     private Location location;
@@ -42,11 +45,13 @@ public class InfinityBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         if (!isReadOnly && cache != null) cache.depositAll(new ItemStack[] {itemStackCache.getItemStack()}, true);
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         if (cache == null) return false;
         boolean toReturn = true;
@@ -61,6 +66,7 @@ public class InfinityBarrelStorage implements IStorage {
 
     @Nonnull
     @Override
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         if (cache == null) return new ItemStorage();
         ItemStorage toReturn = new ItemStorage();
@@ -78,6 +84,7 @@ public class InfinityBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public @Nonnull ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> storage = new ItemHashMap<>();
         Material material = cache.material();
@@ -92,6 +99,7 @@ public class InfinityBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public int getTier(@Nonnull ItemKey itemStack) {
         try {
             if (cache == null || cache.amount() <= 0) return -1;
@@ -106,6 +114,7 @@ public class InfinityBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof InfinityBarrelStorage that)) return false;
@@ -113,6 +122,7 @@ public class InfinityBarrelStorage implements IStorage {
     }
 
     @Override
+    @Async
     public int hashCode() {
         return location.hashCode();
     }

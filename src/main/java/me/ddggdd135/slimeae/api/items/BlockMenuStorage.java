@@ -11,7 +11,10 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class BlockMenuStorage implements IStorage {
     private final BlockMenu blockMenu;
     private final boolean isReadOnly;
@@ -22,6 +25,7 @@ public class BlockMenuStorage implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         if (isReadOnly) return;
 
@@ -36,12 +40,14 @@ public class BlockMenuStorage implements IStorage {
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         return ItemUtils.contains(getStorageUnsafe(), requests);
     }
 
     @Nonnull
     @Override
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         ItemHashMap<Long> amounts = ItemUtils.getAmounts(ItemUtils.createItems(requests));
         ItemStorage found = new ItemStorage();
@@ -74,6 +80,7 @@ public class BlockMenuStorage implements IStorage {
     }
 
     @Override
+    @Async
     public @Nonnull ItemHashMap<Long> getStorageUnsafe() {
         int[] slots = blockMenu.getPreset().getSlotsAccessedByItemTransport(ItemTransportFlow.WITHDRAW);
 

@@ -9,7 +9,10 @@ import me.ddggdd135.slimeae.integrations.networksexpansion.DrawerStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworksStorage extends StorageCollection {
     private final NetworkRoot networkRoot;
 
@@ -41,6 +44,7 @@ public class NetworksStorage extends StorageCollection {
         }
     }
 
+    @Async
     public NetworkRoot getNetworkRoot() {
         return networkRoot;
     }

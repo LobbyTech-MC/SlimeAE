@@ -13,7 +13,10 @@ import me.ddggdd135.slimeae.api.ConcurrentHashSet;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class StorageCollection implements IStorage {
     private final Set<IStorage> storages;
     private final Map<ItemType, IStorage> takeCache;
@@ -30,10 +33,12 @@ public class StorageCollection implements IStorage {
         }
     }
 
+    @Async
     public Set<IStorage> getStorages() {
         return storages;
     }
 
+    @Async
     public void addStorage(@Nullable IStorage storage) {
         if (storage == null) return;
         if (storage instanceof StorageCollection storageCollection) {
@@ -44,6 +49,7 @@ public class StorageCollection implements IStorage {
         notIncluded.clear();
     }
 
+    @Async
     public boolean removeStorage(@Nonnull IStorage storage) {
         if (storage instanceof StorageCollection storageCollection) {
             boolean result = false;
@@ -78,6 +84,7 @@ public class StorageCollection implements IStorage {
         return storages.remove(storage);
     }
 
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         ItemStack itemStack = itemStackCache.getItemStack();
         ItemKey key = itemStackCache.getItemKey();
@@ -108,6 +115,7 @@ public class StorageCollection implements IStorage {
         }
     }
 
+    @Async
     public void pushItem(@Nonnull ItemInfo itemInfo) {
         ItemKey key = itemInfo.getItemKey();
 
@@ -136,6 +144,7 @@ public class StorageCollection implements IStorage {
         }
     }
 
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         ItemHashMap<Long> storage = getStorageUnsafe();
         for (ItemRequest request : requests) {
@@ -149,6 +158,7 @@ public class StorageCollection implements IStorage {
     }
 
     @Nonnull
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         ItemStorage found = new ItemStorage();
 
@@ -194,6 +204,7 @@ public class StorageCollection implements IStorage {
     }
 
     @Override
+    @Async
     public @Nonnull ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> result = new ItemHashMap<>();
 
@@ -218,6 +229,7 @@ public class StorageCollection implements IStorage {
     }
 
     @Override
+    @Async
     public int getTier(@Nonnull ItemKey itemStack) {
         int tier = Integer.MIN_VALUE;
         for (IStorage storage : storages) {

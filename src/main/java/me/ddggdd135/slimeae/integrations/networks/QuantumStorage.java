@@ -17,7 +17,10 @@ import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class QuantumStorage implements IStorage {
     private QuantumCache quantumCache;
     private Block block;
@@ -40,6 +43,7 @@ public class QuantumStorage implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
         ItemStack itemStack = itemStackCache.getItemStack();
 
@@ -62,6 +66,7 @@ public class QuantumStorage implements IStorage {
     }
 
     @Override
+    @Async
     public void pushItem(@Nonnull ItemInfo itemInfo) {
         ItemKey itemKey = itemInfo.getItemKey();
 
@@ -84,6 +89,7 @@ public class QuantumStorage implements IStorage {
     }
 
     @Override
+    @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
         if (quantumCache == null || quantumCache.getAmount() <= 0) return false;
         int stored = (int) (quantumCache.getAmount() - 1);
@@ -99,6 +105,7 @@ public class QuantumStorage implements IStorage {
 
     @Override
     @Nonnull
+    @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
         if (quantumCache == null || quantumCache.getAmount() <= 0) return new ItemStorage();
         int stored = (int) (quantumCache.getAmount() - 1);
@@ -121,6 +128,7 @@ public class QuantumStorage implements IStorage {
 
     @Override
     @Nonnull
+    @Async
     public ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> storage = new ItemHashMap<>();
         if (quantumCache == null || quantumCache.getAmount() <= 0) return storage;
@@ -129,6 +137,7 @@ public class QuantumStorage implements IStorage {
     }
 
     @Override
+    @Async
     public int getTier(@Nonnull ItemKey itemStack) {
         if (quantumCache == null || quantumCache.getAmount() < 0) return -1;
         ItemStack storedItem = quantumCache.getItemStack();

@@ -10,7 +10,10 @@ import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class StorageToBarrelWrapper extends BarrelIdentity {
     protected final IStorage storage;
 
@@ -20,6 +23,7 @@ public class StorageToBarrelWrapper extends BarrelIdentity {
     }
 
     @Override
+    @Async
     @Nullable public ItemStack requestItem(@Nonnull ItemRequest itemRequest) {
         if (itemRequest.getItemStack() == null
                 || itemRequest.getItemStack().getType().isAir()) return null;
@@ -34,16 +38,19 @@ public class StorageToBarrelWrapper extends BarrelIdentity {
     }
 
     @Override
+    @Async
     public void depositItemStack(ItemStack[] itemStacks) {
         storage.pushItem(itemStacks);
     }
 
     @Override
+    @Async
     public int[] getInputSlot() {
         return new int[0];
     }
 
     @Override
+    @Async
     public int[] getOutputSlot() {
         return new int[0];
     }
