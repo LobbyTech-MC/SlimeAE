@@ -37,7 +37,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class AutoCraftingTask implements IDisposable {
     private static final int MAX_LORE_LINES = 15;
     private static final String MORE_ITEMS_INDICATOR = "&7... 还有%d项未显示";
@@ -116,6 +119,7 @@ public class AutoCraftingTask implements IDisposable {
         return craftingSteps;
     }
 
+    @Async
     private boolean checkCraftStepsValid(List<CraftStep> steps, ItemStorage storage) {
         for (CraftStep step : steps) {
             for (Map.Entry<ItemKey, Long> input :
@@ -132,6 +136,7 @@ public class AutoCraftingTask implements IDisposable {
         return true;
     }
 
+    @Async
     private List<CraftStep> match(CraftingRecipe recipe, long count, ItemStorage storage) {
         if (!craftingPath.add(recipe)) {
             throw new IllegalStateException("检测到循环依赖的合成配方");
@@ -212,6 +217,7 @@ public class AutoCraftingTask implements IDisposable {
         }
     }
 
+    @Async
     private class CraftTaskCalcData {
         public class CraftTaskCalcItem {
             Set<CraftingRecipe> before = new ConcurrentHashSet<>();
@@ -243,6 +249,7 @@ public class AutoCraftingTask implements IDisposable {
         }
     }
 
+    @Async
     private List<CraftStep> calcCraftSteps(CraftingRecipe recipe, long count, ItemStorage storage) {
         recipeCalcData.rootRecipe(recipe, count);
         calcCraftStep(recipe, count, storage);
@@ -250,6 +257,7 @@ public class AutoCraftingTask implements IDisposable {
         return recipeCalcData.result;
     }
 
+    @Async
     private void unpackCraftSteps(CraftingRecipe recipe) {
         if (!craftingPath.add(recipe)) {
             throw new IllegalStateException("新版算法出错，退回旧版算法");
@@ -263,6 +271,7 @@ public class AutoCraftingTask implements IDisposable {
         craftingPath.remove(recipe);
     }
 
+    @Async
     private void calcCraftStep(CraftingRecipe recipe, long count, ItemStorage storage) {
         if (!craftingPath.add(recipe)) {
             throw new IllegalStateException("检测到循环依赖的合成配方");
@@ -340,10 +349,12 @@ public class AutoCraftingTask implements IDisposable {
         }
     }
 
+    @Async
     @Nullable private CraftingRecipe getRecipe(@Nonnull ItemStack itemStack) {
         return info.getRecipeFor(itemStack);
     }
 
+    @Async
     public boolean hasNext() {
         return !craftingSteps.isEmpty();
     }
@@ -482,15 +493,18 @@ public class AutoCraftingTask implements IDisposable {
         if (!menu.getInventory().getViewers().isEmpty()) refreshGUI(54);
     }
 
+    @Async
     public void showGUI(Player player) {
         refreshGUI(54);
         menu.open(player);
     }
 
+    @Async
     public void refreshGUI(int maxSize) {
         refreshGUI(maxSize, true);
     }
 
+    @Async
     public void refreshGUI(int maxSize, boolean cancelButton) {
         if (cancelButton) maxSize--;
         List<CraftStep> process = getCraftingSteps();
@@ -586,6 +600,7 @@ public class AutoCraftingTask implements IDisposable {
         menu.getContents();
     }
 
+    @Async
     public void start() {
         if (!SlimeAEPlugin.getNetworkData().AllNetworkData.contains(info)) return;
 
@@ -597,11 +612,13 @@ public class AutoCraftingTask implements IDisposable {
         info.getAutoCraftingSessions().add(this);
     }
 
+    @Async
     public AEMenu getMenu() {
         return menu;
     }
 
     @Override
+    @Async
     public void dispose() {
         if (disposed) return;
         disposed = true;

@@ -735,7 +735,6 @@ public class ItemUtils {
      * @return 用于显示的物品堆
      */
     @Nonnull
-    @Async
     public static ItemStack createDisplayItem(
             @Nonnull ItemStack itemStack, long amount, boolean addLore, boolean addPinnedLore) {
         ItemStack result = itemStack.clone();

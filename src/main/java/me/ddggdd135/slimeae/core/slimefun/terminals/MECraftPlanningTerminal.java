@@ -129,7 +129,6 @@ public class MECraftPlanningTerminal extends METerminal {
         }
     }
 
-    @Async
     private void handleItemClick(Player player, RecipeEntry recipeEntry, NetworkInfo info, Block block) {
         if (SlimefunUtils.isItemSimilar(player.getItemOnCursor(), SlimeAEItems.AE_TERMINAL_TOPPER, true, false)) {
             ItemStack template = recipeEntry.getItemStack().getKey().asOne();
