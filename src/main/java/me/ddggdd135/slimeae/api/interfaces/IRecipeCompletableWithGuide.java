@@ -20,10 +20,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Range;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /*
  * 感谢大香蕉的代码 :)))
  */
+@EnableAsync
 public interface IRecipeCompletableWithGuide {
     default void addJEGRecipeButton(@Nonnull BlockMenu blockMenu, @Range(from = 0, to = 53) int slot) {
         if (SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded()) {
@@ -35,6 +38,7 @@ public interface IRecipeCompletableWithGuide {
         }
     }
 
+    @Async
     default void openGuide_0(@Nonnull BlockMenu blockMenu, @Nonnull Player player) {
         NetworkInfo networkInfo = SlimeAEPlugin.getNetworkData().getNetworkInfo(blockMenu.getLocation());
 
@@ -61,6 +65,7 @@ public interface IRecipeCompletableWithGuide {
         JEGCompatibleListener.tagGuideOpen(player);
     }
 
+    @Async
     default void completeRecipeWithGuide(
             @Nonnull BlockMenu blockMenu, @Nonnull NetworkInfo networkInfo, GuideEvents.ItemButtonClickEvent event) {
         Player player = event.getPlayer();
@@ -110,6 +115,7 @@ public interface IRecipeCompletableWithGuide {
 
     int[] getIngredientSlots();
 
+    @Async
     @Nullable default ItemStack getItemStack(
             @Nonnull NetworkInfo networkInfo, @Nonnull Player player, @Nullable ItemStack itemStack, int amount) {
         if (itemStack == null) return null;

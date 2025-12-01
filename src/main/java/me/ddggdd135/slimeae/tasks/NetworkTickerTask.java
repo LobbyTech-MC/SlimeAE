@@ -44,12 +44,12 @@ public class NetworkTickerTask implements Runnable {
     @Override
     @Async
     public void run() {
-        //long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
         run0();
 
-        //long elapsed = System.currentTimeMillis() - startTime;
-        //long nextDelay = Math.max(tickRate * 50L - elapsed, 0) / 50;
+        long elapsed = System.currentTimeMillis() - startTime;
+        long nextDelay = Math.max(tickRate * 50L - elapsed, 0) / 50;
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(SlimeAEPlugin.getInstance(), this, tickRate);
     }

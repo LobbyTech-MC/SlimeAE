@@ -107,6 +107,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
         blockMenu.replaceExistingItem(getCraftOutputSlot(), MenuItems.EMPTY);
         blockMenu.addMenuClickHandler(getCraftOutputSlot(), new ChestMenu.AdvancedMenuClickHandler() {
             @Override
+            @Async
             public boolean onClick(
                     InventoryClickEvent inventoryClickEvent,
                     Player player,
@@ -152,6 +153,7 @@ public class MECraftingTerminal extends METerminal implements IRecipeCompletable
             }
 
             @Override
+            @Async
             public boolean onClick(Player player, int i, ItemStack itemStack, ClickAction clickAction) {
                 return false;
             }
