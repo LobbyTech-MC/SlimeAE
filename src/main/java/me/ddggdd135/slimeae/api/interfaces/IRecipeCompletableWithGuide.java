@@ -28,6 +28,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @EnableAsync
 public interface IRecipeCompletableWithGuide {
+	@Async
     default void addJEGRecipeButton(@Nonnull BlockMenu blockMenu, @Range(from = 0, to = 53) int slot) {
         if (SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded()) {
             blockMenu.replaceExistingItem(slot, MenuItems.JEG_RECIPE_BUTTON);
@@ -65,7 +66,6 @@ public interface IRecipeCompletableWithGuide {
         JEGCompatibleListener.tagGuideOpen(player);
     }
 
-    @Async
     default void completeRecipeWithGuide(
             @Nonnull BlockMenu blockMenu, @Nonnull NetworkInfo networkInfo, GuideEvents.ItemButtonClickEvent event) {
         Player player = event.getPlayer();

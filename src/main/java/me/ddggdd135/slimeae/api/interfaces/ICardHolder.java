@@ -14,7 +14,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public interface ICardHolder {
     Map<Location, Map<Card, Integer>> cache = new HashMap<>();
 
@@ -56,6 +59,7 @@ public interface ICardHolder {
         }
     }
 
+    @Async
     default void initCardSlots(@Nonnull BlockMenu menu) {
         for (int slot : getCardSlots()) {
             if (menu.getItemInSlot(slot) == null
@@ -71,6 +75,7 @@ public interface ICardHolder {
         }
     }
 
+    @Async
     default void dropCards(@Nonnull BlockMenu menu) {
         Block b = menu.getBlock();
 

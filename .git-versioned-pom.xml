@@ -6,7 +6,7 @@
 
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>de57602-Beta</version>
+    <version>1c6b161-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAEPlugin</name>

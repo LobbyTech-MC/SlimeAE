@@ -14,8 +14,12 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Range;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public interface IItemFilterFindableWithGuide {
+	@Async
     default void addJEGFindingButton(@Nonnull BlockMenu blockMenu, @Range(from = 0, to = 53) int slot) {
         if (SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded()) {
             blockMenu.replaceExistingItem(slot, MenuItems.JEG_FINDING_BUTTON);
@@ -26,6 +30,7 @@ public interface IItemFilterFindableWithGuide {
         }
     }
 
+	@Async
     default void openGuide_1(@Nonnull BlockMenu blockMenu, @Nonnull Player player) {
         NetworkInfo networkInfo = SlimeAEPlugin.getNetworkData().getNetworkInfo(blockMenu.getLocation());
 
@@ -53,5 +58,6 @@ public interface IItemFilterFindableWithGuide {
         JEGCompatibleListener.tagGuideOpen(player);
     }
 
+	@Async
     void setFilter(@Nonnull Block block, @Nonnull String filter);
 }

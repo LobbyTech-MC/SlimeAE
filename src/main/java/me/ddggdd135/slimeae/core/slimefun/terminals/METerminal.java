@@ -371,7 +371,6 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    @Async
     public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block block) {
         menu.replaceExistingItem(getPageNext(), MenuItems.PAGE_NEXT_STACK);
         menu.addMenuClickHandler(getPageNext(), (player, i, cursor, clickAction) -> {

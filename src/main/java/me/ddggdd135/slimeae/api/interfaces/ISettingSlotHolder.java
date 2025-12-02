@@ -15,7 +15,10 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public interface ISettingSlotHolder {
     Map<Location, List<Pair<ItemKey, Integer>>> cache = new HashMap<>();
 
@@ -44,6 +47,7 @@ public interface ISettingSlotHolder {
         return cache.get(location);
     }
 
+    @Async
     default void initSettingSlots(@Nonnull BlockMenu menu) {
         for (int slot : getSettingSlots()) {
             if (menu.getItemInSlot(slot) == null
