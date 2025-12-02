@@ -14,7 +14,6 @@ import me.ddggdd135.slimeae.api.enums.AETaskType;
 import me.ddggdd135.slimeae.api.events.AEPostTaskEvent;
 import me.ddggdd135.slimeae.api.events.AEPreTaskEvent;
 
-@EnableAsync
 public class DataSavingTask implements Runnable {
     private int tickRate;
     private boolean halted = false;
@@ -22,7 +21,6 @@ public class DataSavingTask implements Runnable {
 
     private volatile boolean paused = false;
 
-    @Async
     public void start(@Nonnull SlimeAEPlugin plugin) {
         this.tickRate = SlimeAEPlugin.getInstance().getConfig().getInt("auto-save-period", 300) * 20;
 
@@ -30,7 +28,6 @@ public class DataSavingTask implements Runnable {
         scheduler.runTaskTimerAsynchronously(plugin, this, tickRate, tickRate);
     }
 
-    @Async
     private void reset() {
         synchronized (this) {
             running = false;
@@ -38,7 +35,6 @@ public class DataSavingTask implements Runnable {
     }
 
     @Override
-    @Async
     public void run() {
         if (paused) {
             return;
