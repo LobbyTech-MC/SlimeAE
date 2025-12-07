@@ -191,7 +191,6 @@ public class NetworkInfo implements IDisposable {
         autoCraftingMenu.open(player);
     }
 
-    @Async
     public void updateAutoCraftingMenu() {
         for (ItemStack content : autoCraftingMenu.getContents()) {
             if (content == null) continue;
@@ -209,8 +208,8 @@ public class NetworkInfo implements IDisposable {
             ItemStack itemStack;
             if (itemStacks.length == 1) {
                 itemStack = itemStacks[0].clone();
+                if (itemStack.isEmpty() || itemStack.getType() == Material.AIR) continue;
                 itemStack.setAmount((int) Math.min(64, task.getCount()));
-                if (itemStack.isEmpty()) continue;
             } else {
                 itemStack = new AdvancedCustomItemStack(
                         Material.BARREL,
@@ -221,6 +220,7 @@ public class NetworkInfo implements IDisposable {
                 itemStack.setAmount((int) Math.min(64, task.getCount()));
             }
 
+            if (itemStack.isEmpty() || itemStack.getType() == Material.AIR) continue;
             List<String> lore = itemStack.getLore();
             if (lore == null) lore = new ArrayList<>();
             lore.add("");
