@@ -40,16 +40,21 @@ import me.sfiguz7.transcendence.lists.TERecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class RecipeUtils {
     public static final Map<RecipeType, SlimefunItem> SUPPORTED_RECIPE_TYPES = new HashMap<>();
     public static final Map<RecipeType, SlimefunItem> CRAFTING_TABLE_TYPES = new HashMap<>();
     public static final Map<RecipeType, SlimefunItem> LARGE_TYPES = new HashMap<>();
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(@Nonnull ItemStack itemStack) {
         return getRecipe(itemStack, SUPPORTED_RECIPE_TYPES);
     }
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(@Nonnull ItemStack itemStack, Map<RecipeType, SlimefunItem> supported) {
         SlimefunItem slimefunItem = SlimefunItem.getByItem(itemStack);
         if (slimefunItem != null) {
@@ -117,10 +122,12 @@ public class RecipeUtils {
         return null;
     }
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(@Nonnull ItemStack[] input) {
         return getRecipe(input, SUPPORTED_RECIPE_TYPES);
     }
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(@Nonnull ItemStack[] input, Map<RecipeType, SlimefunItem> supported) {
         for (Map.Entry<RecipeType, SlimefunItem> entry : supported.entrySet()) {
             if (entry.getValue() == null) continue;
@@ -192,10 +199,12 @@ public class RecipeUtils {
         return null;
     }
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(@Nonnull ItemStack[] input, @Nonnull ItemStack[] output) {
         return getRecipe(input, output, SUPPORTED_RECIPE_TYPES);
     }
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(
             @Nonnull ItemStack[] input, @Nonnull ItemStack[] output, Map<RecipeType, SlimefunItem> supported) {
         for (Map.Entry<RecipeType, SlimefunItem> entry : supported.entrySet()) {
@@ -278,10 +287,12 @@ public class RecipeUtils {
         return null;
     }
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(@Nonnull ItemHashMap<Long> input, @Nullable ItemStack output) {
         return getRecipe(input, output, SUPPORTED_RECIPE_TYPES);
     }
 
+    @Async
     @Nullable public static CraftingRecipe getRecipe(
             @Nonnull ItemHashMap<Long> input, @Nullable ItemStack output, Map<RecipeType, SlimefunItem> supported) {
         for (Map.Entry<RecipeType, SlimefunItem> entry : supported.entrySet()) {
@@ -301,6 +312,7 @@ public class RecipeUtils {
         return null;
     }
 
+    @Async
     public static List<ItemStack[]> getInputs(RecipeType recipeType) {
         SlimefunItem slimefunItem = SUPPORTED_RECIPE_TYPES.get(recipeType);
         if (slimefunItem == null) return new ArrayList<>();
@@ -351,6 +363,7 @@ public class RecipeUtils {
         return new ArrayList<>();
     }
 
+    @Async
     public static ItemStack[] getOutputs(RecipeType recipeType, ItemStack[] inputs) {
         SlimefunItem slimefunItem = SUPPORTED_RECIPE_TYPES.get(recipeType);
         if (slimefunItem == null) return new ItemStack[0];
@@ -477,6 +490,7 @@ public class RecipeUtils {
         return new ItemStack[0];
     }
 
+    @Async
     public static CraftType getCraftType(@Nonnull RecipeType recipeType) {
         if (LARGE_TYPES.containsKey(recipeType)) return CraftType.LARGE;
         if (SUPPORTED_RECIPE_TYPES.containsKey(recipeType)) return CraftType.CRAFTING_TABLE;
@@ -495,6 +509,7 @@ public class RecipeUtils {
      * @param playerInputs 玩家输入的配方顺序
      * @return 一个数量为1的配方顺序，注意不是原版配方顺序，而是玩家决定的顺序
      */
+    @Async
     public static ItemStack[] getRecipeInputs(Collection<RecipeChoice> choices, ItemStack[] playerInputs) {
         ItemStack[] result = new ItemStack[9];
         if (choices == null || playerInputs == null || playerInputs.length != 9) {
@@ -535,6 +550,7 @@ public class RecipeUtils {
         return result;
     }
 
+    @Async
     public static ItemStack[] getAltarRecipeInput(@Nonnull AltarRecipe altarRecipe) {
         List<ItemStack> input = altarRecipe.getInput();
         ItemStack[] itemStacks = new ItemStack[9];

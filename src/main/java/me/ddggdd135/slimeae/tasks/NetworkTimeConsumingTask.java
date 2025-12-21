@@ -24,20 +24,20 @@ public class NetworkTimeConsumingTask implements Runnable {
 
     public void start(@Nonnull SlimeAEPlugin plugin) {
         this.tickRate = Slimefun.getCfg().getInt("URID.custom-ticker-delay");
-        Bukkit.getScheduler().runTaskLaterAsynchronously(SlimeAEPlugin.getInstance(), this, 1);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(SlimeAEPlugin.getInstance(), this, tickRate);
     }
 
     @Override
     @Async
     public void run() {
-        //long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
         run0();
 
-        //long elapsed = System.currentTimeMillis() - startTime;
-        //long nextDelay = Math.max(tickRate * 50L - elapsed, 0) / 50;
+        long elapsed = System.currentTimeMillis() - startTime;
+        long nextDelay = Math.max(tickRate * 50L - elapsed, 0) / 50;
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(SlimeAEPlugin.getInstance(), this, 1);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(SlimeAEPlugin.getInstance(), this, nextDelay);
     }
 
     @Async

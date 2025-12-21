@@ -8,9 +8,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class QuantumUtils {
 
+	@Async
     @Nullable public static QuantumCache getQuantumCache(@Nonnull ItemStack itemStack) {
         final ItemMeta meta = itemStack.getItemMeta();
 
@@ -28,6 +32,7 @@ public class QuantumUtils {
         return cache;
     }
 
+	@Async
     public static void setQuantumCache(@Nonnull ItemStack itemStack, QuantumCache quantumCache) {
         final ItemMeta meta = itemStack.getItemMeta();
 

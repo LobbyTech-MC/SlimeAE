@@ -19,8 +19,12 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class NetworkUtils {
+	@Async
     public static void scan(Block block, Set<Location> blocks) {
         Stack<Location> stack = new Stack<>();
         stack.push(block.getLocation());
@@ -61,12 +65,14 @@ public class NetworkUtils {
         }
     }
 
+	@Async
     public static Set<Location> scan(Block block) {
         Set<Location> result = new HashSet<>();
         scan(block, result);
         return result;
     }
 
+	@Async
     public static void doCraft(@Nonnull NetworkInfo networkInfo, @Nonnull ItemStack itemStack, long amount) {
         // 检查是否已有相同的合成任务
         boolean hasExistingTask = false;

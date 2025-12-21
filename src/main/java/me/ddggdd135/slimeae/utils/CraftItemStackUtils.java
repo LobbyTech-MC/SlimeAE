@@ -4,8 +4,12 @@ import javax.annotation.Nonnull;
 import me.ddggdd135.guguslimefunlib.libraries.matlib.nmsMirror.impl.CraftBukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class CraftItemStackUtils {
+	@Async
     public static ItemStack[] asCraftCopy(@Nonnull ItemStack[] itemStacks) {
         ItemStack[] copy = new ItemStack[itemStacks.length];
 
