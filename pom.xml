@@ -182,8 +182,9 @@
         <dependency>
             <groupId>com.github.TimetownDev</groupId>
             <artifactId>GuguSlimefunLib</artifactId>
-            <version>3e58618ecc</version>
-            <scope>provided</scope>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${GuguSlimefunLib-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>net.guizhanss</groupId>
