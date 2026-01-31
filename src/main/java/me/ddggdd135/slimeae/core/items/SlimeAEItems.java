@@ -1676,7 +1676,7 @@ public class SlimeAEItems {
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ADVANCED_CARD, CRYSTAL_FLUIX})
                 .register(plugin);
-        new AdvancedAccelerationCard(
+        new UltimateAccelerationCard(
                         SlimeAEItemGroups.MATERIAL,
                         ADVANCED_ACCELERATION_CARD,
                         RecipeType.ENHANCED_CRAFTING_TABLE,
