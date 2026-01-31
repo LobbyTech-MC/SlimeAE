@@ -125,6 +125,7 @@ public class QuantumStorage implements IStorage {
         if (quantumCache.getAmount() < amount) {
             gotten = (int) Math.min(quantumCache.getAmount(), amount);
             toReturn.addItem(vaild.getKey(), gotten);
+            quantumCache.setAmount(0);
         } else {
             quantumCache.setAmount((int) (quantumCache.getAmount() - amount));
             toReturn.addItem(vaild.getKey(), amount);
@@ -149,7 +150,10 @@ public class QuantumStorage implements IStorage {
     @Override
     @Async
     public int getTier(@Nonnull ItemKey itemStack) {
-        if (quantumCache == null || quantumCache.getAmount() < 0) return -1;
+        ItemStack output = blockMenu.getItemInSlot(NetworkQuantumStorage.OUTPUT_SLOT);
+        if (quantumCache == null
+                || (quantumCache.getAmount() < 0
+                        && (output == null || output.getType().isAir()))) return -1;
         ItemStack storedItem = quantumCache.getItemStack();
         if (storedItem == null || storedItem.getType().isAir()) return -1;
         if (storedItem.getType() == itemStack.getItemStack().getType()) return 2000;
