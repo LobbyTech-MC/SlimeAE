@@ -208,6 +208,9 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         IStorage networkStorage = info.getStorage();
         ItemHashMap<Long> storage = networkStorage.getStorageUnsafe();
 
+        if (blockMenu.getInventory().getViewers().isEmpty()) {
+        	return;
+        }
         Player player = (Player) blockMenu.getInventory().getViewers().get(0);
 
         // 获取过滤器
