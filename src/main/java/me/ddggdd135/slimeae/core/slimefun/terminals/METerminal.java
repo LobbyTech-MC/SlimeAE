@@ -16,8 +16,11 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.inventory.InvUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+
+import java.lang.System.Logger;
 import java.text.Collator;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.IntStream;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -190,7 +193,11 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
     }
 
     @Async
+    // 目前卡服
     public void updateGui(@Nonnull Block block) {
+
+
+        
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;
         if (!blockMenu.hasViewer()) return;
@@ -205,87 +212,102 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
             return;
         }
 
-        IStorage networkStorage = info.getStorage();
-        ItemHashMap<Long> storage = networkStorage.getStorageUnsafe();
+        
+        Bukkit.getScheduler().runTaskAsynchronously(SlimeAEPlugin.getInstance(), () -> {
+        	//经debug测试以下这段卡
+        	IStorage networkStorage = info.getStorage();
+            ItemHashMap<Long> storage = networkStorage.getStorageUnsafe();
 
-        if (blockMenu.getInventory().getViewers().isEmpty()) {
-        	return;
-        }
-        Player player = (Player) blockMenu.getInventory().getViewers().get(0);
-
-        // 获取过滤器
-        String filter = getFilter(block).toLowerCase(Locale.ROOT);
-
-        // 过滤和排序逻辑
-        List<Map.Entry<ItemStack, Long>> items = new ArrayList<>(storage.entrySet());
-        if (!filter.isEmpty()) {
-            if (!SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded())
-                items.removeIf(x -> doFilterNoJEG(x, filter));
-            else {
-                boolean isPinyinSearch = JustEnoughGuide.getConfigManager().isPinyinSearch();
-                SearchGroup group = new SearchGroup(null, player, filter, isPinyinSearch);
-                List<SlimefunItem> slimefunItems = group.filterItems(player, filter, isPinyinSearch);
-                items.removeIf(x -> doFilterWithJEG(x, slimefunItems, filter));
+            if (blockMenu.getInventory().getViewers().isEmpty()) {
+            	return;
             }
-        }
+            Player player = (Player) blockMenu.getInventory().getViewers().get(0);
 
-        if (storage instanceof CreativeItemMap) items.sort(MATERIAL_SORT);
-        else items.sort(getSort(block));
+            // 获取过滤器
+            String filter = getFilter(block).toLowerCase(Locale.ROOT);
 
-        int pinnedCount = 0;
-        if (filter.isEmpty()) {
-            PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
-            List<ItemStack> pinnedItems = pinnedManager.getPinnedItems(player);
-            if (pinnedItems == null) pinnedItems = new ArrayList<>();
-
-            for (ItemStack pinned : pinnedItems) {
-                if (!storage.containsKey(pinned)) continue;
-                items.add(0, new AbstractMap.SimpleEntry<>(pinned, storage.get(pinned)));
-                pinnedCount++;
+            // 过滤和排序逻辑
+            List<Map.Entry<ItemStack, Long>> items = new ArrayList<>(storage.entrySet());
+            if (!filter.isEmpty()) {
+                if (!SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded())
+                    items.removeIf(x -> doFilterNoJEG(x, filter));
+                else {
+                    boolean isPinyinSearch = JustEnoughGuide.getConfigManager().isPinyinSearch();
+                    SearchGroup group = new SearchGroup(null, player, filter, isPinyinSearch);
+                    List<SlimefunItem> slimefunItems = group.filterItems(player, filter, isPinyinSearch);
+                    items.removeIf(x -> doFilterWithJEG(x, slimefunItems, filter));
+                }
             }
-        }
+            //经debug测试以上这段卡
+            
+            if (storage instanceof CreativeItemMap) items.sort(MATERIAL_SORT);
+            else items.sort(getSort(block));
 
-        // 计算分页
-        int page = getPage(block);
-        int maxPage = (int) Math.max(0, Math.ceil(items.size() / (double) getDisplaySlots().length) - 1);
-        if (page > maxPage) {
-            page = maxPage;
-            setPage(block, page);
-        }
+            int pinnedCount = 0;
+            if (filter.isEmpty()) {
+                PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
+                List<ItemStack> pinnedItems = pinnedManager.getPinnedItems(player);
+                if (pinnedItems == null) pinnedItems = new ArrayList<>();
 
-        // 显示当前页的物品
-        int startIndex = page * getDisplaySlots().length;
-        int endIndex = startIndex + getDisplaySlots().length;
-
-        if (startIndex == endIndex) {
-            for (int slot : getDisplaySlots()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
-                blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+                for (ItemStack pinned : pinnedItems) {
+                    if (!storage.containsKey(pinned)) continue;
+                    items.add(0, new AbstractMap.SimpleEntry<>(pinned, storage.get(pinned)));
+                    pinnedCount++;
+                }
             }
-        }
-
-        for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
-            int slot = getDisplaySlots()[i];
-            if (i + startIndex >= items.size()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
-                blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
-                continue;
-            }
-            Map.Entry<ItemStack, Long> entry = items.get(i + startIndex);
-            ItemStack itemStack = entry.getKey();
-
-            if (itemStack == null || itemStack.getType().isAir()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
-                blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
-                continue;
+        	
+            
+         // 计算分页
+            int page = getPage(block);
+            int maxPage = (int) Math.max(0, Math.ceil(items.size() / (double) getDisplaySlots().length) - 1);
+            if (page > maxPage) {
+                page = maxPage;
+                setPage(block, page);
             }
 
-            blockMenu.replaceExistingItem(
-                    slot,
-                    ItemUtils.createDisplayItem(
-                            itemStack, entry.getValue(), true, i < pinnedCount - page * getDisplaySlots().length));
-            blockMenu.addMenuClickHandler(slot, handleGuiClick(block, blockMenu, itemStack));
-        }
+            // 显示当前页的物品
+            int startIndex = page * getDisplaySlots().length;
+            int endIndex = startIndex + getDisplaySlots().length;
+
+            if (startIndex == endIndex) {
+                for (int slot : getDisplaySlots()) {
+                    blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                    blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+                }
+            }
+
+            for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
+                int slot = getDisplaySlots()[i];
+                if (i + startIndex >= items.size()) {
+                    blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                    blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+                    continue;
+                }
+                Map.Entry<ItemStack, Long> entry = items.get(i + startIndex);
+                ItemStack itemStack = entry.getKey();
+
+                if (itemStack == null || itemStack.getType().isAir()) {
+                    blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                    blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+                    continue;
+                }
+
+                blockMenu.replaceExistingItem(
+                        slot,
+                        ItemUtils.createDisplayItem(
+                                itemStack, entry.getValue(), true, i < pinnedCount - page * getDisplaySlots().length));
+                blockMenu.addMenuClickHandler(slot, handleGuiClick(block, blockMenu, itemStack));
+            }
+            
+        });
+        
+
+        
+        
+
+        
+        
+
     }
 
     @Async
