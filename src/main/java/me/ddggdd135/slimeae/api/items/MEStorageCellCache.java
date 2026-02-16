@@ -209,7 +209,6 @@ public class MEStorageCellCache implements IStorage {
 
     @Nonnull
     @Unsafe
-    @Async
     public ItemHashMap<Long> getStorageUnsafe() {
         return storageData.getStorage();
     }
