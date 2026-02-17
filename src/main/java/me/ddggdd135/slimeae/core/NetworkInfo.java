@@ -205,7 +205,7 @@ public class NetworkInfo implements IDisposable {
         int i = 0;
         for (AutoCraftingTask task : tasks) {
             ItemStack[] itemStacks = task.getRecipe().getOutput();
-            ItemStack itemStack;
+            ItemStack itemStack = new ItemStack(Material.AIR);
             if (itemStacks.length == 1) {
                 itemStack = itemStacks[0].clone();
                 if (itemStack.isEmpty() || itemStack.getType() == Material.AIR) continue;
