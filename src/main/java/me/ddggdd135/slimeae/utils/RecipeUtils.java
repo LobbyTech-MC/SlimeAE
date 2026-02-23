@@ -422,23 +422,17 @@ public class RecipeUtils {
             for (CraftCraftingBlockRecipe recipe : recipes) {
                 ItemStack[] in = recipe.recipe();
                 for (int i = 0; i < Math.max(in.length, inputs.length); i++) {
-                    ItemStack x = null;
-                    ItemStack y = null;
-                    if (in.length > i) {
-                        x = in[i];
-                    }
-                    if (inputs.length > i) {
-                        y = inputs[i];
-                    }
-                    if (x != null && !x.getType().isAir()) x = new ItemStack(x);
+                    ItemStack x = (in.length > i) ? in[i] : null;
+                    ItemStack y = (inputs.length > i) ? inputs[i] : null;
+
+                    // Don't wrap x in 'new ItemStack()', SlimefunUtils handles snapshots fine
                     if (!SlimefunUtils.isItemSimilar(x, y, true, false)) {
                         continue i;
                     }
                 }
-                ItemStack out = new ItemStack(recipe.output());
-                return new ItemStack[] {out};
+                // Use clone() instead of the constructor
+                return new ItemStack[] { recipe.output().clone() };
             }
-
             return new ItemStack[0];
         }
         if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()
