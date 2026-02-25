@@ -1,13 +1,19 @@
 package me.ddggdd135.slimeae.api.abstracts;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.blockdata.MEChainedBusData;
 import me.ddggdd135.slimeae.api.blockdata.MEChainedBusDataAdapter;
@@ -17,9 +23,6 @@ import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 public abstract class MEChainedBus extends MEBus {
     private static final MEChainedBusDataAdapter adapter = new MEChainedBusDataAdapter();

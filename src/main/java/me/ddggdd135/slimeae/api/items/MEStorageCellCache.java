@@ -1,10 +1,18 @@
 package me.ddggdd135.slimeae.api.items;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.guguslimefunlib.items.ItemStackCache;
@@ -18,9 +26,6 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.ddggdd135.slimeae.utils.ShulkerBoxUtils;
-import org.bukkit.inventory.ItemStack;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 public class MEStorageCellCache implements IStorage {

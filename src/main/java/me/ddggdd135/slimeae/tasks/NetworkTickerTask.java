@@ -1,15 +1,23 @@
 package me.ddggdd135.slimeae.tasks;
 
-import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.LocationUtils;
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.LocationUtils;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.autocraft.AutoCraftingTask;
 import me.ddggdd135.slimeae.api.enums.AETaskType;
@@ -21,10 +29,6 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.StorageCollection;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.integrations.networks.QuantumStorage;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 public class NetworkTickerTask implements Runnable {

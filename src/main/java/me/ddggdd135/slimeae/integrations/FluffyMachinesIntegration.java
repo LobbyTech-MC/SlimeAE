@@ -1,8 +1,9 @@
 package me.ddggdd135.slimeae.integrations;
 
+import org.bukkit.Bukkit;
+
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.interfaces.Integration;
-import org.bukkit.Bukkit;
 
 public class FluffyMachinesIntegration implements Integration {
     private boolean cache = false;

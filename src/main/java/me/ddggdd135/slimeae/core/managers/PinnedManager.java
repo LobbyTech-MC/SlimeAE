@@ -1,9 +1,5 @@
 package me.ddggdd135.slimeae.core.managers;
 
-import com.xzavier0722.mc.plugin.slimefun4.storage.controller.ProfileDataController;
-import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
-import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,10 +10,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.interfaces.IManager;
-import me.ddggdd135.slimeae.utils.SerializeUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -26,6 +18,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
+
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.ProfileDataController;
+
+import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
+import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.IManager;
+import me.ddggdd135.slimeae.utils.SerializeUtils;
 
 public class PinnedManager implements IManager {
     private static final int DATA_ITEM_SLOT = 0;

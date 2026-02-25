@@ -1,8 +1,10 @@
 package me.ddggdd135.slimeae.utils;
 
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemStackSnapshot;
 import javax.annotation.Nonnull;
+
 import org.bukkit.inventory.ItemStack;
+
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemStackSnapshot;
 
 public class ItemStackSnapshotUtils {
     @Nonnull

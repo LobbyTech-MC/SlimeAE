@@ -2,15 +2,9 @@ package me.ddggdd135.slimeae.core.listeners;
 
 import static me.ddggdd135.slimeae.api.interfaces.IMEObject.Valid_Faces;
 
-import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockPlaceEvent;
 import java.util.HashSet;
 import java.util.Set;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.interfaces.IMEController;
-import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
-import me.ddggdd135.slimeae.api.interfaces.IMEObject;
-import me.ddggdd135.slimeae.api.interfaces.IMEStorageObject;
-import me.ddggdd135.slimeae.core.NetworkInfo;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,6 +14,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import io.github.thebusybiscuit.slimefun4.api.events.SlimefunBlockPlaceEvent;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.IMEController;
+import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
+import me.ddggdd135.slimeae.api.interfaces.IMEObject;
+import me.ddggdd135.slimeae.api.interfaces.IMEStorageObject;
+import me.ddggdd135.slimeae.core.NetworkInfo;
 
 @EnableAsync
 public class NetworkListener implements Listener {

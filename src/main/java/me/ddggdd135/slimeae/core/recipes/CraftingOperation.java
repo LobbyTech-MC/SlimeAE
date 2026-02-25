@@ -1,8 +1,10 @@
 package me.ddggdd135.slimeae.core.recipes;
 
-import io.github.thebusybiscuit.slimefun4.core.machines.MachineOperation;
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
+
+import io.github.thebusybiscuit.slimefun4.core.machines.MachineOperation;
 import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 
 public class CraftingOperation implements MachineOperation {

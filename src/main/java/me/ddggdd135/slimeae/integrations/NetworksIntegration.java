@@ -1,11 +1,13 @@
 package me.ddggdd135.slimeae.integrations;
 
-import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
 import java.util.Arrays;
-import me.ddggdd135.slimeae.api.interfaces.Integration;
+
 import org.bukkit.Bukkit;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
+import me.ddggdd135.slimeae.api.interfaces.Integration;
 
 @EnableAsync
 public class NetworksIntegration implements Integration {

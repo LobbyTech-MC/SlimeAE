@@ -1,23 +1,26 @@
 package me.ddggdd135.slimeae.core.listeners;
 
-import com.balugaq.netex.api.enums.StorageType;
-import com.balugaq.netex.api.events.NetworkRootLocateStorageEvent;
-import com.balugaq.netex.api.events.NetworkRootReadyEvent;
-import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.sefiraat.networks.network.NetworkRoot;
-import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import java.util.Set;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.core.NetworkInfo;
-import me.ddggdd135.slimeae.core.slimefun.NetworksExpansionSwitch;
-import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
+
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import com.balugaq.netex.api.enums.StorageType;
+import com.balugaq.netex.api.events.NetworkRootLocateStorageEvent;
+import com.balugaq.netex.api.events.NetworkRootReadyEvent;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
+import io.github.sefiraat.networks.network.NetworkRoot;
+import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.core.NetworkInfo;
+import me.ddggdd135.slimeae.core.slimefun.NetworksExpansionSwitch;
+import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
 
 @EnableAsync
 public class NetworksIntegrationListener implements Listener {

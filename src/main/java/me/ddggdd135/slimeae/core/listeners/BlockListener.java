@@ -1,11 +1,7 @@
 package me.ddggdd135.slimeae.core.listeners;
 
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.Random;
-import me.ddggdd135.slimeae.api.handlers.BlockLeftClickedHandler;
-import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
+
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,6 +12,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import me.ddggdd135.slimeae.api.handlers.BlockLeftClickedHandler;
+import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
 
 @EnableAsync
 public class BlockListener implements Listener {

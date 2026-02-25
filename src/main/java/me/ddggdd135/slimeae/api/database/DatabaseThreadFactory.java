@@ -2,6 +2,7 @@ package me.ddggdd135.slimeae.api.database;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.annotation.Nonnull;
 
 public class DatabaseThreadFactory implements ThreadFactory {

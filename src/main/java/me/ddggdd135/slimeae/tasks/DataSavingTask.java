@@ -6,8 +6,6 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.enums.AETaskType;

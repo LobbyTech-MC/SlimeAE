@@ -1,9 +1,20 @@
 package me.ddggdd135.slimeae.api.items;
 
-import it.unimi.dsi.fastutil.objects.ObjectIntImmutablePair;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+import it.unimi.dsi.fastutil.objects.ObjectIntImmutablePair;
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.api.ItemHashSet;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
@@ -12,9 +23,6 @@ import me.ddggdd135.guguslimefunlib.items.ItemType;
 import me.ddggdd135.slimeae.api.ConcurrentHashSet;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.utils.ItemUtils;
-import org.bukkit.inventory.ItemStack;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 public class StorageCollection implements IStorage {

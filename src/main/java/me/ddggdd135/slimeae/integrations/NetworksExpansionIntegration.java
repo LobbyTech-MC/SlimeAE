@@ -1,16 +1,18 @@
 package me.ddggdd135.slimeae.integrations;
 
-import io.github.sefiraat.networks.network.NetworkRoot;
-import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import me.ddggdd135.slimeae.api.interfaces.Integration;
-import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
+
 import org.bukkit.Bukkit;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import io.github.sefiraat.networks.network.NetworkRoot;
+import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
+import me.ddggdd135.slimeae.api.interfaces.Integration;
+import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
 
 @EnableAsync
 public class NetworksExpansionIntegration implements Integration {

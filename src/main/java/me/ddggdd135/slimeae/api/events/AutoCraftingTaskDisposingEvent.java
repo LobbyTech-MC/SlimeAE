@@ -1,10 +1,12 @@
 package me.ddggdd135.slimeae.api.events;
 
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.api.autocraft.AutoCraftingTask;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import me.ddggdd135.slimeae.api.autocraft.AutoCraftingTask;
 
 public class AutoCraftingTaskDisposingEvent extends Event {
     private static HandlerList handlerList = new HandlerList();

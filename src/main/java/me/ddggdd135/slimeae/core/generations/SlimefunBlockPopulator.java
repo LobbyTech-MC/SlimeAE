@@ -1,14 +1,17 @@
 package me.ddggdd135.slimeae.core.generations;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.Random;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
+
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
 
 public class SlimefunBlockPopulator extends BlockPopulator {
     private static boolean enableOreGen;

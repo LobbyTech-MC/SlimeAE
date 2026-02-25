@@ -1,9 +1,10 @@
 package me.ddggdd135.slimeae.integrations;
 
-import me.ddggdd135.slimeae.api.interfaces.Integration;
 import org.bukkit.Bukkit;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import me.ddggdd135.slimeae.api.interfaces.Integration;
 
 @EnableAsync
 public class JustEnoughGuideIntegration implements Integration {

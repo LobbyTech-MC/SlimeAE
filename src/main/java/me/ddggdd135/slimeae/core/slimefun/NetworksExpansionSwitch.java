@@ -1,6 +1,17 @@
 package me.ddggdd135.slimeae.core.slimefun;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+
 import com.balugaq.netex.api.enums.FeedbackType;
+
 import io.github.sefiraat.networks.NetworkStorage;
 import io.github.sefiraat.networks.network.NodeDefinition;
 import io.github.sefiraat.networks.network.NodeType;
@@ -9,10 +20,6 @@ import io.github.sefiraat.networks.slimefun.network.NetworkObject;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
@@ -21,9 +28,6 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.integrations.networks.NetworksStorage;
 import me.ddggdd135.slimeae.integrations.networks.StorageToBarrelWrapper;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 /*
  * 只能在网络拓展里用

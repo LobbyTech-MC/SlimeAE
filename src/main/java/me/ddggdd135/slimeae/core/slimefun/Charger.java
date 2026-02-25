@@ -1,13 +1,15 @@
 package me.ddggdd135.slimeae.core.slimefun;
 
+import javax.annotation.Nonnull;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import javax.annotation.Nonnull;
 import me.ddggdd135.slimeae.api.abstracts.AEMachineBlock;
 import me.ddggdd135.slimeae.core.items.SlimeAEItems;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public class Charger extends AEMachineBlock {
     public Charger(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {

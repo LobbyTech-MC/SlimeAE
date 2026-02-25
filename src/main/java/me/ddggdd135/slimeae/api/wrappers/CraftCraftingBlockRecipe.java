@@ -1,7 +1,8 @@
 package me.ddggdd135.slimeae.api.wrappers;
 
-import me.ddggdd135.slimeae.utils.ReflectionUtils;
 import org.bukkit.inventory.ItemStack;
+
+import me.ddggdd135.slimeae.utils.ReflectionUtils;
 
 public class CraftCraftingBlockRecipe extends CraftInfinityLibObject {
     public CraftCraftingBlockRecipe(Object handle) {

@@ -1,11 +1,13 @@
 package me.ddggdd135.slimeae.utils;
 
 import javax.annotation.Nonnull;
-import me.ddggdd135.guguslimefunlib.libraries.matlib.nmsMirror.impl.CraftBukkit;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import me.ddggdd135.guguslimefunlib.libraries.matlib.nmsMirror.impl.CraftBukkit;
 
 @EnableAsync
 public class CraftItemStackUtils {

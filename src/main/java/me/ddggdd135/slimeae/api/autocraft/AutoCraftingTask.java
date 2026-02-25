@@ -1,8 +1,5 @@
 package me.ddggdd135.slimeae.api.autocraft;
 
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -10,8 +7,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.ddggdd135.guguslimefunlib.api.AEMenu;
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
@@ -23,7 +36,10 @@ import me.ddggdd135.slimeae.api.ConcurrentHashSet;
 import me.ddggdd135.slimeae.api.events.AutoCraftingTaskDisposingEvent;
 import me.ddggdd135.slimeae.api.events.AutoCraftingTaskStartingEvent;
 import me.ddggdd135.slimeae.api.exceptions.NoEnoughMaterialsException;
-import me.ddggdd135.slimeae.api.interfaces.*;
+import me.ddggdd135.slimeae.api.interfaces.IDisposable;
+import me.ddggdd135.slimeae.api.interfaces.IMECraftDevice;
+import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
+import me.ddggdd135.slimeae.api.interfaces.IMERealCraftDevice;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import me.ddggdd135.slimeae.api.items.StorageCollection;
@@ -31,15 +47,6 @@ import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import net.Zrips.CMILib.Items.CMIMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 public class AutoCraftingTask implements IDisposable {

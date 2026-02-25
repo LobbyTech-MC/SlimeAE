@@ -1,19 +1,22 @@
 package me.ddggdd135.slimeae.tasks;
 
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.Bukkit;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.enums.AETaskType;
 import me.ddggdd135.slimeae.api.events.AEPostTaskEvent;
 import me.ddggdd135.slimeae.api.events.AEPreTaskEvent;
 import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 import me.ddggdd135.slimeae.core.NetworkInfo;
-import org.bukkit.Bukkit;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 public class NetworkTimeConsumingTask implements Runnable {

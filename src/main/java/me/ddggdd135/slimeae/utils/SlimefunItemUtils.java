@@ -1,15 +1,22 @@
 package me.ddggdd135.slimeae.utils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Radioactive;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import java.util.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 
 public class SlimefunItemUtils {

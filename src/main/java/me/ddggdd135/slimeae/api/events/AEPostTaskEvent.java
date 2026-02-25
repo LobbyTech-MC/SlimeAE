@@ -1,9 +1,11 @@
 package me.ddggdd135.slimeae.api.events;
 
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.api.enums.AETaskType;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import me.ddggdd135.slimeae.api.enums.AETaskType;
 
 public class AEPostTaskEvent extends Event {
     private static HandlerList handlerList = new HandlerList();

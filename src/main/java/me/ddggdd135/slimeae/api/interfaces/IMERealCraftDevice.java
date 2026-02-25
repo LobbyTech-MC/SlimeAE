@@ -2,8 +2,10 @@ package me.ddggdd135.slimeae.api.interfaces;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
+
 import org.bukkit.block.Block;
+
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 
 public interface IMERealCraftDevice extends IMECraftDevice {
     boolean canStartCrafting(@Nonnull Block block, @Nonnull CraftingRecipe recipe);

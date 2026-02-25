@@ -1,9 +1,19 @@
 package me.ddggdd135.slimeae.api;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.bukkit.inventory.ItemStack;
+
 import me.ddggdd135.guguslimefunlib.api.ItemHashSet;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.guguslimefunlib.items.ItemType;
@@ -11,7 +21,6 @@ import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTType;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
-import org.bukkit.inventory.ItemStack;
 
 public class MEStorageCellFilterData {
     private static final Map<UUID, MEStorageCellFilterData> cache = new ConcurrentHashMap<>();

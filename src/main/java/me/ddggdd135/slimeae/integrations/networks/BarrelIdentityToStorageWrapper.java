@@ -1,18 +1,21 @@
 package me.ddggdd135.slimeae.integrations.networks;
 
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
 import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import java.util.Objects;
-import javax.annotation.Nonnull;
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.guguslimefunlib.items.ItemStackCache;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
-import org.bukkit.inventory.ItemStack;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @Deprecated
 @EnableAsync

@@ -1,6 +1,7 @@
 package me.ddggdd135.slimeae.api.exceptions;
 
 import javax.annotation.Nonnull;
+
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 
 public class NoEnoughMaterialsException extends RuntimeException {

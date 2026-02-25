@@ -1,9 +1,17 @@
 package me.ddggdd135.slimeae.api.interfaces;
 
+import javax.annotation.Nonnull;
+
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Range;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
 import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
-import javax.annotation.Nonnull;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.core.NetworkInfo;
@@ -11,11 +19,6 @@ import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.core.listeners.JEGCompatibleListener;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Range;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 public interface IItemFilterFindableWithGuide {

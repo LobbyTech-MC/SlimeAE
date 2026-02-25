@@ -1,9 +1,32 @@
 package me.ddggdd135.slimeae.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.CookingRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
 import com.balugaq.netex.api.data.SuperRecipe;
 import com.ytdd9527.networksexpansion.core.items.machines.AbstractManualCrafter;
 import com.ytdd9527.networksexpansion.implementation.ExpansionItemStacks;
 import com.ytdd9527.networksexpansion.implementation.machines.manual.ExpansionWorkbench;
+
 import io.github.addoncommunity.galactifun.base.BaseItems;
 import io.github.addoncommunity.galactifun.base.items.AssemblyTable;
 import io.github.mooy1.infinityexpansion.items.blocks.Blocks;
@@ -19,9 +42,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.altar.AltarRecipe
 import io.github.thebusybiscuit.slimefun4.implementation.items.altar.AncientAltar;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemStackSnapshot;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import java.util.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.api.abstracts.AbstractMachineBlock;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
@@ -37,11 +57,6 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
 import me.sfiguz7.transcendence.lists.TEItems;
 import me.sfiguz7.transcendence.lists.TERecipeType;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.*;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 public class RecipeUtils {

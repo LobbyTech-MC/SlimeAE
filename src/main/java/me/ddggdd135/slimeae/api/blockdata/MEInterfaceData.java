@@ -1,11 +1,14 @@
 package me.ddggdd135.slimeae.api.blockdata;
 
 import java.util.Arrays;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.interfaces.IInventoryBlockData;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.IInventoryBlockData;
 
 public class MEInterfaceData implements IInventoryBlockData {
     private static final NamespacedKey key = new NamespacedKey(SlimeAEPlugin.getInstance(), "me_interface");

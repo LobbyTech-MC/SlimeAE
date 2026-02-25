@@ -1,14 +1,15 @@
 package me.ddggdd135.slimeae.core.items;
 
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 import me.ddggdd135.guguslimefunlib.libraries.version.Version;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.core.groups.DummyItemGroup;
 import me.ddggdd135.slimeae.core.groups.MainItemGroup;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 
 public class SlimeAEItemGroups {
     public static final ItemStack MAIN_ITEM_GROUP_ICON =

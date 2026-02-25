@@ -1,12 +1,15 @@
 package me.ddggdd135.slimeae.api.autocraft;
 
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.slimeae.utils.CraftItemStackUtils;
 import me.ddggdd135.slimeae.utils.ItemUtils;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public class CraftingRecipe {
     private final CraftType craftType;

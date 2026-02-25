@@ -1,15 +1,17 @@
 package me.ddggdd135.slimeae.utils;
 
-import io.github.sefiraat.networks.network.stackcaches.QuantumCache;
-import io.github.sefiraat.networks.utils.Keys;
-import io.github.sefiraat.networks.utils.datatypes.DataTypeMethods;
-import io.github.sefiraat.networks.utils.datatypes.PersistentQuantumStorageType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import io.github.sefiraat.networks.network.stackcaches.QuantumCache;
+import io.github.sefiraat.networks.utils.Keys;
+import io.github.sefiraat.networks.utils.datatypes.DataTypeMethods;
+import io.github.sefiraat.networks.utils.datatypes.PersistentQuantumStorageType;
 
 @EnableAsync
 public class QuantumUtils {

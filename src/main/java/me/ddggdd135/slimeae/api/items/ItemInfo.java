@@ -1,7 +1,9 @@
 package me.ddggdd135.slimeae.api.items;
 
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
+
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 
 public class ItemInfo {

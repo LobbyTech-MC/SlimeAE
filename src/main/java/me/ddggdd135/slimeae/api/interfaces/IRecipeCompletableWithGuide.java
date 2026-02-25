@@ -1,12 +1,21 @@
 package me.ddggdd135.slimeae.api.interfaces;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Range;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
@@ -16,12 +25,6 @@ import me.ddggdd135.slimeae.core.items.MenuItems;
 import me.ddggdd135.slimeae.core.listeners.JEGCompatibleListener;
 import me.ddggdd135.slimeae.utils.RecipeUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Range;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 /*
  * 感谢大香蕉的代码 :)))

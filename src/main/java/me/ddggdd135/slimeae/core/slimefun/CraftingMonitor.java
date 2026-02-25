@@ -1,5 +1,8 @@
 package me.ddggdd135.slimeae.core.slimefun;
 
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -10,8 +13,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 import me.ddggdd135.slimeae.core.NetworkInfo;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 public class CraftingMonitor extends SlimefunItem implements IMEObject {
     public CraftingMonitor(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {

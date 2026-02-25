@@ -1,9 +1,12 @@
 package me.ddggdd135.slimeae.api.blockdata;
 
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
+
 import org.bukkit.NamespacedKey;
+
+import me.ddggdd135.slimeae.SlimeAEPlugin;
 
 public class MEChainedBusData extends MEBusData {
     private static final NamespacedKey key = new NamespacedKey(SlimeAEPlugin.getInstance(), "me_chained_bus");

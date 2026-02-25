@@ -1,9 +1,11 @@
 package me.ddggdd135.slimeae.api.interfaces;
 
 import javax.annotation.Nonnull;
+
+import org.bukkit.block.Block;
+
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
 import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
-import org.bukkit.block.Block;
 
 public interface IMEVirtualCraftDevice extends IMECraftDevice {
     int getSpeed(@Nonnull Block block);
