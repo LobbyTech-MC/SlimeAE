@@ -78,7 +78,6 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
     private DataSavingTask dataSavingTask;
     private SlimeAECommand slimeAECommand = new SlimeAECommand();
     private PinnedManager pinnedManager;
-    private Metrics metrics;
     private static boolean debug = false;
 
     @Override

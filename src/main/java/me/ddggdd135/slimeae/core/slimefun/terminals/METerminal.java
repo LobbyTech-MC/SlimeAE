@@ -42,6 +42,8 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import net.guizhanss.minecraft.guizhanlib.gugu.minecraft.helpers.inventory.ItemStackHelper;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -49,7 +51,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 public class METerminal extends TickingBlock implements IMEObject, InventoryBlock, IItemFilterFindableWithGuide {
     public static final Comparator<Map.Entry<ItemStack, Long>> ALPHABETICAL_SORT = Comparator.comparing(
             itemStackIntegerEntry -> CMIChatColor.stripColor(ItemUtils.getItemName(itemStackIntegerEntry.getKey())),
@@ -116,6 +121,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
 
     @Override
     @OverridingMethodsMustInvokeSuper
+    @Async
     protected void tick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
         BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
         if (blockMenu == null) return;
@@ -187,157 +193,165 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         return filter;
     }
 
+    @Async
     public void setFilter(@Nonnull Block block, @Nonnull String filter) {
         StorageCacheUtils.setData(block.getLocation(), FILTER_KEY, filter);
     }
 
+    @Async
     public void updateGui(@Nonnull Block block) {
-        BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
-        if (blockMenu == null) return;
-        if (!blockMenu.hasViewer()) return;
+    	Bukkit.getScheduler().runTaskAsynchronously(SlimeAEPlugin.getInstance(), () -> {
+    		BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
+            if (blockMenu == null) return;
+            if (!blockMenu.hasViewer()) return;
 
-        NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
-        if (info == null) {
-            // 清空显示槽
-            for (int slot : getDisplaySlots()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
-                blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
-            }
-            return;
-        }
-
-        IStorage networkStorage = info.getStorage();
-        ItemHashMap<Long> storage = networkStorage.getStorageUnsafe();
-
-        Player player = (Player) blockMenu.getInventory().getViewers().get(0);
-
-        // 获取过滤器
-        String filter = getFilter(block).toLowerCase(Locale.ROOT);
-        String sortKey = StorageCacheUtils.getData(block.getLocation(), SORT_KEY);
-        int sortId = (sortKey != null) ? Integer.parseInt(sortKey) : 0;
-
-        // F5: 计算存储内容的轻量级哈希（size + 总量和）用于脏检测
-        Location loc = block.getLocation();
-        int storageSize = storage.size();
-        long storageTotalAmount = 0;
-        for (Map.Entry<ItemStack, Long> e : storage.entrySet()) {
-            storageTotalAmount += e.getValue();
-        }
-
-        // F7: 检查排序结果缓存
-        SortedItemsCache cachedResult = sortedItemsCacheMap.get(loc);
-        List<Map.Entry<ItemStack, Long>> items;
-        int pinnedCount = 0;
-
-        if (cachedResult != null
-                && cachedResult.isValid(
-                        filter, sortId, storageSize, storageTotalAmount, storage instanceof CreativeItemMap)) {
-            // F5+F7: 缓存命中，数据未变化，复用上次的过滤+排序结果
-            items = cachedResult.items;
-            pinnedCount = cachedResult.pinnedCount;
-        } else {
-            // 过滤和排序逻辑
-            items = new ArrayList<>(storage.entrySet());
-            if (!filter.isEmpty()) {
-                if (!SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded())
-                    items.removeIf(x -> doFilterNoJEG(x, filter));
-                else {
-                    boolean isPinyinSearch = JustEnoughGuide.getConfigManager().isPinyinSearch();
-                    // F1: 使用缓存的搜索结果
-                    List<SlimefunItem> slimefunItemsList = getCachedFilterItems(player, filter, isPinyinSearch);
-                    // F4: List→HashSet 优化 contains 查找为 O(1)
-                    Set<SlimefunItem> slimefunItemSet = new HashSet<>(slimefunItemsList);
-                    items.removeIf(x -> doFilterWithJEG(x, slimefunItemSet, filter));
-                }
-            }
-
-            if (storage instanceof CreativeItemMap) items.sort(MATERIAL_SORT);
-            else items.sort(getSort(block));
-
-            if (filter.isEmpty()) {
-                PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
-                List<ItemStack> pinnedItems = pinnedManager.getPinnedItems(player);
-                if (pinnedItems == null) pinnedItems = new ArrayList<>();
-
-                for (ItemStack pinned : pinnedItems) {
-                    if (!storage.containsKey(pinned)) continue;
-                    items.add(0, new AbstractMap.SimpleEntry<>(pinned, storage.get(pinned)));
-                    pinnedCount++;
-                }
-            }
-
-            // 更新缓存
-            sortedItemsCacheMap.put(
-                    loc,
-                    new SortedItemsCache(
-                            filter,
-                            sortId,
-                            storageSize,
-                            storageTotalAmount,
-                            storage instanceof CreativeItemMap,
-                            items,
-                            pinnedCount));
-        }
-
-        // 计算分页
-        int page = getPage(block);
-        int maxPage = (int) Math.max(0, Math.ceil(items.size() / (double) getDisplaySlots().length) - 1);
-        if (page > maxPage) {
-            page = maxPage;
-            setPage(block, page);
-        }
-
-        // 显示当前页的物品
-        int startIndex = page * getDisplaySlots().length;
-        int endIndex = startIndex + getDisplaySlots().length;
-
-        if (startIndex == endIndex) {
-            for (int slot : getDisplaySlots()) {
-                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
-                blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
-            }
-        }
-
-        // F8: 获取或创建当前位置的显示槽位缓存
-        DisplaySlotCache slotCache = displaySlotCacheMap.computeIfAbsent(loc, k -> new DisplaySlotCache());
-
-        for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
-            int slot = getDisplaySlots()[i];
-            if (i + startIndex >= items.size()) {
-                // F8: 检查是否已经是空槽
-                if (!slotCache.isEmptySlot(slot)) {
+            NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
+            if (info == null) {
+                // 清空显示槽
+                for (int slot : getDisplaySlots()) {
                     blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
                     blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
-                    slotCache.markEmpty(slot);
                 }
-                continue;
+                return;
             }
-            Map.Entry<ItemStack, Long> entry = items.get(i + startIndex);
-            ItemStack itemStack = entry.getKey();
 
-            if (itemStack == null || itemStack.getType().isAir()) {
-                if (!slotCache.isEmptySlot(slot)) {
+            IStorage networkStorage = info.getStorage();
+            ItemHashMap<Long> storage = networkStorage.getStorageUnsafe();
+
+            Player player = (Player) blockMenu.getInventory().getViewers().get(0);
+
+            // 获取过滤器
+            String filter = getFilter(block).toLowerCase(Locale.ROOT);
+            String sortKey = StorageCacheUtils.getData(block.getLocation(), SORT_KEY);
+            int sortId = (sortKey != null) ? Integer.parseInt(sortKey) : 0;
+
+            // F5: 计算存储内容的轻量级哈希（size + 总量和）用于脏检测
+            Location loc = block.getLocation();
+            int storageSize = storage.size();
+            long storageTotalAmount = 0;
+            for (Map.Entry<ItemStack, Long> e : storage.entrySet()) {
+                storageTotalAmount += e.getValue();
+            }
+
+            // F7: 检查排序结果缓存
+            SortedItemsCache cachedResult = sortedItemsCacheMap.get(loc);
+            List<Map.Entry<ItemStack, Long>> items;
+            int pinnedCount = 0;
+
+            if (cachedResult != null
+                    && cachedResult.isValid(
+                            filter, sortId, storageSize, storageTotalAmount, storage instanceof CreativeItemMap)) {
+                // F5+F7: 缓存命中，数据未变化，复用上次的过滤+排序结果
+                items = cachedResult.items;
+                pinnedCount = cachedResult.pinnedCount;
+            } else {
+                // 过滤和排序逻辑
+                items = new ArrayList<>(storage.entrySet());
+                if (!filter.isEmpty()) {
+                    if (!SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded())
+                        items.removeIf(x -> doFilterNoJEG(x, filter));
+                    else {
+                        boolean isPinyinSearch = JustEnoughGuide.getConfigManager().isPinyinSearch();
+                        // F1: 使用缓存的搜索结果
+                        List<SlimefunItem> slimefunItemsList = getCachedFilterItems(player, filter, isPinyinSearch);
+                        // F4: List→HashSet 优化 contains 查找为 O(1)
+                        Set<SlimefunItem> slimefunItemSet = new HashSet<>(slimefunItemsList);
+                        items.removeIf(x -> doFilterWithJEG(x, slimefunItemSet, filter));
+                    }
+                }
+
+                if (storage instanceof CreativeItemMap) items.sort(MATERIAL_SORT);
+                else items.sort(getSort(block));
+
+                if (filter.isEmpty()) {
+                    PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
+                    List<ItemStack> pinnedItems = pinnedManager.getPinnedItems(player);
+                    if (pinnedItems == null) pinnedItems = new ArrayList<>();
+
+                    for (ItemStack pinned : pinnedItems) {
+                        if (!storage.containsKey(pinned)) continue;
+                        items.add(0, new AbstractMap.SimpleEntry<>(pinned, storage.get(pinned)));
+                        pinnedCount++;
+                    }
+                }
+
+                // 更新缓存
+                sortedItemsCacheMap.put(
+                        loc,
+                        new SortedItemsCache(
+                                filter,
+                                sortId,
+                                storageSize,
+                                storageTotalAmount,
+                                storage instanceof CreativeItemMap,
+                                items,
+                                pinnedCount));
+            }
+
+            // 计算分页
+            int page = getPage(block);
+            int maxPage = (int) Math.max(0, Math.ceil(items.size() / (double) getDisplaySlots().length) - 1);
+            if (page > maxPage) {
+                page = maxPage;
+                setPage(block, page);
+            }
+
+            // 显示当前页的物品
+            int startIndex = page * getDisplaySlots().length;
+            int endIndex = startIndex + getDisplaySlots().length;
+
+            if (startIndex == endIndex) {
+                for (int slot : getDisplaySlots()) {
                     blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
                     blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
-                    slotCache.markEmpty(slot);
                 }
-                continue;
             }
 
-            boolean isPinned = i < pinnedCount - page * getDisplaySlots().length;
-            long amount = entry.getValue();
+            // F8: 获取或创建当前位置的显示槽位缓存
+            DisplaySlotCache slotCache = displaySlotCacheMap.computeIfAbsent(loc, k -> new DisplaySlotCache());
 
-            // F8: 检查此槽位的物品和数量是否有变化
-            if (slotCache.isUnchanged(slot, itemStack, amount, isPinned)) {
-                continue; // 跳过未变化的槽位
+            for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
+                int slot = getDisplaySlots()[i];
+                if (i + startIndex >= items.size()) {
+                    // F8: 检查是否已经是空槽
+                    if (!slotCache.isEmptySlot(slot)) {
+                        blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                        blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+                        slotCache.markEmpty(slot);
+                    }
+                    continue;
+                }
+                Map.Entry<ItemStack, Long> entry = items.get(i + startIndex);
+                ItemStack itemStack = entry.getKey();
+
+                if (itemStack == null || itemStack.getType().isAir()) {
+                    if (!slotCache.isEmptySlot(slot)) {
+                        blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                        blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+                        slotCache.markEmpty(slot);
+                    }
+                    continue;
+                }
+
+                boolean isPinned = i < pinnedCount - page * getDisplaySlots().length;
+                long amount = entry.getValue();
+
+                // F8: 检查此槽位的物品和数量是否有变化
+                if (slotCache.isUnchanged(slot, itemStack, amount, isPinned)) {
+                    continue; // 跳过未变化的槽位
+                }
+
+                blockMenu.replaceExistingItem(slot, ItemUtils.createDisplayItem(itemStack, amount, true, isPinned));
+                blockMenu.addMenuClickHandler(slot, handleGuiClick(block, blockMenu, itemStack));
+                slotCache.update(slot, itemStack, amount, isPinned);
             }
-
-            blockMenu.replaceExistingItem(slot, ItemUtils.createDisplayItem(itemStack, amount, true, isPinned));
-            blockMenu.addMenuClickHandler(slot, handleGuiClick(block, blockMenu, itemStack));
-            slotCache.update(slot, itemStack, amount, isPinned);
-        }
+    		
+    	});
+        
     }
 
+    
+    @Async
     private ChestMenu.AdvancedMenuClickHandler handleGuiClick(Block block, BlockMenu menu, ItemStack display) {
         return new ChestMenu.AdvancedMenuClickHandler() {
             @Override
@@ -513,8 +527,10 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
     }
 
     @Override
+    @Async
     public void onNetworkTick(Block block, NetworkInfo networkInfo) {}
 
+    @Async
     public static Comparator<Map.Entry<ItemStack, Long>> int2Sort(int id) {
         if (id == 0) return ALPHABETICAL_SORT;
         if (id == 1) return NUMERICAL_SORT;
@@ -522,6 +538,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
         return ALPHABETICAL_SORT;
     }
 
+    @Async
     protected boolean doFilterNoJEG(Map.Entry<ItemStack, Long> x, String filter) {
         String itemType = x.getKey().getType().toString().toLowerCase(Locale.ROOT);
         if (itemType.startsWith(filter)) {
@@ -536,6 +553,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
     /**
      * 使用 Set 参数的 JEG 过滤方法 (F4: HashSet 优化)
      */
+    @Async
     protected boolean doFilterWithJEG(Map.Entry<ItemStack, Long> x, Set<SlimefunItem> slimefunItems, String filter) {
         ItemStack item = x.getKey();
         if (item.getType().isItem() && SlimefunItem.getOptionalByItem(item).isEmpty()) {
@@ -560,6 +578,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
      * 以 filter 字符串为 key，缓存 filterItems() 返回的 List<SlimefunItem>。
      * 当过滤器未变化时（TTL 内），直接复用缓存。
      */
+    @Async
     protected List<SlimefunItem> getCachedFilterItems(Player player, String filter, boolean isPinyinSearch) {
         long now = System.currentTimeMillis();
         Long cachedTime = searchCacheTime.get(filter);
