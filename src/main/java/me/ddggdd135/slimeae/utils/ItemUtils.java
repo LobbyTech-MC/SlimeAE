@@ -41,7 +41,6 @@ import me.ddggdd135.guguslimefunlib.api.ItemHashSet;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.guguslimefunlib.items.ItemStackCache;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
-import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.abstracts.Card;
 import me.ddggdd135.slimeae.api.interfaces.ICardHolder;
@@ -62,6 +61,16 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import net.guizhanss.minecraft.guizhanlib.gugu.minecraft.helpers.inventory.ItemStackHelper;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.FurnaceInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 /**
  * 物品操作工具类
@@ -70,6 +79,7 @@ import net.guizhanss.minecraft.guizhanlib.gugu.minecraft.helpers.inventory.ItemS
 @EnableAsync
 public class ItemUtils {
     public static final String DISPLAY_ITEM_KEY = "display_item";
+    private static final NamespacedKey DISPLAY_ITEM_NS_KEY = new NamespacedKey("slimeae", DISPLAY_ITEM_KEY);
     /**
      * 根据模板物品创建指定数量的物品堆数组
      *
@@ -751,19 +761,23 @@ public class ItemUtils {
         ItemStack result = itemStack.clone();
 
         result.setAmount((int) Math.min(itemStack.getMaxStackSize(), Math.max(1, amount)));
-        if (addLore) {
-            List<String> lore = result.getLore();
-            if (lore == null) lore = new ArrayList<>();
 
-            lore.add("");
-            lore.add("&e物品数量 " + amount);
-            if (addPinnedLore) lore.add("&e===已置顶===");
-            result.setLore(CMIChatColor.translate(lore));
+        // 性能优化：合并 lore 修改和 NBT 标记为单次 ItemMeta 操作，
+        // 避免分别调用 setLore + NBT.modify 造成两次序列化/反序列化
+        ItemMeta meta = result.getItemMeta();
+        if (meta != null) {
+            if (addLore) {
+                List<String> lore = meta.getLore();
+                if (lore == null) lore = new ArrayList<>();
+
+                lore.add("");
+                lore.add("&e物品数量 " + amount);
+                if (addPinnedLore) lore.add("&e===已置顶===");
+                meta.setLore(CMIChatColor.translate(lore));
+            }
+            meta.getPersistentDataContainer().set(DISPLAY_ITEM_NS_KEY, PersistentDataType.BYTE, (byte) 1);
+            result.setItemMeta(meta);
         }
-
-        NBT.modify(result, x -> {
-            x.setBoolean(DISPLAY_ITEM_KEY, true);
-        });
 
         return result;
     }

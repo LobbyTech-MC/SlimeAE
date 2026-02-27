@@ -217,10 +217,116 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
             if (blockMenu == null) return;
             if (!blockMenu.hasViewer()) return;
 
-            NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
-            if (info == null) {
-                // 清空显示槽
-                for (int slot : getDisplaySlots()) {
+        NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
+        if (info == null) {
+            // 清空显示槽
+            for (int slot : getDisplaySlots()) {
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+            }
+            return;
+        }
+
+        IStorage networkStorage = info.getStorage();
+        ItemHashMap<Long> storage = networkStorage.getStorageUnsafe();
+
+        Player player = (Player) blockMenu.getInventory().getViewers().get(0);
+
+        // 获取过滤器
+        String filter = getFilter(block).toLowerCase(Locale.ROOT);
+        String sortKey = StorageCacheUtils.getData(block.getLocation(), SORT_KEY);
+        int sortId = (sortKey != null) ? Integer.parseInt(sortKey) : 0;
+
+        // F5: 计算存储内容的轻量级哈希（size + 总量和）用于脏检测
+        Location loc = block.getLocation();
+        int storageSize = storage.size();
+        long storageTotalAmount = 0;
+        for (Long v : storage.values()) {
+            storageTotalAmount += v;
+        }
+
+        // F7: 检查排序结果缓存
+        SortedItemsCache cachedResult = sortedItemsCacheMap.get(loc);
+        List<Map.Entry<ItemStack, Long>> items;
+        int pinnedCount = 0;
+
+        if (cachedResult != null
+                && cachedResult.isValid(
+                        filter, sortId, storageSize, storageTotalAmount, storage instanceof CreativeItemMap)) {
+            // F5+F7: 缓存命中，数据未变化，复用上次的过滤+排序结果
+            items = cachedResult.items;
+            pinnedCount = cachedResult.pinnedCount;
+        } else {
+            // 过滤和排序逻辑
+            items = new ArrayList<>(storage.entrySet());
+            if (!filter.isEmpty()) {
+                if (!SlimeAEPlugin.getJustEnoughGuideIntegration().isLoaded())
+                    items.removeIf(x -> doFilterNoJEG(x, filter));
+                else {
+                    boolean isPinyinSearch = JustEnoughGuide.getConfigManager().isPinyinSearch();
+                    // F1: 使用缓存的搜索结果
+                    List<SlimefunItem> slimefunItemsList = getCachedFilterItems(player, filter, isPinyinSearch);
+                    // F4: List→HashSet 优化 contains 查找为 O(1)
+                    Set<SlimefunItem> slimefunItemSet = new HashSet<>(slimefunItemsList);
+                    items.removeIf(x -> doFilterWithJEG(x, slimefunItemSet, filter));
+                }
+            }
+
+            if (storage instanceof CreativeItemMap) items.sort(MATERIAL_SORT);
+            else items.sort(getSort(block));
+
+            if (filter.isEmpty()) {
+                PinnedManager pinnedManager = SlimeAEPlugin.getPinnedManager();
+                List<ItemStack> pinnedItems = pinnedManager.getPinnedItems(player);
+                if (pinnedItems == null) pinnedItems = new ArrayList<>();
+
+                for (ItemStack pinned : pinnedItems) {
+                    if (!storage.containsKey(pinned)) continue;
+                    items.add(0, new AbstractMap.SimpleEntry<>(pinned, storage.get(pinned)));
+                    pinnedCount++;
+                }
+            }
+
+            // 更新缓存
+            sortedItemsCacheMap.put(
+                    loc,
+                    new SortedItemsCache(
+                            filter,
+                            sortId,
+                            storageSize,
+                            storageTotalAmount,
+                            storage instanceof CreativeItemMap,
+                            items,
+                            pinnedCount));
+        }
+
+        // 计算分页
+        int page = getPage(block);
+        int maxPage = (int) Math.max(0, Math.ceil(items.size() / (double) getDisplaySlots().length) - 1);
+        if (page > maxPage) {
+            page = maxPage;
+            setPage(block, page);
+        }
+
+        // 显示当前页的物品
+        int startIndex = page * getDisplaySlots().length;
+        int endIndex = startIndex + getDisplaySlots().length;
+
+        if (startIndex == endIndex) {
+            for (int slot : getDisplaySlots()) {
+                blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
+                blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+            }
+        }
+
+        // F8: 获取或创建当前位置的显示槽位缓存
+        DisplaySlotCache slotCache = displaySlotCacheMap.computeIfAbsent(loc, k -> new DisplaySlotCache());
+
+        for (int i = 0; i < getDisplaySlots().length && (i + startIndex) < endIndex; i++) {
+            int slot = getDisplaySlots()[i];
+            if (i + startIndex >= items.size()) {
+                // F8: 检查是否已经是空槽
+                if (!slotCache.isEmptySlot(slot)) {
                     blockMenu.replaceExistingItem(slot, MenuItems.EMPTY);
                     blockMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
                 }
@@ -389,9 +495,8 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
                         if (pinned == null) pinned = new ArrayList<>();
                         if (!pinned.contains(template.asOne())) pinnedManager.addPinned(player, template);
                         else pinnedManager.removePinned(player, template);
-                        // F7: 置顶变化，使排序缓存失效
+                        // F7: 置顶变化，使排序缓存失效，让 tick 刷新 GUI
                         clearSortedItemsCache(block.getLocation());
-                        updateGui(block);
                         return false;
                     }
 
@@ -416,7 +521,9 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
                         }
                     }
                 }
-                updateGui(block);
+                // 性能优化：不再在每次点击后立即调用 updateGui，
+                // 让 tick 循环自然刷新 GUI，避免快速点击导致的 TPS 骤降
+                clearSortedItemsCache(block.getLocation());
                 return false;
             }
 
