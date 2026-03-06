@@ -1,7 +1,6 @@
 package me.ddggdd135.slimeae.api.abstracts;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +8,22 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import me.ddggdd135.guguslimefunlib.api.abstracts.TickingBlock;
+import me.ddggdd135.guguslimefunlib.api.interfaces.InventoryBlock;
+import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.blockdata.MEBusData;
+import me.ddggdd135.slimeae.api.blockdata.MEBusDataAdapter;
+import me.ddggdd135.slimeae.api.interfaces.*;
+import me.ddggdd135.slimeae.core.NetworkInfo;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+import net.Zrips.CMILib.Items.CMIMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -51,7 +66,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import net.Zrips.CMILib.Items.CMIMaterial;
 
 public abstract class MEBus extends TickingBlock implements IMEObject, InventoryBlock, ICardHolder, IDataBlock {
-    protected static final Map<Location, BlockFace> SELECTED_DIRECTION_MAP = new HashMap<>();
+    protected static final Map<Location, BlockFace> SELECTED_DIRECTION_MAP = new ConcurrentHashMap<>();
     private static final MEBusDataAdapter adapter = new MEBusDataAdapter();
 
     public int getNorthSlot() {
@@ -299,6 +314,12 @@ public abstract class MEBus extends TickingBlock implements IMEObject, Inventory
     public void setDirection(BlockMenu blockMenu, BlockFace blockFace) {
         SELECTED_DIRECTION_MAP.put(blockMenu.getLocation().clone(), blockFace);
         StorageCacheUtils.setData(blockMenu.getBlock().getLocation(), dataKey, blockFace.name());
+
+        NetworkInfo networkInfo = SlimeAEPlugin.getNetworkData()
+                .getNetworkInfo(blockMenu.getBlock().getLocation());
+        if (networkInfo != null) {
+            networkInfo.setNeedsStorageUpdate(true);
+        }
     }
 
     @ParametersAreNonnullByDefault

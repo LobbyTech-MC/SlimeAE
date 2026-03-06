@@ -14,6 +14,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.balugaq.netex.api.data.ItemContainer;
 import com.balugaq.netex.api.data.StorageUnitData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import com.ytdd9527.networksexpansion.implementation.machines.unit.NetworksDrawer;
 import com.ytdd9527.networksexpansion.utils.databases.DataStorage;
 
@@ -26,11 +28,16 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.ItemInfo;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 @EnableAsync
 public class DrawerStorage implements IStorage {
     private StorageUnitData data;
     private boolean isReadOnly;
+    private final Location location;
+    private final SlimefunBlockData originalBlockData;
 
     public DrawerStorage(@Nonnull Block block) {
         this(block, false);
@@ -39,20 +46,27 @@ public class DrawerStorage implements IStorage {
     public DrawerStorage(@Nonnull Block block, boolean isReadOnly) {
         if (!SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded())
             throw new RuntimeException("NetworksExpansion is not loaded");
+        this.location = block.getLocation();
+        SlimefunBlockData blockData = StorageCacheUtils.getBlock(block.getLocation());
+        this.originalBlockData = blockData;
         data = NetworksDrawer.getStorageData(block.getLocation());
         this.isReadOnly = isReadOnly;
+    }
+
+    private boolean isBlockValid() {
+        return originalBlockData != null && StorageCacheUtils.getBlock(location) == originalBlockData;
     }
 
     @Override
     @Async
     public void pushItem(@Nonnull ItemStackCache itemStackCache) {
-        if (!isReadOnly && data != null) data.depositItemStack(itemStackCache.getItemStack(), true);
+        if (!isReadOnly && data != null && isBlockValid()) data.depositItemStack(itemStackCache.getItemStack(), true);
     }
 
     @Override
     @Async
     public void pushItem(@Nonnull ItemInfo itemInfo) {
-        if (!isReadOnly && data != null) {
+        if (!isReadOnly && data != null && isBlockValid()) {
             Map.Entry<ItemStack, Integer> entry =
                     new AbstractMap.SimpleEntry<>(itemInfo.getItemKey().getItemStack(), (int) itemInfo.getAmount());
             data.depositItemStack(entry, true);
@@ -63,7 +77,7 @@ public class DrawerStorage implements IStorage {
     @Override
     @Async
     public boolean contains(@Nonnull ItemRequest[] requests) {
-        if (data == null) return false;
+        if (data == null || !isBlockValid()) return false;
         List<ItemContainer> items = data.getStoredItems();
         for (ItemRequest request : requests) {
             boolean found = false;
@@ -84,7 +98,7 @@ public class DrawerStorage implements IStorage {
     @Override
     @Async
     public ItemStorage takeItem(@Nonnull ItemRequest[] requests) {
-        if (data == null) return new ItemStorage();
+        if (data == null || !isBlockValid()) return new ItemStorage();
 
         ItemStorage storage = new ItemStorage();
         for (ItemRequest request : requests) {
@@ -112,7 +126,7 @@ public class DrawerStorage implements IStorage {
     @Async
     public ItemHashMap<Long> getStorageUnsafe() {
         ItemHashMap<Long> storage = new ItemHashMap<>();
-        if (data == null) return storage;
+        if (data == null || !isBlockValid()) return storage;
         for (ItemContainer itemContainer : data.getStoredItemsDirectly()) {
             storage.put(itemContainer.getSampleDirectly(), (long) itemContainer.getAmount());
         }
@@ -123,7 +137,7 @@ public class DrawerStorage implements IStorage {
     @Override
     @Async
     public int getTier(@Nonnull ItemKey itemStack) {
-        if (data == null) return -1;
+        if (data == null || !isBlockValid()) return -1;
 
         for (ItemContainer itemContainer : data.getStoredItemsDirectly()) {
             if (itemStack.getItemStack().getType()

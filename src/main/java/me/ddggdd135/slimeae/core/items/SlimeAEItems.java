@@ -382,6 +382,18 @@ public class SlimeAEItems {
             "PATTERN_WORKBENCH",
             new AdvancedCustomItemStack(
                     Material.PRISMARINE_BRICKS, "&e样板工作台", "", "&a在里面放入数量对应的配方所需物品和输出 就可以合成样板", "&a支持超大型配方 不支持原版配方"));
+    public static final SlimefunItemStack ME_RESKIN_MACHINE = new SlimefunItemStack(
+            "ME_RESKIN_MACHINE",
+            new AdvancedCustomItemStack(
+                    Material.SMITHING_TABLE,
+                    "{#Vanilla_Ice}ME材质转换机",
+                    "",
+                    "{#3366ff>}将SlimeAE机器的外观更换为其他材质{#33ccf3<}",
+                    "{#3366ff>}支持普通方块和头颅{#33ccf3<}"));
+    public static final SlimefunItemStack PATTERN_RESET_MACHINE = new SlimefunItemStack(
+            "PATTERN_RESET_MACHINE",
+            new AdvancedCustomItemStack(
+                    Material.GRINDSTONE, "{#Vanilla_Ice}样板重置机", "", "{#3366ff>}将任意样板还原为空白样板{#33ccf3<}"));
 
     // MATERIAL
     public static final SlimefunItemStack CRYSTAL_CERTUS_QUARTZ = new SlimefunItemStack(
@@ -1203,6 +1215,38 @@ public class SlimeAEItems {
                         RecipeType.ENHANCED_CRAFTING_TABLE,
                         new ItemStack[] {ME_PATTERN_TERMINAL, ENGINEERING_PROCESSOR, new ItemStack(Material.CHEST)})
                 .register(plugin);
+        new MaterialReskinMachine(
+                        SlimeAEItemGroups.MACHINE,
+                        ME_RESKIN_MACHINE,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            QUARTZ_GLASS,
+                            null,
+                            QUARTZ_GLASS,
+                            FORMATION_CORE,
+                            new ItemStack(Material.SMITHING_TABLE),
+                            ANNIHILATION_CORE,
+                            QUARTZ_GLASS,
+                            ENGINEERING_PROCESSOR,
+                            QUARTZ_GLASS
+                        })
+                .register(plugin);
+        new PatternResetMachine(
+                        SlimeAEItemGroups.MACHINE,
+                        PATTERN_RESET_MACHINE,
+                        RecipeType.ENHANCED_CRAFTING_TABLE,
+                        new ItemStack[] {
+                            QUARTZ_GLASS,
+                            null,
+                            QUARTZ_GLASS,
+                            ANNIHILATION_CORE,
+                            new ItemStack(Material.GRINDSTONE),
+                            FORMATION_CORE,
+                            QUARTZ_GLASS,
+                            CALCULATION_PROCESSOR,
+                            QUARTZ_GLASS
+                        })
+                .register(plugin);
         // Materials
 
         SlimefunItem crystal_certus_quartz = new SlimefunItem(
@@ -1943,9 +1987,11 @@ public class SlimeAEItems {
                         new ItemStack[] {ME_STORAGE_HOUSING, ME_ITEM_STORAGE_COMPONENT_INFINITY},
                         Long.MAX_VALUE)
                 .register(plugin);
-        new MECreativeItemStorageCell(
-                        SlimeAEItemGroups.CELL, ME_CREATIVE_ITEM_STORAGE_CELL, RecipeType.NULL, new ItemStack[0])
-                .register(plugin);
+        if (SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_creative_cell", true)) {
+            new MECreativeItemStorageCell(
+                            SlimeAEItemGroups.CELL, ME_CREATIVE_ITEM_STORAGE_CELL, RecipeType.NULL, new ItemStack[0])
+                    .register(plugin);
+        }
         // TOOLS
 
         new MemoryCard(SlimeAEItemGroups.TOOL, MEMORY_CARD, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {

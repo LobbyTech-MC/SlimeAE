@@ -52,7 +52,8 @@ public class DataSavingTask implements Runnable {
 
                 SlimeAEPlugin.getStorageCellStorageDataController().saveAllAsync();
                 SlimeAEPlugin.getStorageCellFilterDataController().saveAllAsync();
-                SlimeAEPlugin.getInstance().getLogger().info("开始保存能源传输存储元件数据");
+                SlimeAEPlugin.getReskinDataController().saveAllAsync();
+                SlimeAEPlugin.getInstance().getLogger().info("开始保存ME存储元件数据");
 
                 AEPostTaskEvent postTaskEvent = new AEPostTaskEvent(AETaskType.DATA_SAVING);
                 Bukkit.getPluginManager().callEvent(postTaskEvent);
