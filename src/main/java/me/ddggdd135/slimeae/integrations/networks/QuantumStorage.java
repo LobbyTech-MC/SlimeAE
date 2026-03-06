@@ -2,6 +2,7 @@ package me.ddggdd135.slimeae.integrations.networks;
 
 import javax.annotation.Nonnull;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.scheduling.annotation.Async;
@@ -23,9 +24,6 @@ import me.ddggdd135.slimeae.api.items.ItemInfo;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 @EnableAsync
 public class QuantumStorage implements IStorage {

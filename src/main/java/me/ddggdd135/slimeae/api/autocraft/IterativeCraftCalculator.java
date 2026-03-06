@@ -1,15 +1,26 @@
 package me.ddggdd135.slimeae.api.autocraft;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.bukkit.inventory.ItemStack;
+
 import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.api.exceptions.NoEnoughMaterialsException;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.ddggdd135.slimeae.api.items.ItemStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
-import org.bukkit.inventory.ItemStack;
 
 public class IterativeCraftCalculator {
     private static final long TIME_BUDGET_NS = 5_000_000L;

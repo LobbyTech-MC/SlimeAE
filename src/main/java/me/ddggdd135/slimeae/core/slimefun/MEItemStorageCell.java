@@ -5,16 +5,12 @@ import static me.ddggdd135.slimeae.core.slimefun.terminals.METerminal.ALPHABETIC
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -29,10 +25,9 @@ import me.ddggdd135.slimeae.api.items.MEStorageCellCache;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 
 /**
- * 能源传输物品存储元件类
+ * ME物品存储元件类
  * 用于存储物品的基本单元
  */
-@EnableAsync
 public class MEItemStorageCell extends SlimefunItem implements NotPlaceable {
     public static final String UUID_KEY = "uuid";
     public static final String SERVER_UUID_KEY = "server_uuid";
@@ -85,31 +80,21 @@ public class MEItemStorageCell extends SlimefunItem implements NotPlaceable {
      *
      * @param itemStack 存储元件物品
      */
-    @Async
     public static void updateLore(@Nonnull ItemStack itemStack) {
         if (SlimefunItem.getByItem(itemStack) instanceof MECreativeItemStorageCell) return;
-        Bukkit.getScheduler().runTaskAsynchronously(SlimeAEPlugin.getInstance(), () -> {
-        	MEStorageCellCache meStorageCellCache = MEStorageCellCache.getMEStorageCellCache(itemStack);
-            List<String> lores = new ArrayList<>();
-            lores.add(
-                    CMIChatColor.translate("&e已存储 " + meStorageCellCache.getStored() + "/" + meStorageCellCache.getSize()));
-            lores.add("");
-            
-            // 先获取 Entry 的快照列表，这步操作很快
-            List<Entry<ItemStack, Long>> snapshot = new ArrayList<>(meStorageCellCache.getStorageUnsafe().entrySet());
-
-            // 在快照上进行排序，安全且不会崩溃
-            snapshot.sort(ALPHABETICAL_SORT);
-
-            List<Entry<ItemStack, Long>> storages = snapshot;
-            int lines = 0;
-            for (Map.Entry<ItemStack, Long> entry : storages) {
-                if (lines >= 8) {
-                    lores.add(CMIChatColor.translate("&e------还有" + (storages.size() - lines) + "项------"));
-                    break;
-                }
-                lines++;
-                lores.add(CMIChatColor.translate("&e" + ItemUtils.getItemName(entry.getKey()) + " - " + entry.getValue()));
+        MEStorageCellCache meStorageCellCache = MEStorageCellCache.getMEStorageCellCache(itemStack);
+        List<String> lores = new ArrayList<>();
+        lores.add(
+                CMIChatColor.translate("&e已存储 " + meStorageCellCache.getStored() + "/" + meStorageCellCache.getSize()));
+        lores.add("");
+        List<Map.Entry<ItemStack, Long>> storages = meStorageCellCache.getStorageUnsafe().entrySet().stream()
+                .sorted(ALPHABETICAL_SORT)
+                .toList();
+        int lines = 0;
+        for (Map.Entry<ItemStack, Long> entry : storages) {
+            if (lines >= 8) {
+                lores.add(CMIChatColor.translate("&e------还有" + (storages.size() - lines) + "项------"));
+                break;
             }
             lines++;
             lores.add(CMIChatColor.translate(

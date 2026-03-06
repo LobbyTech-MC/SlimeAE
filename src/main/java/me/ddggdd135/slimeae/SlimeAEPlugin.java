@@ -34,6 +34,7 @@ import me.ddggdd135.slimeae.core.listeners.CardListener;
 import me.ddggdd135.slimeae.core.listeners.JEGCompatibleListener;
 import me.ddggdd135.slimeae.core.listeners.NetworkListener;
 import me.ddggdd135.slimeae.core.listeners.NetworksIntegrationListener;
+import me.ddggdd135.slimeae.core.listeners.ReskinListener;
 import me.ddggdd135.slimeae.core.managers.PinnedManager;
 import me.ddggdd135.slimeae.core.slimefun.MECleaner;
 import me.ddggdd135.slimeae.core.slimefun.MECraftingTrigger;

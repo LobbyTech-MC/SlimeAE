@@ -5,8 +5,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

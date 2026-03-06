@@ -1,14 +1,19 @@
 package me.ddggdd135.slimeae.api.reskin;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.interfaces.IMEObject;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.IMEObject;
 
 public class MaterialValidator {
 

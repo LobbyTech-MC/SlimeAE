@@ -1,20 +1,7 @@
 package me.ddggdd135.slimeae.core.slimefun;
 
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
-import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBreakHandler;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import javax.annotation.Nonnull;
-import me.ddggdd135.guguslimefunlib.api.interfaces.InventoryBlock;
-import me.ddggdd135.slimeae.core.items.SlimeAEItems;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,6 +11,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
+import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBreakHandler;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.ddggdd135.guguslimefunlib.api.interfaces.InventoryBlock;
+import me.ddggdd135.slimeae.core.items.SlimeAEItems;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 public class PatternResetMachine extends SlimefunItem implements InventoryBlock {
 

@@ -1,15 +1,12 @@
 package me.ddggdd135.slimeae.core;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
@@ -17,13 +14,15 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.api.ConcurrentHashSet;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
@@ -41,9 +40,6 @@ import me.ddggdd135.slimeae.core.slimefun.assembler.LargeMolecularAssembler;
 import me.ddggdd135.slimeae.core.slimefun.assembler.MolecularAssembler;
 import me.ddggdd135.slimeae.integrations.networks.NetworksStorage;
 import me.ddggdd135.slimeae.utils.NetworkUtils;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 @EnableAsync
 public class NetworkData {

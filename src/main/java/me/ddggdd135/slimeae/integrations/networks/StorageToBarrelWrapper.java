@@ -20,7 +20,7 @@ public class StorageToBarrelWrapper extends BarrelIdentity {
     protected final IStorage storage;
 
     public StorageToBarrelWrapper(@Nonnull Location location, @Nonnull IStorage storage, @Nonnull ItemKey key) {
-        super(location, key.getItemStack(), storage.getStorageUnsafe().getOrDefault(key, 0L), BarrelType.UNKNOWN);
+        super(location, key.getItemStack(), storage.getStorageUnsafe().getOrDefault(key, 0L), 100000, BarrelType.UNKNOWN);
         this.storage = storage;
     }
 
@@ -56,4 +56,5 @@ public class StorageToBarrelWrapper extends BarrelIdentity {
     public int[] getOutputSlot() {
         return new int[0];
     }
+    
 }
