@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -242,13 +243,23 @@ public class RecipeUtils {
         if (inputHasSimi) return null;
 
         ItemStack[] oldInput = input;
-        input = new ItemStack[9];
+        ItemStack[] craftingGrid = Arrays.copyOf(input, 9);
         for (int i = 0; i < 9; i++) {
             if (oldInput.length <= i) break;
             input[i] = oldInput[i];
         }
-        Recipe minecraftRecipe =
-                Bukkit.getCraftingRecipe(input, Bukkit.getWorlds().get(0));
+        CompletableFuture<Recipe> recipeFuture = new CompletableFuture<>();
+
+        Bukkit.getScheduler().runTask(SlimeAEPlugin.getInstance(), () -> {
+            try {
+                recipeFuture.complete(Bukkit.getCraftingRecipe(input, Bukkit.getWorlds().get(0)));
+            } catch (Exception e) {
+                recipeFuture.completeExceptionally(e);
+            }
+        });
+
+        // Block and wait for the result (or use .thenAccept)
+        Recipe minecraftRecipe = Bukkit.getCraftingRecipe(craftingGrid, Bukkit.getWorlds().get(0));
         if (minecraftRecipe instanceof ShapedRecipe shapedRecipe) {
             ItemStack out = new ItemStack(
                     shapedRecipe.getResult().getType(), shapedRecipe.getResult().getAmount());
