@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -221,6 +223,26 @@ public class RecipeUtils {
     }
 
     @Async
+    public static CompletableFuture<Recipe> getRecipeAsync(ItemStack[] craftingGrid, World world) {
+        CompletableFuture<Recipe> future = new CompletableFuture<>();
+
+        // 1. 立即切换到服务器主线程执行非线程安全的 API
+        Bukkit.getScheduler().runTask(SlimeAEPlugin.getInstance(), () -> {
+            try {
+                // 2. 在主线程安全获取配方
+                Recipe recipe = Bukkit.getCraftingRecipe(craftingGrid, world);
+                
+                // 3. 将结果传递回 Future
+                future.complete(recipe);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+
+        return future;
+    }
+    
+    @Async
     @Nullable public static CraftingRecipe getRecipe(
             @Nonnull ItemStack[] input, @Nonnull ItemStack[] output, Map<RecipeType, SlimefunItem> supported) {
         for (Map.Entry<RecipeType, SlimefunItem> entry : supported.entrySet()) {
@@ -243,70 +265,69 @@ public class RecipeUtils {
         if (inputHasSimi) return null;
 
         ItemStack[] oldInput = input;
-        ItemStack[] craftingGrid = Arrays.copyOf(input, 9);
         for (int i = 0; i < 9; i++) {
             if (oldInput.length <= i) break;
             input[i] = oldInput[i];
         }
-        CompletableFuture<Recipe> recipeFuture = new CompletableFuture<>();
-
-        Bukkit.getScheduler().runTask(SlimeAEPlugin.getInstance(), () -> {
-            try {
-                recipeFuture.complete(Bukkit.getCraftingRecipe(input, Bukkit.getWorlds().get(0)));
-            } catch (Exception e) {
-                recipeFuture.completeExceptionally(e);
+     // 在异步线程中
+        ItemStack[] craftingGrid = Arrays.copyOf(input, 9);
+        World world = Bukkit.getWorlds().get(0);
+        try {
+            Recipe minecraftRecipe = getRecipeAsync(craftingGrid, world).get(50, TimeUnit.MILLISECONDS); 
+            
+            if (minecraftRecipe != null) {
+            	if (minecraftRecipe instanceof ShapedRecipe shapedRecipe) {
+                    ItemStack out = new ItemStack(
+                            shapedRecipe.getResult().getType(), shapedRecipe.getResult().getAmount());
+                    if (output.length == 1 && SlimefunUtils.isItemSimilar(output[0], out, true, false))
+                        return new CraftingRecipe(
+                                CraftType.CRAFTING_TABLE,
+                                Arrays.stream(input)
+                                        .map(x -> {
+                                            if (x == null) return null;
+                                            return new ItemStack(x.getType(), x.getAmount());
+                                        })
+                                        .toArray(ItemStack[]::new),
+                                output);
+                }
+                if (minecraftRecipe instanceof ShapelessRecipe shapelessRecipe) {
+                    ItemStack out = new ItemStack(
+                            shapelessRecipe.getResult().getType(),
+                            shapelessRecipe.getResult().getAmount());
+                    if (output.length == 1 && SlimefunUtils.isItemSimilar(output[0], out, true, false))
+                        return new CraftingRecipe(
+                                CraftType.CRAFTING_TABLE,
+                                Arrays.stream(input)
+                                        .map(x -> {
+                                            if (x == null) return null;
+                                            return new ItemStack(x.getType(), x.getAmount());
+                                        })
+                                        .toArray(ItemStack[]::new),
+                                new ItemStack(
+                                        shapelessRecipe.getResult().getType(),
+                                        shapelessRecipe.getResult().getAmount()));
+                }
+                if (minecraftRecipe instanceof CookingRecipe cookingRecipe) {
+                    ItemStack out = new ItemStack(
+                            cookingRecipe.getResult().getType(),
+                            cookingRecipe.getResult().getAmount());
+                    if (output.length == 1 && SlimefunUtils.isItemSimilar(output[0], out, true, false))
+                        return new CraftingRecipe(
+                                CraftType.COOKING,
+                                new ItemStack[] {
+                                    new ItemStack(
+                                            cookingRecipe.getInput().getType(),
+                                            cookingRecipe.getInput().getAmount())
+                                },
+                                new ItemStack(
+                                        cookingRecipe.getResult().getType(),
+                                        cookingRecipe.getResult().getAmount()));
+                }
             }
-        });
-
-        // Block and wait for the result (or use .thenAccept)
-        Recipe minecraftRecipe = Bukkit.getCraftingRecipe(craftingGrid, Bukkit.getWorlds().get(0));
-        if (minecraftRecipe instanceof ShapedRecipe shapedRecipe) {
-            ItemStack out = new ItemStack(
-                    shapedRecipe.getResult().getType(), shapedRecipe.getResult().getAmount());
-            if (output.length == 1 && SlimefunUtils.isItemSimilar(output[0], out, true, false))
-                return new CraftingRecipe(
-                        CraftType.CRAFTING_TABLE,
-                        Arrays.stream(input)
-                                .map(x -> {
-                                    if (x == null) return null;
-                                    return new ItemStack(x.getType(), x.getAmount());
-                                })
-                                .toArray(ItemStack[]::new),
-                        output);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (minecraftRecipe instanceof ShapelessRecipe shapelessRecipe) {
-            ItemStack out = new ItemStack(
-                    shapelessRecipe.getResult().getType(),
-                    shapelessRecipe.getResult().getAmount());
-            if (output.length == 1 && SlimefunUtils.isItemSimilar(output[0], out, true, false))
-                return new CraftingRecipe(
-                        CraftType.CRAFTING_TABLE,
-                        Arrays.stream(input)
-                                .map(x -> {
-                                    if (x == null) return null;
-                                    return new ItemStack(x.getType(), x.getAmount());
-                                })
-                                .toArray(ItemStack[]::new),
-                        new ItemStack(
-                                shapelessRecipe.getResult().getType(),
-                                shapelessRecipe.getResult().getAmount()));
-        }
-        if (minecraftRecipe instanceof CookingRecipe cookingRecipe) {
-            ItemStack out = new ItemStack(
-                    cookingRecipe.getResult().getType(),
-                    cookingRecipe.getResult().getAmount());
-            if (output.length == 1 && SlimefunUtils.isItemSimilar(output[0], out, true, false))
-                return new CraftingRecipe(
-                        CraftType.COOKING,
-                        new ItemStack[] {
-                            new ItemStack(
-                                    cookingRecipe.getInput().getType(),
-                                    cookingRecipe.getInput().getAmount())
-                        },
-                        new ItemStack(
-                                cookingRecipe.getResult().getType(),
-                                cookingRecipe.getResult().getAmount()));
-        }
+        
 
         if (output.length == 1) return getRecipe(output[0]);
 
