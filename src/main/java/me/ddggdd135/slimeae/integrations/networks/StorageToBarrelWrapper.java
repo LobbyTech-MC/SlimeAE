@@ -5,8 +5,6 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import io.github.sefiraat.networks.network.barrel.BarrelType;
 import io.github.sefiraat.networks.network.stackcaches.BarrelIdentity;
@@ -15,17 +13,15 @@ import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 
-@EnableAsync
 public class StorageToBarrelWrapper extends BarrelIdentity {
     protected final IStorage storage;
 
     public StorageToBarrelWrapper(@Nonnull Location location, @Nonnull IStorage storage, @Nonnull ItemKey key) {
-        super(location, key.getItemStack(), storage.getStorageUnsafe().getOrDefault(key, 0L), 100000, BarrelType.UNKNOWN);
+        super(location, key.getItemStack(), storage.getStorageUnsafe().getOrDefault(key, 0L), 1000000000, BarrelType.UNKNOWN);
         this.storage = storage;
     }
 
     @Override
-    @Async
     @Nullable public ItemStack requestItem(@Nonnull ItemRequest itemRequest) {
         if (itemRequest.getItemStack() == null
                 || itemRequest.getItemStack().getType().isAir()) return null;
@@ -40,19 +36,16 @@ public class StorageToBarrelWrapper extends BarrelIdentity {
     }
 
     @Override
-    @Async
     public void depositItemStack(ItemStack[] itemStacks) {
         storage.pushItem(itemStacks);
     }
 
     @Override
-    @Async
     public int[] getInputSlot() {
         return new int[0];
     }
 
     @Override
-    @Async
     public int[] getOutputSlot() {
         return new int[0];
     }
