@@ -479,6 +479,7 @@ public class METerminal extends TickingBlock implements IMEObject, InventoryBloc
                 info.getStorage().invalidateStorageCache();
                 info.getStorage().clearTakeAndPushCache();
                 info.setNeedsStorageUpdate(true);
+                info.setNeedsRecipeUpdate(true);
             }
             clearSortedItemsCache(block.getLocation());
         });

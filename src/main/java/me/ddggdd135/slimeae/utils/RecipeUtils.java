@@ -40,6 +40,7 @@ import io.github.thebusybiscuit.exoticgarden.ExoticGardenRecipeTypes;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.altar.AltarRecipe;
 import io.github.thebusybiscuit.slimefun4.implementation.items.altar.AncientAltar;
@@ -49,17 +50,20 @@ import me.ddggdd135.guguslimefunlib.api.ItemHashMap;
 import me.ddggdd135.guguslimefunlib.api.abstracts.AbstractMachineBlock;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
+import me.ddggdd135.slimeae.api.autocraft.CraftTypeRegistry;
 import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 import me.ddggdd135.slimeae.api.wrappers.CraftCraftingBlock;
 import me.ddggdd135.slimeae.api.wrappers.CraftCraftingBlockRecipe;
 import me.ddggdd135.slimeae.core.items.SlimeAEItems;
 import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
-import me.lucasgithuber.obsidianexpansion.Items;
-import me.lucasgithuber.obsidianexpansion.machines.ObsidianForge;
+import me.ddggdd135.slimeae.integrations.*;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
 import me.sfiguz7.transcendence.lists.TEItems;
 import me.sfiguz7.transcendence.lists.TERecipeType;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.*;
 
 @EnableAsync
 public class RecipeUtils {
@@ -67,7 +71,121 @@ public class RecipeUtils {
     public static final Map<RecipeType, SlimefunItem> CRAFTING_TABLE_TYPES = new HashMap<>();
     public static final Map<RecipeType, SlimefunItem> LARGE_TYPES = new HashMap<>();
 
-    @Async
+    private static boolean initialized = false;
+
+    public static void init() {
+        if (initialized) return;
+        initialized = true;
+
+        registerType(
+                CraftType.ENHANCED_CRAFTING_TABLE,
+                RecipeType.ENHANCED_CRAFTING_TABLE,
+                SlimefunItem.getByItem(SlimefunItems.ENHANCED_CRAFTING_TABLE));
+        registerType(CraftType.CHARGER, SlimefunAERecipeTypes.CHARGER, SlimefunItem.getByItem(SlimeAEItems.CHARGER));
+        registerType(
+                CraftType.INSCRIBER, SlimefunAERecipeTypes.INSCRIBER, SlimefunItem.getByItem(SlimeAEItems.INSCRIBER));
+        registerType(
+                CraftType.MAGIC_WORKBENCH,
+                RecipeType.MAGIC_WORKBENCH,
+                SlimefunItem.getByItem(SlimefunItems.MAGIC_WORKBENCH));
+        registerType(CraftType.ARMOR_FORGE, RecipeType.ARMOR_FORGE, SlimefunItem.getByItem(SlimefunItems.ARMOR_FORGE));
+        registerType(CraftType.SMELTERY, RecipeType.SMELTERY, SlimefunItem.getByItem(SlimefunItems.SMELTERY));
+        registerType(
+                CraftType.ANCIENT_ALTAR, RecipeType.ANCIENT_ALTAR, SlimefunItem.getByItem(SlimefunItems.ANCIENT_ALTAR));
+        registerType(CraftType.COMPRESSOR, RecipeType.COMPRESSOR, SlimefunItem.getByItem(SlimefunItems.COMPRESSOR));
+        registerType(CraftType.GRIND_STONE, RecipeType.GRIND_STONE, SlimefunItem.getByItem(SlimefunItems.GRIND_STONE));
+        registerType(CraftType.JUICER, RecipeType.JUICER, SlimefunItem.getByItem(SlimefunItems.JUICER));
+        registerType(CraftType.ORE_CRUSHER, RecipeType.ORE_CRUSHER, SlimefunItem.getByItem(SlimefunItems.ORE_CRUSHER));
+        registerType(
+                CraftType.PRESSURE_CHAMBER,
+                RecipeType.PRESSURE_CHAMBER,
+                SlimefunItem.getByItem(SlimefunItems.PRESSURE_CHAMBER));
+        registerType(
+                CraftType.HEATED_PRESSURE_CHAMBER,
+                RecipeType.HEATED_PRESSURE_CHAMBER,
+                SlimefunItem.getByItem(SlimefunItems.HEATED_PRESSURE_CHAMBER));
+
+        try {
+            if (SlimeAEPlugin.getInfinityIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_InfinityExpansion", true)) {
+                InfinityRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getGalactifunIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_Galactifun", true)) {
+                GalactifunRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getObsidianExpansionIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_ObsidianExpansion", true)) {
+                ObsidianExpansionRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getExoticGardenIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_ExoticGarden", true)) {
+                ExoticGardenRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_NetworksExpansion", true)) {
+                NetworksExpansionRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_NTW_QUANTUM_WORKBENCH", true)) {
+                NetworksExpansionRecipeRegistration.registerQuantumWorkbench();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getTranscEndenceIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_TranscEndence", true)) {
+                TranscEndenceRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getLogiTechIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_LogiTech", true)) {
+                LogiTechRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getFinalTechIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_FinalTECH", true)) {
+                FinalTechRecipeRegistration.register();
+            }
+        } catch (Throwable ignored) {
+        }
+
+        try {
+            if (SlimeAEPlugin.getFinalTechIntegration().isLoaded()
+                    && SlimeAEPlugin.getInstance().getConfig().getBoolean("enable_FinalTECH_BedrockCraftTable", true)) {
+                FinalTechRecipeRegistration.registerBedrockCraftTable();
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
     @Nullable public static CraftingRecipe getRecipe(@Nonnull ItemStack itemStack) {
         return getRecipe(itemStack, SUPPORTED_RECIPE_TYPES);
     }
@@ -396,10 +514,8 @@ public class RecipeUtils {
             return result;
         }
         if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()
-                && slimefunItem instanceof AbstractManualCrafter abstractManualCrafter) {
-            return abstractManualCrafter.getRecipes().stream()
-                    .map(SuperRecipe::getInput)
-                    .toList();
+                && NetworksExpansionRecipeRegistration.isAbstractManualCrafter(slimefunItem)) {
+            return NetworksExpansionRecipeRegistration.getInputs(slimefunItem);
         }
         if (slimefunItem instanceof AncientAltar ancientAltar) {
             return ancientAltar.getRecipes().stream()
@@ -407,7 +523,13 @@ public class RecipeUtils {
                     .toList();
         }
 
-        return new ArrayList<>();
+        List<ItemStack[]> fallback = new ArrayList<>();
+        for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+            if (!item.isDisabled() && recipeType.equals(item.getRecipeType())) {
+                fallback.add(item.getRecipe());
+            }
+        }
+        return fallback;
     }
 
     @Async
@@ -469,26 +591,6 @@ public class RecipeUtils {
             for (CraftCraftingBlockRecipe recipe : recipes) {
                 ItemStack[] in = recipe.recipe();
                 for (int i = 0; i < Math.max(in.length, inputs.length); i++) {
-                    ItemStack x = (in.length > i) ? in[i] : null;
-                    ItemStack y = (inputs.length > i) ? inputs[i] : null;
-
-                    // Don't wrap x in 'new ItemStack()', SlimefunUtils handles snapshots fine
-                    if (!SlimefunUtils.isItemSimilar(x, y, true, false)) {
-                        continue i;
-                    }
-                }
-                // Use clone() instead of the constructor
-                return new ItemStack[] { recipe.output().clone() };
-            }
-            return new ItemStack[0];
-        }
-        if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()
-                && slimefunItem instanceof AbstractManualCrafter abstractManualCrafter) {
-            List<SuperRecipe> recipes = abstractManualCrafter.getRecipes();
-            i:
-            for (SuperRecipe recipe : recipes) {
-                ItemStack[] in = recipe.getInput();
-                for (int i = 0; i < Math.max(in.length, inputs.length); i++) {
                     ItemStack x = null;
                     ItemStack y = null;
                     if (in.length > i) {
@@ -497,13 +599,26 @@ public class RecipeUtils {
                     if (inputs.length > i) {
                         y = inputs[i];
                     }
+                    if (x != null && !x.getType().isAir())
+                        x = (x instanceof ItemStackSnapshot snap)
+                                ? ItemStackSnapshotUtils.clone(snap)
+                                : new ItemStack(x);
                     if (!SlimefunUtils.isItemSimilar(x, y, true, false)) {
                         continue i;
                     }
                 }
-
-                return recipe.getOutput();
+                ItemStack rawOut = recipe.output();
+                ItemStack out = (rawOut instanceof ItemStackSnapshot snap)
+                        ? ItemStackSnapshotUtils.clone(snap)
+                        : new ItemStack(rawOut);
+                return new ItemStack[] {out};
             }
+            return new ItemStack[0];
+        }
+        if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()
+                && NetworksExpansionRecipeRegistration.isAbstractManualCrafter(slimefunItem)) {
+            ItemStack[] result = NetworksExpansionRecipeRegistration.getOutputs(slimefunItem, inputs);
+            if (result != null) return result;
         }
         if (slimefunItem instanceof AncientAltar ancientAltar) {
             List<AltarRecipe> recipes = ancientAltar.getRecipes();
@@ -528,15 +643,20 @@ public class RecipeUtils {
             }
         }
 
+        for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+            if (!item.isDisabled() && recipeType.equals(item.getRecipeType())) {
+                ItemStack[] in = item.getRecipe();
+                if (!ItemUtils.matchesAll(inputs, in, true)) continue;
+                return new ItemStack[] {item.getRecipeOutput()};
+            }
+        }
+
         return new ItemStack[0];
     }
 
     @Async
     public static CraftType getCraftType(@Nonnull RecipeType recipeType) {
-        if (LARGE_TYPES.containsKey(recipeType)) return CraftType.LARGE;
-        if (SUPPORTED_RECIPE_TYPES.containsKey(recipeType)) return CraftType.CRAFTING_TABLE;
-
-        return CraftType.COOKING;
+        return CraftTypeRegistry.getCraftType(recipeType);
     }
 
     /**
@@ -610,57 +730,13 @@ public class RecipeUtils {
         return itemStacks;
     }
 
-    static {
-        SUPPORTED_RECIPE_TYPES.put(
-                RecipeType.ENHANCED_CRAFTING_TABLE, SlimefunItem.getByItem(SlimefunItems.ENHANCED_CRAFTING_TABLE));
-        SUPPORTED_RECIPE_TYPES.put(SlimefunAERecipeTypes.CHARGER, SlimefunItem.getByItem(SlimeAEItems.CHARGER));
-        SUPPORTED_RECIPE_TYPES.put(SlimefunAERecipeTypes.INSCRIBER, SlimefunItem.getByItem(SlimeAEItems.INSCRIBER));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.MAGIC_WORKBENCH, SlimefunItem.getByItem(SlimefunItems.MAGIC_WORKBENCH));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.ARMOR_FORGE, SlimefunItem.getByItem(SlimefunItems.ARMOR_FORGE));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.SMELTERY, SlimefunItem.getByItem(SlimefunItems.SMELTERY));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.ANCIENT_ALTAR, SlimefunItem.getByItem(SlimefunItems.ANCIENT_ALTAR));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.COMPRESSOR, SlimefunItem.getByItem(SlimefunItems.COMPRESSOR));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.GRIND_STONE, SlimefunItem.getByItem(SlimefunItems.GRIND_STONE));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.JUICER, SlimefunItem.getByItem(SlimefunItems.JUICER));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.ORE_CRUSHER, SlimefunItem.getByItem(SlimefunItems.ORE_CRUSHER));
-        SUPPORTED_RECIPE_TYPES.put(RecipeType.PRESSURE_CHAMBER, SlimefunItem.getByItem(SlimefunItems.PRESSURE_CHAMBER));
-        SUPPORTED_RECIPE_TYPES.put(
-                RecipeType.HEATED_PRESSURE_CHAMBER, SlimefunItem.getByItem(SlimefunItems.HEATED_PRESSURE_CHAMBER));
-
-        CRAFTING_TABLE_TYPES.put(
-                RecipeType.ENHANCED_CRAFTING_TABLE, SlimefunItem.getByItem(SlimefunItems.ENHANCED_CRAFTING_TABLE));
-
-        if (SlimeAEPlugin.getInfinityIntegration().isLoaded()) {
-            SUPPORTED_RECIPE_TYPES.put(InfinityWorkbench.TYPE, SlimefunItem.getByItem(Blocks.INFINITY_FORGE));
-            LARGE_TYPES.put(InfinityWorkbench.TYPE, SlimefunItem.getByItem(Blocks.INFINITY_FORGE));
-            SUPPORTED_RECIPE_TYPES.put(MobDataInfuser.TYPE, SlimefunItem.getByItem(MobData.INFUSER));
-            LARGE_TYPES.put(MobDataInfuser.TYPE, SlimefunItem.getByItem(MobData.INFUSER));
-        }
-
-        if (SlimeAEPlugin.getGalactifunIntegration().isLoaded()) {
-            SUPPORTED_RECIPE_TYPES.put(AssemblyTable.TYPE, SlimefunItem.getByItem(BaseItems.ASSEMBLY_TABLE));
-            LARGE_TYPES.put(AssemblyTable.TYPE, SlimefunItem.getByItem(BaseItems.ASSEMBLY_TABLE));
-        }
-
-        if (SlimeAEPlugin.getObsidianExpansionIntegration().isLoaded()) {
-            SUPPORTED_RECIPE_TYPES.put(ObsidianForge.TYPE, SlimefunItem.getByItem(Items.OBSIDIAN_FORGE));
-            LARGE_TYPES.put(ObsidianForge.TYPE, SlimefunItem.getByItem(Items.OBSIDIAN_FORGE));
-        }
-
-        if (SlimeAEPlugin.getExoticGardenIntegration().isLoaded()) {
-            SUPPORTED_RECIPE_TYPES.put(ExoticGardenRecipeTypes.KITCHEN, SlimefunItem.getById("KITCHEN"));
-        }
-
-        if (SlimeAEPlugin.getNetworksExpansionIntegration().isLoaded()) {
-            SUPPORTED_RECIPE_TYPES.put(
-                    ExpansionWorkbench.TYPE, SlimefunItem.getByItem(ExpansionItemStacks.NETWORKS_EXPANSION_WORKBENCH));
-            CRAFTING_TABLE_TYPES.put(
-                    ExpansionWorkbench.TYPE, SlimefunItem.getByItem(ExpansionItemStacks.NETWORKS_EXPANSION_WORKBENCH));
-        }
-
-        if (SlimeAEPlugin.getTranscEndenceIntegration().isLoaded()) {
-            SUPPORTED_RECIPE_TYPES.put(TERecipeType.NANOBOT_CRAFTER, SlimefunItem.getByItem(TEItems.NANOBOT_CRAFTER));
-            CRAFTING_TABLE_TYPES.put(TERecipeType.NANOBOT_CRAFTER, SlimefunItem.getByItem(TEItems.NANOBOT_CRAFTER));
+    public static void registerType(CraftType craftType, RecipeType recipeType, SlimefunItem machine) {
+        SUPPORTED_RECIPE_TYPES.put(recipeType, machine);
+        CraftTypeRegistry.register(craftType, recipeType, machine);
+        if (craftType.isSmall()) {
+            CRAFTING_TABLE_TYPES.put(recipeType, machine);
+        } else if (craftType.isLarge()) {
+            LARGE_TYPES.put(recipeType, machine);
         }
     }
 }

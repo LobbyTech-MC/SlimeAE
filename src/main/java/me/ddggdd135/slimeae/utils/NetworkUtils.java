@@ -8,6 +8,12 @@ import java.util.Stack;
 
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.autocraft.AutoCraftingTask;
+import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
+import me.ddggdd135.slimeae.api.interfaces.*;
+import me.ddggdd135.slimeae.core.NetworkInfo;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -80,6 +86,26 @@ public class NetworkUtils {
     }
 
 	@Async
+    @Nullable public static NetworkInfo findNetworkByBFS(Location start) {
+        Set<Location> visited = new HashSet<>();
+        Stack<Location> stack = new Stack<>();
+        stack.push(start);
+        visited.add(start);
+        while (!stack.empty()) {
+            Location next = stack.pop();
+            for (BlockFace blockFace : Valid_Faces) {
+                Location testLocation = next.clone().add(blockFace.getDirection());
+                if (visited.contains(testLocation)) continue;
+                if (!SlimeAEPlugin.getNetworkData().AllNetworkBlocks.containsKey(testLocation)) continue;
+                visited.add(testLocation);
+                NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(testLocation);
+                if (info != null) return info;
+                stack.push(testLocation);
+            }
+        }
+        return null;
+    }
+
     public static void doCraft(@Nonnull NetworkInfo networkInfo, @Nonnull ItemStack itemStack, long amount) {
         // 检查是否已有相同的合成任务
         boolean hasExistingTask = false;
