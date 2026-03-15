@@ -1,17 +1,21 @@
 package me.ddggdd135.slimeae.core.slimefun.assembler;
 
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import java.util.Map;
-import javax.annotation.Nonnull;
 import me.ddggdd135.slimeae.api.abstracts.Card;
 import me.ddggdd135.slimeae.api.interfaces.ICardHolder;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 public class AdvancedVanillaMolecularAssembler extends VanillaMolecularAssembler {
     private final int defaultSpeed;

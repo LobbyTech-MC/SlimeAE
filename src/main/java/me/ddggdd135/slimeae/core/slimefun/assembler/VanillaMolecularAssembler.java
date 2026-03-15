@@ -1,14 +1,17 @@
 package me.ddggdd135.slimeae.core.slimefun.assembler;
 
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import javax.annotation.Nonnull;
-import me.ddggdd135.slimeae.api.autocraft.CraftType;
+
 import org.bukkit.inventory.ItemStack;
+
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import me.ddggdd135.slimeae.api.autocraft.CraftType;
 
 public class VanillaMolecularAssembler extends MolecularAssembler {
     private static final Set<CraftType> VANILLA_CRAFT_TYPES =

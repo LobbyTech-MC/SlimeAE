@@ -1,16 +1,19 @@
 package me.ddggdd135.slimeae.core.slimefun.terminals;
 
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
 import javax.annotation.Nonnull;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.ddggdd135.guguslimefunlib.items.AdvancedCustomItemStack;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
 import me.ddggdd135.slimeae.api.autocraft.CraftTypeRegistry;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public final class CraftTypeSelector {
     private static final int[] ITEM_SLOTS = {

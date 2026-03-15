@@ -1,12 +1,14 @@
 package me.ddggdd135.slimeae.core.slimefun.terminals;
 
 import javax.annotation.Nonnull;
+
+import org.bukkit.inventory.ItemStack;
+
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.inventory.ItemStack;
 
 public final class NetworkRecipeFetch {
     private NetworkRecipeFetch() {}

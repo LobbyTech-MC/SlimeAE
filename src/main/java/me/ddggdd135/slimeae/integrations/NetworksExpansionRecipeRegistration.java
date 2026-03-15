@@ -1,17 +1,20 @@
 package me.ddggdd135.slimeae.integrations;
 
+import java.util.List;
+
+import org.bukkit.inventory.ItemStack;
+
 import com.balugaq.netex.api.data.SuperRecipe;
 import com.ytdd9527.networksexpansion.core.items.machines.AbstractManualCrafter;
 import com.ytdd9527.networksexpansion.implementation.ExpansionItemStacks;
 import com.ytdd9527.networksexpansion.implementation.machines.manual.ExpansionWorkbench;
+
 import io.github.sefiraat.networks.slimefun.NetworksSlimefunItemStacks;
 import io.github.sefiraat.networks.slimefun.network.NetworkQuantumWorkbench;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import java.util.List;
 import me.ddggdd135.slimeae.api.autocraft.CraftType;
 import me.ddggdd135.slimeae.utils.RecipeUtils;
-import org.bukkit.inventory.ItemStack;
 
 public final class NetworksExpansionRecipeRegistration {
     public static void register() {

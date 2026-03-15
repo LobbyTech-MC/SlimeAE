@@ -1,11 +1,16 @@
 package me.ddggdd135.slimeae.api.autocraft;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 
 public final class CraftTypeRegistry {
     private static final Map<RecipeType, CraftType> RECIPE_TYPE_TO_CRAFT_TYPE = new ConcurrentHashMap<>();

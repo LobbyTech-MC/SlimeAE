@@ -25,18 +25,6 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.balugaq.netex.api.data.SuperRecipe;
-import com.ytdd9527.networksexpansion.core.items.machines.AbstractManualCrafter;
-import com.ytdd9527.networksexpansion.implementation.ExpansionItemStacks;
-import com.ytdd9527.networksexpansion.implementation.machines.manual.ExpansionWorkbench;
-
-import io.github.addoncommunity.galactifun.base.BaseItems;
-import io.github.addoncommunity.galactifun.base.items.AssemblyTable;
-import io.github.mooy1.infinityexpansion.items.blocks.Blocks;
-import io.github.mooy1.infinityexpansion.items.blocks.InfinityWorkbench;
-import io.github.mooy1.infinityexpansion.items.mobdata.MobData;
-import io.github.mooy1.infinityexpansion.items.mobdata.MobDataInfuser;
-import io.github.thebusybiscuit.exoticgarden.ExoticGardenRecipeTypes;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
@@ -56,14 +44,16 @@ import me.ddggdd135.slimeae.api.wrappers.CraftCraftingBlock;
 import me.ddggdd135.slimeae.api.wrappers.CraftCraftingBlockRecipe;
 import me.ddggdd135.slimeae.core.items.SlimeAEItems;
 import me.ddggdd135.slimeae.core.recipes.SlimefunAERecipeTypes;
-import me.ddggdd135.slimeae.integrations.*;
+import me.ddggdd135.slimeae.integrations.ExoticGardenRecipeRegistration;
+import me.ddggdd135.slimeae.integrations.FinalTechRecipeRegistration;
+import me.ddggdd135.slimeae.integrations.GalactifunRecipeRegistration;
+import me.ddggdd135.slimeae.integrations.InfinityRecipeRegistration;
+import me.ddggdd135.slimeae.integrations.LogiTechRecipeRegistration;
+import me.ddggdd135.slimeae.integrations.NetworksExpansionRecipeRegistration;
+import me.ddggdd135.slimeae.integrations.ObsidianExpansionRecipeRegistration;
+import me.ddggdd135.slimeae.integrations.TranscEndenceRecipeRegistration;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
-import me.sfiguz7.transcendence.lists.TEItems;
-import me.sfiguz7.transcendence.lists.TERecipeType;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.*;
 
 @EnableAsync
 public class RecipeUtils {

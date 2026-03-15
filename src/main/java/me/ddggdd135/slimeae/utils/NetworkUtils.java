@@ -7,13 +7,8 @@ import java.util.Set;
 import java.util.Stack;
 
 import javax.annotation.Nonnull;
-
 import javax.annotation.Nullable;
-import me.ddggdd135.slimeae.SlimeAEPlugin;
-import me.ddggdd135.slimeae.api.autocraft.AutoCraftingTask;
-import me.ddggdd135.slimeae.api.autocraft.CraftingRecipe;
-import me.ddggdd135.slimeae.api.interfaces.*;
-import me.ddggdd135.slimeae.core.NetworkInfo;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

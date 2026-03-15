@@ -6,7 +6,7 @@
 
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>7994a74-Beta</version>
+    <version>fae927a-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAEPlugin</name>
@@ -233,6 +233,20 @@
             <version>0994db4b6f</version>
             <scope>system</scope>
             <systemPath>${ExoticGarden-systemPath}</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>me.matl114</groupId>
+            <artifactId>LogiTech</artifactId>
+            <version>1.0.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/LogiTech.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>io.taraxacum</groupId>
+            <artifactId>FinalTECH-Changed</artifactId>
+            <version>3.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/FinalTECH-Changed.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>

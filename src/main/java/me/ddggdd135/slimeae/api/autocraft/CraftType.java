@@ -1,12 +1,16 @@
 package me.ddggdd135.slimeae.api.autocraft;
 
-import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerHead;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerSkin;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerHead;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerSkin;
 
 public enum CraftType {
     CRAFTING_TABLE("&e工作台配方", Material.CRAFTING_TABLE, GridSize.SMALL_3x3),

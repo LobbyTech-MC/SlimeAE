@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,10 +43,12 @@ import me.ddggdd135.slimeae.core.slimefun.MELevelEmitter;
 import me.ddggdd135.slimeae.core.slimefun.NetworksExpansionSwitch;
 import me.ddggdd135.slimeae.core.slimefun.cards.CraftingCard;
 import me.ddggdd135.slimeae.integrations.ExoticGardenIntegration;
+import me.ddggdd135.slimeae.integrations.FinalTechIntegration;
 import me.ddggdd135.slimeae.integrations.FluffyMachinesIntegration;
 import me.ddggdd135.slimeae.integrations.GalactifunIntegration;
 import me.ddggdd135.slimeae.integrations.InfinityIntegration;
 import me.ddggdd135.slimeae.integrations.JustEnoughGuideIntegration;
+import me.ddggdd135.slimeae.integrations.LogiTechIntegration;
 import me.ddggdd135.slimeae.integrations.NetworksExpansionIntegration;
 import me.ddggdd135.slimeae.integrations.NetworksIntegration;
 import me.ddggdd135.slimeae.integrations.ObsidianExpansionIntegration;
@@ -53,8 +56,6 @@ import me.ddggdd135.slimeae.integrations.TranscEndenceIntegration;
 import me.ddggdd135.slimeae.tasks.DataSavingTask;
 import me.ddggdd135.slimeae.tasks.NetworkTickerTask;
 import me.ddggdd135.slimeae.tasks.NetworkTimeConsumingTask;
-import me.ddggdd135.slimeae.integrations.*;
-import me.ddggdd135.slimeae.tasks.*;
 import me.ddggdd135.slimeae.utils.RecipeUtils;
 import me.ddggdd135.slimeae.utils.SlimefunItemUtils;
 import net.guizhanss.minecraft.guizhanlib.updater.GuizhanUpdater;
@@ -88,6 +89,7 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
     private SlimeAECommand slimeAECommand = new SlimeAECommand();
     private PinnedManager pinnedManager;
     private static boolean debug = false;
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -186,8 +188,8 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         getCommand("SlimeAE").setExecutor(slimeAECommand);
         getCommand("SlimeAE").setTabCompleter(slimeAECommand);
 
-        //int pluginId = 24737;
-        //metrics = new Metrics(this, pluginId);
+        int pluginId = 24737;
+        metrics = new Metrics(this, pluginId);
     }
 
     @Override

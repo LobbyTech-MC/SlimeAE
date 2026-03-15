@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -41,10 +42,6 @@ import me.ddggdd135.slimeae.core.slimefun.assembler.LargeMolecularAssembler;
 import me.ddggdd135.slimeae.core.slimefun.assembler.MolecularAssembler;
 import me.ddggdd135.slimeae.integrations.networks.NetworksStorage;
 import me.ddggdd135.slimeae.utils.NetworkUtils;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.inventory.ItemStack;
 
 @EnableAsync
 public class NetworkData {
