@@ -6,12 +6,13 @@
 
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>b3adb50-Beta</version>
+    <version>bc50039-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAEPlugin</name>
 
     <properties>
+        <LogiTech-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\LogiTech.jar</LogiTech-systemPath>
         <JustEnoughGuide-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\JustEnoughGuide.jar</JustEnoughGuide-systemPath>
         <InfinityExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\InfinityExpansion.jar</InfinityExpansion-systemPath>
         <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
@@ -243,14 +244,14 @@
             <artifactId>LogiTech</artifactId>
             <version>1.0.3</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/LogiTech.jar</systemPath>
+            <systemPath>${LogiTech-systemPath}</systemPath>
         </dependency>
         <dependency>
             <groupId>io.taraxacum</groupId>
             <artifactId>FinalTECH-Changed</artifactId>
             <version>3.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/FinalTECH-Changed.jar</systemPath>
+            <systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FinalTECH-Changed.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
