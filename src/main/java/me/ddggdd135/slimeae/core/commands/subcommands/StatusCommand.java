@@ -4,14 +4,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.SubCommand;
 import me.ddggdd135.slimeae.api.database.v3.V3DatabaseManager;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 public class StatusCommand extends SubCommand {
     @Override

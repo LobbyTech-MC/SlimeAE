@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import me.ddggdd135.guguslimefunlib.GuguSlimefunLib;
 
 public class JournalWriter {

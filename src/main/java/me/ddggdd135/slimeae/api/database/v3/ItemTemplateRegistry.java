@@ -1,17 +1,24 @@
 package me.ddggdd135.slimeae.api.database.v3;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import java.nio.charset.StandardCharsets;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import me.ddggdd135.slimeae.utils.SerializeUtils;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.ddggdd135.slimeae.utils.SerializeUtils;
 
 public class ItemTemplateRegistry {
     private static final Logger logger = Logger.getLogger("SlimeAE-Templates");

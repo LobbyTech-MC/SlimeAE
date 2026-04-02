@@ -6,9 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bukkit.inventory.ItemStack;
+
 import me.ddggdd135.guguslimefunlib.GuguSlimefunLib;
 import me.ddggdd135.slimeae.utils.SerializeUtils;
-import org.bukkit.inventory.ItemStack;
 
 public class MigrationV2ToV3 {
     private static final Logger logger = Logger.getLogger("SlimeAE-Migration");

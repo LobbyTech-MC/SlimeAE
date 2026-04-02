@@ -1,9 +1,10 @@
 package me.ddggdd135.slimeae.api.database.v3;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class SqliteConnectionManager implements ConnectionManager {
     private final HikariDataSource writePool;

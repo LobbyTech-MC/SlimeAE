@@ -3,8 +3,8 @@ package me.ddggdd135.slimeae.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
 import java.util.Base64;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

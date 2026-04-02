@@ -2,10 +2,13 @@ package me.ddggdd135.slimeae.api.database.v3;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import me.ddggdd135.guguslimefunlib.items.ItemKey;
+
 import org.bukkit.inventory.ItemStack;
+
+import me.ddggdd135.guguslimefunlib.items.ItemKey;
 
 public class ItemKeyTplIdBridge {
     private final ConcurrentHashMap<ItemKey, Long> keyToTplId = new ConcurrentHashMap<>();

@@ -1,14 +1,17 @@
 package me.ddggdd135.slimeae.api.abstracts;
 
 import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import me.ddggdd135.slimeae.api.interfaces.IStorage;
-import me.ddggdd135.slimeae.core.NetworkInfo;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+
+import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.core.NetworkInfo;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 public class BusTickContext {
     private final Block block;

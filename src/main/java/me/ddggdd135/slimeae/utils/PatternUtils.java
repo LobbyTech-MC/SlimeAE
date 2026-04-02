@@ -1,6 +1,10 @@
 package me.ddggdd135.slimeae.utils;
 
 import javax.annotation.Nonnull;
+
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
@@ -8,8 +12,6 @@ import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.core.items.SlimeAEItems;
 import me.ddggdd135.slimeae.core.slimefun.Pattern;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 public class PatternUtils {
 

@@ -3,8 +3,8 @@ package me.ddggdd135.slimeae.api.interfaces;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;

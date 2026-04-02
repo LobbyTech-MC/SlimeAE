@@ -6,7 +6,7 @@
 
     <groupId>me.ddggdd135.slimeae</groupId>
     <artifactId>SlimeAE</artifactId>
-    <version>eadfb8f-Beta</version>
+    <version>d2513d3-Beta</version>
     <packaging>jar</packaging>
 
     <name>SlimeAEPlugin</name>
@@ -64,6 +64,10 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>me.ddggdd135.slimeae.libs</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>me.ddggdd135.slimeae.libs.hikari</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -258,6 +262,18 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>5.3.27</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.45.3.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

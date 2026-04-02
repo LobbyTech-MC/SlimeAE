@@ -38,7 +38,6 @@ import me.ddggdd135.slimeae.api.events.AutoCraftingTaskDisposingEvent;
 import me.ddggdd135.slimeae.api.events.AutoCraftingTaskStartingEvent;
 import me.ddggdd135.slimeae.api.exceptions.NoEnoughMaterialsException;
 import me.ddggdd135.slimeae.api.interfaces.IDisposable;
-import me.ddggdd135.slimeae.api.interfaces.IMECraftDevice;
 import me.ddggdd135.slimeae.api.interfaces.IMECraftHolder;
 import me.ddggdd135.slimeae.api.interfaces.IMERealCraftDevice;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
