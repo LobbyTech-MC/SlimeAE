@@ -21,6 +21,12 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import javax.annotation.Nonnull;
+import me.ddggdd135.slimeae.api.abstracts.BusTickContext;
+import me.ddggdd135.slimeae.api.operations.ExportOperation;
+import me.ddggdd135.slimeae.api.operations.ImportOperation;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 public class MEAdvancedIEBus extends MEAdvancedExportBus {
     public MEAdvancedIEBus(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
@@ -28,23 +34,9 @@ public class MEAdvancedIEBus extends MEAdvancedExportBus {
     }
 
     @Override
-    @OverridingMethodsMustInvokeSuper
-    public void onMEBusTick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
-        super.onMEBusTick(block, item, data);
-        BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
-        if (blockMenu == null) return;
-        NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
-        if (info == null) return;
-        Set<BlockFace> directions = getDirections(block.getLocation());
-        if (directions.isEmpty()) return;
-        IStorage networkStorage = info.getStorage();
-        for (BlockFace direction : directions) {
-            Block transportBlock = block.getRelative(direction);
-            IStorage storage = ItemUtils.getStorage(transportBlock);
-            if (storage == null) continue;
-            ItemStack itemStack = ItemUtils.getItemStack(transportBlock);
-            if (itemStack == null || itemStack.getType().isAir()) continue;
-            networkStorage.pushItem(itemStack);
-        }
+    public void onMEBusTick(
+            @Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data, BusTickContext context) {
+        ExportOperation.executeMultiDirection(context, block, this, false);
+        ImportOperation.executeMultiDirection(context, true, false);
     }
 }

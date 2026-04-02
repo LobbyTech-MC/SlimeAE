@@ -136,7 +136,8 @@ public final class RecipeSelectMenu {
             @Nonnull ItemStack[] trimmed,
             @Nonnull CraftType type,
             @Nonnull List<CraftingRecipe> matches) {
-        boolean hasSlimefunItem = Arrays.stream(trimmed).anyMatch(x -> SlimefunItem.getByItem(x) != null);
+        boolean hasSlimefunItem =
+                Arrays.stream(trimmed).anyMatch(x -> me.ddggdd135.slimeae.utils.ItemUtils.getSlimefunId(x) != null);
         if (hasSlimefunItem) return;
 
         if (type == CraftType.VANILLA_CRAFTING_TABLE) {

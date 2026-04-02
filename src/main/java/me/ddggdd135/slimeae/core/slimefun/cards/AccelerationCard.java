@@ -12,7 +12,6 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.MachineProcessHolder;
 import io.github.thebusybiscuit.slimefun4.core.machines.MachineOperation;
 import me.ddggdd135.slimeae.api.abstracts.Card;
-import me.ddggdd135.slimeae.api.abstracts.MEBus;
 import me.ddggdd135.slimeae.core.slimefun.MEIOPort;
 
 public class AccelerationCard extends Card {
@@ -45,12 +44,6 @@ public class AccelerationCard extends Card {
                 operation.addProgress(accelerationMultiplier);
             }
             return;
-        }
-
-        if (item instanceof MEBus meBus) {
-            for (int i = 0; i < accelerationMultiplier; i++) {
-                meBus.onMEBusTick(block, item, data);
-            }
         }
 
         if (item instanceof MEIOPort meioPort) {

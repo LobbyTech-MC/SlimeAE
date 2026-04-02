@@ -1,8 +1,13 @@
 package me.ddggdd135.slimeae.tasks;
 
 import java.util.HashMap;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.LocationUtils;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -22,8 +27,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.autocraft.AutoCraftingTask;
-import me.ddggdd135.slimeae.api.autocraft.CraftStep;
-import me.ddggdd135.slimeae.api.autocraft.CraftType;
 import me.ddggdd135.slimeae.api.enums.AETaskType;
 import me.ddggdd135.slimeae.api.events.AEPostTaskEvent;
 import me.ddggdd135.slimeae.api.events.AEPreTaskEvent;
@@ -55,6 +58,8 @@ public class NetworkTickerTask implements Runnable {
         long startTime = System.currentTimeMillis();
 
         run0();
+
+        if (halted) return;
 
         long elapsed = System.currentTimeMillis() - startTime;
         long nextDelay = Math.max(tickRate * 50L - elapsed, 0) / 50;
@@ -140,17 +145,10 @@ public class NetworkTickerTask implements Runnable {
 
                     // tick autoCrafting
                     Set<AutoCraftingTask> tasks = new HashSet<>(info.getAutoCraftingSessions());
-                    Map<CraftType, Integer> taskCountByType = new HashMap<>();
-                    for (AutoCraftingTask task : tasks) {
-                        for (CraftStep step : task.getActiveSteps()) {
-                            CraftType ct = step.getRecipe().getCraftType();
-                            taskCountByType.merge(ct, 1, Integer::sum);
-                        }
-                    }
                     for (AutoCraftingTask task : tasks) {
                         if (!task.hasNext()) {
                             task.dispose();
-                        } else task.moveNext(NetworkInfo.getMaxDevicesPerTick(), taskCountByType);
+                        } else task.moveNext(NetworkInfo.getMaxDevicesPerTick());
                     }
                     info.updateAutoCraftingMenu();
                 }

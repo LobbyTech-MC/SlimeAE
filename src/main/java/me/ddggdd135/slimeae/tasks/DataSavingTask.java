@@ -50,8 +50,7 @@ public class DataSavingTask implements Runnable {
                 Bukkit.getPluginManager().callEvent(preTaskEventEvent);
                 if (preTaskEventEvent.isCancelled()) return;
 
-                SlimeAEPlugin.getStorageCellStorageDataController().saveAllAsync();
-                SlimeAEPlugin.getStorageCellFilterDataController().saveAllAsync();
+                SlimeAEPlugin.getV3DatabaseManager().saveAllAsync();
                 SlimeAEPlugin.getReskinDataController().saveAllAsync();
                 SlimeAEPlugin.getInstance().getLogger().info("开始保存ME存储元件数据");
 
@@ -82,6 +81,10 @@ public class DataSavingTask implements Runnable {
 
     public boolean isPaused() {
         return paused;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public void setPaused(boolean paused) {

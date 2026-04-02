@@ -16,7 +16,6 @@ import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBT;
 import me.ddggdd135.guguslimefunlib.libraries.nbtapi.NBTType;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.items.CreativeItemMap;
-import me.ddggdd135.slimeae.core.slimefun.MECreativeItemStorageCell;
 import me.ddggdd135.slimeae.core.slimefun.MEItemStorageCell;
 
 public class MEStorageCellStorageData {
@@ -29,9 +28,11 @@ public class MEStorageCellStorageData {
     public MEStorageCellStorageData() {}
 
     public MEStorageCellStorageData(@Nonnull ItemStack itemStack) {
-        if (MEItemStorageCell.getSize(itemStack) == 0) throw new RuntimeException("ItemStack is not MEItemStorageCell");
-        size = MEItemStorageCell.getSize(itemStack);
-        if (SlimefunItem.getByItem(itemStack) instanceof MECreativeItemStorageCell) storages = new CreativeItemMap();
+        long cellSize = MEItemStorageCell.getSize(itemStack);
+        if (cellSize == 0) throw new RuntimeException("ItemStack is not MEItemStorageCell");
+        size = cellSize;
+        // 使用 size == Integer.MAX_VALUE 判断创造元件，避免昂贵的 getByItem 调用
+        if (size == Integer.MAX_VALUE) storages = new CreativeItemMap();
         else {
             storages = new ItemHashMap<>();
         }

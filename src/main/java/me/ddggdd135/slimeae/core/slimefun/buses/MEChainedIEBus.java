@@ -19,6 +19,12 @@ import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
 import me.ddggdd135.slimeae.utils.ItemUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import javax.annotation.Nonnull;
+import me.ddggdd135.slimeae.api.abstracts.BusTickContext;
+import me.ddggdd135.slimeae.api.operations.ExportOperation;
+import me.ddggdd135.slimeae.api.operations.ImportOperation;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 public class MEChainedIEBus extends MEChainedExportBus {
     public MEChainedIEBus(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
@@ -26,31 +32,9 @@ public class MEChainedIEBus extends MEChainedExportBus {
     }
 
     @Override
-    @OverridingMethodsMustInvokeSuper
-    public void onMEBusTick(@Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data) {
-        super.onMEBusTick(block, item, data);
-        BlockMenu blockMenu = StorageCacheUtils.getMenu(block.getLocation());
-        if (blockMenu == null) return;
-        NetworkInfo info = SlimeAEPlugin.getNetworkData().getNetworkInfo(block.getLocation());
-        if (info == null) return;
-        BlockFace current = getDirection(blockMenu);
-        if (current == BlockFace.SELF) return;
-
-        int distance = getDistance(block.getLocation());
-        Block transportBlock = block.getRelative(current);
-
-        for (int i = 0; i < distance; i++) {
-            IStorage networkStorage = info.getStorage();
-            if (ItemUtils.getStorage(transportBlock) == null) return;
-
-            ItemStack itemStack = ItemUtils.getItemStack(transportBlock);
-            if (itemStack == null || itemStack.getType().isAir()) {
-                transportBlock = transportBlock.getRelative(current);
-                continue;
-            }
-
-            networkStorage.pushItem(itemStack);
-            transportBlock = transportBlock.getRelative(current);
-        }
+    public void onMEBusTick(
+            @Nonnull Block block, @Nonnull SlimefunItem item, @Nonnull SlimefunBlockData data, BusTickContext context) {
+        ExportOperation.executeChained(context, block, this);
+        ImportOperation.executeChained(context, true, false);
     }
 }

@@ -1,10 +1,10 @@
 package me.ddggdd135.slimeae.api.interfaces;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -24,7 +24,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 @EnableAsync
 public interface ISettingSlotHolder {
-    Map<Location, List<Pair<ItemKey, Integer>>> cache = new HashMap<>();
+    Map<Location, List<Pair<ItemKey, Integer>>> cache = new ConcurrentHashMap<>();
 
     static void updateCache(Block block, ISettingSlotHolder item, SlimefunBlockData data) {
         BlockMenu menu = data.getBlockMenu();
