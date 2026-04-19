@@ -3,7 +3,9 @@ package me.ddggdd135.slimeae.api.autocraft;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.Nonnull;
+
 import org.bukkit.Location;
 
 public class CraftStep {

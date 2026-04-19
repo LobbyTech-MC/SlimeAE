@@ -4,7 +4,7 @@
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
   <name>SlimeAEPlugin</name>
-  <version>7d61c92-Beta</version>
+  <version>3c16a5d-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -226,21 +226,21 @@
     <git.ref.slug>master</git.ref.slug>
     <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
     <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Galactifun.jar</Galactifun-systemPath>
-    <git.commit.short>7d61c92</git.commit.short>
+    <git.commit.short>3c16a5d</git.commit.short>
     <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
     <maven.settings.file>${project.basedir}/.mvn/settings.xml</maven.settings.file>
-    <git.commit>7d61c92dc14c4eeff22d34192b486feaad19b6d7</git.commit>
+    <git.commit>3c16a5dc6e21960c948bd207b6105cfbf70d67ee</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <LogiTech-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\LogiTech.jar</LogiTech-systemPath>
     <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\ExoticGarden.jar</ExoticGarden-systemPath>
     <InfinityExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\InfinityExpansion.jar</InfinityExpansion-systemPath>
     <maven.compiler.source>21</maven.compiler.source>
-    <git.commit.timestamp>1775347148</git.commit.timestamp>
+    <git.commit.timestamp>1776604534</git.commit.timestamp>
     <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
     <JustEnoughGuide-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\JustEnoughGuide.jar</JustEnoughGuide-systemPath>
     <git.ref>master</git.ref>
     <maven.compiler.target>21</maven.compiler.target>
-    <git.commit.timestamp.datetime>2026-04-04T23:59:08Z</git.commit.timestamp.datetime>
+    <git.commit.timestamp.datetime>2026-04-19T13:15:34Z</git.commit.timestamp.datetime>
     <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
     <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
   </properties>

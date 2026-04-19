@@ -66,6 +66,7 @@ import me.ddggdd135.slimeae.integrations.TranscEndenceIntegration;
 import me.ddggdd135.slimeae.tasks.DataSavingTask;
 import me.ddggdd135.slimeae.tasks.NetworkTickerTask;
 import me.ddggdd135.slimeae.tasks.NetworkTimeConsumingTask;
+import me.ddggdd135.slimeae.tasks.TaskBackupTask;
 import me.ddggdd135.slimeae.utils.RecipeUtils;
 import me.ddggdd135.slimeae.utils.SlimefunItemUtils;
 import net.guizhanss.minecraft.guizhanlib.updater.GuizhanUpdater;
