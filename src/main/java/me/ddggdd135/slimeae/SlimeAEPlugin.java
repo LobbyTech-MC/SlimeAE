@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.ddggdd135.guguslimefunlib.libraries.colors.CMIChatColor;
 import me.ddggdd135.slimeae.api.abstracts.MEChainedBus;
+import me.ddggdd135.slimeae.api.database.v3.CraftTaskPersistence;
 import me.ddggdd135.slimeae.api.database.v3.StorageConfig;
 import me.ddggdd135.slimeae.api.database.v3.V3DatabaseManager;
 import me.ddggdd135.slimeae.api.database.v3.V3FilterController;
@@ -89,10 +90,12 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
     private FinalTechIntegration finalTechIntegration;
 
     private V3DatabaseManager v3DatabaseManager;
+    private CraftTaskPersistence craftTaskPersistence;
 
     private NetworkTickerTask networkTicker;
     private NetworkTimeConsumingTask networkTimeConsumingTask;
     private DataSavingTask dataSavingTask;
+    private TaskBackupTask taskBackupTask;
     private SlimeAECommand slimeAECommand = new SlimeAECommand();
     private PinnedManager pinnedManager;
     private static boolean debug = false;
@@ -117,6 +120,7 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         networkTicker = new NetworkTickerTask();
         networkTimeConsumingTask = new NetworkTimeConsumingTask();
         dataSavingTask = new DataSavingTask();
+        taskBackupTask = new TaskBackupTask();
         slimeAECommand = new SlimeAECommand();
 
         pinnedManager = new PinnedManager();
@@ -170,6 +174,9 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
 
         v3DatabaseManager.init();
 
+        craftTaskPersistence = new CraftTaskPersistence(v3DatabaseManager);
+        craftTaskPersistence.initSchema();
+
         Bukkit.getPluginManager().registerEvents(new ReskinListener(), this);
 
         for (World world : Bukkit.getWorlds()) {
@@ -179,6 +186,7 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         networkTicker.start(this);
         networkTimeConsumingTask.start(this);
         dataSavingTask.start(this);
+        taskBackupTask.start(this);
 
         slimeAECommand.addSubCommand(new ApplyUUIDCommand());
         slimeAECommand.addSubCommand(new CleardataCommand());
@@ -214,6 +222,17 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
         networkTimeConsumingTask.halt();
         dataSavingTask.setPaused(true);
         dataSavingTask.halt();
+        taskBackupTask.setPaused(true);
+        taskBackupTask.halt();
+
+        if (craftTaskPersistence != null) {
+            for (NetworkInfo info : new java.util.HashSet<>(networkData.AllNetworkData)) {
+                for (me.ddggdd135.slimeae.api.autocraft.AutoCraftingTask task :
+                        new java.util.HashSet<>(info.getAutoCraftingSessions())) {
+                    task.suspend();
+                }
+            }
+        }
 
         int waitCount = 0;
         while (dataSavingTask.isRunning() && waitCount < 30) {
@@ -375,6 +394,10 @@ public final class SlimeAEPlugin extends JavaPlugin implements SlimefunAddon {
     @Nonnull
     public static V3DatabaseManager getV3DatabaseManager() {
         return getInstance().v3DatabaseManager;
+    }
+
+    @javax.annotation.Nullable public static CraftTaskPersistence getCraftTaskPersistence() {
+        return getInstance().craftTaskPersistence;
     }
 
     @Nonnull

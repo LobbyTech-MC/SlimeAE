@@ -178,9 +178,19 @@ public class NetworkInfo implements IDisposable {
     }
 
     @Override
-    @Async
-    public void dispose() {
+    public synchronized void dispose() {
         if (disposed) return;
+
+        for (AutoCraftingTask task : autoCraftingTasks) {
+            task.suspend();
+        }
+
+        for (AutoCraftingTask task : autoCraftingTasks) {
+            task.dispose();
+        }
+
+        updateTempStorage();
+
         disposed = true;
 
         NetworkData networkData = SlimeAEPlugin.getNetworkData();
@@ -190,12 +200,6 @@ public class NetworkInfo implements IDisposable {
             networkData.locationToNetwork.remove(loc, this);
         }
         networkData.locationToNetwork.remove(controller, this);
-
-        for (AutoCraftingTask task : autoCraftingTasks) {
-            task.dispose();
-        }
-
-        updateTempStorage();
     }
 
     public boolean isDisposed() {
@@ -408,8 +412,7 @@ public class NetworkInfo implements IDisposable {
         return tempStorage;
     }
 
-    @Async
-    public void updateTempStorage() {
+    public synchronized void updateTempStorage() {
         Set<ItemKey> toPush = new HashSet<>(tempStorage.getStorageUnsafe().sourceKeySet());
         for (ItemKey key : toPush) {
             ItemHashMap<Long> items = tempStorage
