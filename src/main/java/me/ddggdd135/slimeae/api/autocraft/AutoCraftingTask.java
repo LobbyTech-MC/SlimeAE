@@ -350,7 +350,7 @@ public class AutoCraftingTask implements IDisposable {
         }
 
         if (SlimeAEPlugin.getCraftTaskPersistence() != null) {
-            SlimeAEPlugin.getCraftTaskPersistence().save(this);
+            SlimeAEPlugin.getCraftTaskPersistence().saveSuspended(this);
         }
 
         info.getAutoCraftingSessions().remove(this);
@@ -970,6 +970,8 @@ public class AutoCraftingTask implements IDisposable {
     public void start() {
         if (!SlimeAEPlugin.getNetworkData().AllNetworkData.contains(info)) return;
 
+        if (info.getAutoCraftingSessions().contains(this)) return;
+
         AutoCraftingTaskStartingEvent e = new AutoCraftingTaskStartingEvent(this);
         Bukkit.getPluginManager().callEvent(e);
 
@@ -1062,5 +1064,17 @@ public class AutoCraftingTask implements IDisposable {
 
         Bukkit.getScheduler()
                 .runTask(SlimeAEPlugin.getInstance(), () -> menu.getInventory().close());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AutoCraftingTask other)) return false;
+        return taskId.equals(other.taskId);
+    }
+
+    @Override
+    public int hashCode() {
+        return taskId.hashCode();
     }
 }
