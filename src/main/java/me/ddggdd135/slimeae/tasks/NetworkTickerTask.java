@@ -33,6 +33,7 @@ import me.ddggdd135.slimeae.integrations.networks.QuantumStorage;
 
 @EnableAsync
 public class NetworkTickerTask implements Runnable {
+    private static final int MAX_TRANSIENT_CONTROLLER_MISSES = 5;
     public Object2IntOpenHashMap<Location> errorTimes = new Object2IntOpenHashMap<>();
     private int tickRate;
     private int errorResetTime = 2000;
@@ -102,15 +103,20 @@ public class NetworkTickerTask implements Runnable {
                     }
                     SlimefunBlockData slimefunBlockData = StorageCacheUtils.getBlock(info.getController());
                     if (slimefunBlockData == null || !info.getController().isChunkLoaded()) {
-                        info.dispose();
+                        if (info.markControllerUnavailable() >= MAX_TRANSIENT_CONTROLLER_MISSES) {
+                            info.dispose();
+                        }
                         continue;
                     }
 
                     SlimefunItem slimefunItem = SlimefunItem.getById(slimefunBlockData.getSfId());
                     if (!(slimefunItem instanceof IMEController)) {
-                        info.dispose();
+                        if (info.markControllerUnavailable() >= MAX_TRANSIENT_CONTROLLER_MISSES) {
+                            info.dispose();
+                        }
                         continue;
                     }
+                    info.markControllerAvailable();
                     info.getVirtualCraftingDeviceUsed().clear();
                     info.updateTempStorage();
 
