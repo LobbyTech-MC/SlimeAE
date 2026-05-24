@@ -4,7 +4,7 @@
   <groupId>me.ddggdd135.slimeae</groupId>
   <artifactId>SlimeAE</artifactId>
   <name>SlimeAEPlugin</name>
-  <version>1497e8b-Beta</version>
+  <version>9794137-Beta</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -22,6 +22,10 @@
           <source>21</source>
           <target>21</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -144,6 +148,26 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit-jupiter-api</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-jupiter-params</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>com.github.JWJUN233233</groupId>
       <artifactId>InfinityExpansion</artifactId>
       <version>1.0.0</version>
@@ -226,21 +250,21 @@
     <git.ref.slug>master</git.ref.slug>
     <NetworksExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\NetworksExpansion.jar</NetworksExpansion-systemPath>
     <Galactifun-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\Galactifun.jar</Galactifun-systemPath>
-    <git.commit.short>1497e8b</git.commit.short>
+    <git.commit.short>9794137</git.commit.short>
     <GuguSlimefunLib-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\GuguSlimefunLib.jar</GuguSlimefunLib-systemPath>
     <maven.settings.file>${project.basedir}/.mvn/settings.xml</maven.settings.file>
-    <git.commit>1497e8b446802ece3c38bcc570c912db821bf8a6</git.commit>
+    <git.commit>9794137ea6e47eaddef89778b780cfa3e32acde7</git.commit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <LogiTech-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\LogiTech.jar</LogiTech-systemPath>
     <ExoticGarden-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\ExoticGarden.jar</ExoticGarden-systemPath>
     <InfinityExpansion-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\InfinityExpansion.jar</InfinityExpansion-systemPath>
     <maven.compiler.source>21</maven.compiler.source>
-    <git.commit.timestamp>1776689636</git.commit.timestamp>
+    <git.commit.timestamp>1779538724</git.commit.timestamp>
     <FluffyMachines-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\FluffyMachines.jar</FluffyMachines-systemPath>
     <JustEnoughGuide-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\JustEnoughGuide.jar</JustEnoughGuide-systemPath>
     <git.ref>master</git.ref>
     <maven.compiler.target>21</maven.compiler.target>
-    <git.commit.timestamp.datetime>2026-04-20T12:53:56Z</git.commit.timestamp.datetime>
+    <git.commit.timestamp.datetime>2026-05-23T12:18:44Z</git.commit.timestamp.datetime>
     <TranscEndence-systemPath>C:\Users\11877\Documents\GitHub\SlimeAE\lib\TranscEndence.jar</TranscEndence-systemPath>
     <git.worktree>C:\Users\11877\Documents\GitHub\SlimeAE</git.worktree>
   </properties>
